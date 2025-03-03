@@ -2,7 +2,7 @@ import styles from './NodeCard.module.css';
 import Image from 'next/image';
 import { useState } from 'react';
 
-export default function NodeCard({ id, left, top, width, height, title, content, ogImage, imageRatio }) {
+export default function NodeCard({ id, left, top, width, height, title, content, ogImage, imageRatio, onClick }) {
     const [nodeInfoVisible, setNodeInfoVisible] = useState(false);
 
     const handleImageClick = () => {
@@ -10,7 +10,9 @@ export default function NodeCard({ id, left, top, width, height, title, content,
     };
 
     return (
-        <div style={{ 
+        <div 
+        onDoubleClick={() => onClick({ title, content })} 
+        style={{ 
             position: 'absolute', 
             left, 
             top, 
@@ -27,18 +29,17 @@ export default function NodeCard({ id, left, top, width, height, title, content,
                 onDoubleClick={handleImageClick}
             />
 
-            {nodeInfoVisible && (
+            {/* {nodeInfoVisible && (
                 <div className={styles.hidden}>
                     <div className={styles.container} style={{
-                        "width": width *6, "min-width": "300px", "max-width": "500px",
-                        "height": width, "min-height": "100px", "max-height": "300px",
+                        "width": width *6, "minWidth": "300px", "maxWidth": "500px",
+                        "height": width, "minHeight": "100px", "maxHeight": "300px",
                         }}>
                         <div className={`${styles.field} ${styles.bold}`}>Node: {title}</div>
                         <div className={`${styles.field} ${styles.abstract}`}>{content}</div>
-                        {/* <div className={styles.field}>Node: {title}</div> */}
                     </div>
                 </div>
-            )}
+            )} */}
         </div>
     );
 }

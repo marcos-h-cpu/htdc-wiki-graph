@@ -29,7 +29,13 @@ export default function Input({ setNewNode }) {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: 'auto', textAlign: 'center' }}>
+    <div style={{
+      width: '500px',
+      margin: 'auto', textAlign: 'left',
+      position: 'fixed',
+      top: '20px',
+      left: '20px',
+    }}>
       <input
         type="text"
         placeholder="Enter Wikipedia URL"
@@ -43,16 +49,6 @@ export default function Input({ setNewNode }) {
       </button>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {data && (
-        <div className={styles.container}>
-          <h2>{data.title}</h2>
-          <div className={styles.field}>
-            <p>{data.content}</p>
-          </div>
-          {console.log(data)}
-        </div>
-      )}
     </div>
   );
 }

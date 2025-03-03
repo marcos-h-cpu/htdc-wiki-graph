@@ -2,11 +2,11 @@ import Cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
 import NodeCard from "./NodeCard";
 
-export default function CytoscapeComponent({ nodesData = [] }) {
+export default function CytoscapeComponent({ nodesData = [], setFocusedNode }) {
     const cyRef = useRef(null);
     const containerRef = useRef(null);
     const [nodeCardData, setNodeCardData] = useState({});
-    const [zoom, setZoom] = useState(1); // Track zoom level
+    const [zoom, setZoom] = useState(1);
 
     useEffect(() => {
         if (!cyRef.current) {
@@ -25,21 +25,17 @@ export default function CytoscapeComponent({ nodesData = [] }) {
         const cy = cyRef.current;
         if (!cy) return;
 
-        // Add nodes if they don’t already exist
         const updatedNodeCardData = { ...nodeCardData };
         nodesData.forEach((newNode) => {
             if (!cy.$(`#${newNode.data.id}`).length) {
-                // Generate random position
                 const randomX = Math.random() * cy.width();
                 const randomY = Math.random() * cy.height();
 
-                // Add new node
                 cy.add({
                     ...newNode,
                     position: { x: randomX, y: randomY }
                 });
 
-                // Store node card data
                 updatedNodeCardData[newNode.data.id] = {
                     left: randomX,
                     top: randomY,
@@ -51,7 +47,6 @@ export default function CytoscapeComponent({ nodesData = [] }) {
                     imageRatio: newNode.data.imageRatio || 1,
                 };
 
-                // **Edge Creation Logic**
                 newNode.data.links?.forEach((link) => {
                     cy.nodes().forEach((existing) => {
                         const existingLinks = existing.data("links") || [];
@@ -61,10 +56,7 @@ export default function CytoscapeComponent({ nodesData = [] }) {
                             const sourceId = newNode.data.id;
                             const targetId = existing.id();
 
-                            if (
-                                sourceId !== targetId &&
-                                !cy.$(`edge[source="${sourceId}"][target="${targetId}"]`).length
-                            ) {
+                            if (sourceId !== targetId && !cy.$(`edge[source="${sourceId}"][target="${targetId}"]`).length) {
                                 cy.add({ data: { id: `${sourceId}-${targetId}`, source: sourceId, target: targetId } });
                             }
                         }
@@ -75,13 +67,12 @@ export default function CytoscapeComponent({ nodesData = [] }) {
 
         setNodeCardData(updatedNodeCardData);
 
-        // Function to update NodeCard positions and sizes
         const updateNodeCardPositions = () => {
             setNodeCardData((prev) => {
                 const updatedData = { ...prev };
                 cy.nodes().forEach((node) => {
                     const pos = node.renderedPosition();
-                    const size = 50 * cy.zoom(); // Scale dynamically with zoom
+                    const size = 50 * cy.zoom();
 
                     if (updatedData[node.id()]) {
                         updatedData[node.id()] = {
@@ -96,10 +87,9 @@ export default function CytoscapeComponent({ nodesData = [] }) {
                 return updatedData;
             });
 
-            setZoom(cy.zoom()); // Track zoom changes
+            setZoom(cy.zoom());
         };
 
-        // Listen for drag, zoom, and pan events
         cy.on("drag free zoom pan", updateNodeCardPositions);
 
         return () => {
@@ -108,9 +98,14 @@ export default function CytoscapeComponent({ nodesData = [] }) {
     }, [nodesData]);
 
     return (
-        <div ref={containerRef} style={{ width: "100%", height: "500px", position: "relative" }}>
+        <div ref={containerRef} style={{ width: "100%", height: "600px", position: "relative" }}>
             {Object.entries(nodeCardData).map(([id, data]) => (
-                <NodeCard key={id} id={id} {...data} />
+                <NodeCard
+                    key={id}
+                    id={id}
+                    {...data}
+                    onClick={() => setFocusedNode( data ) }
+                />
             ))}
         </div>
     );

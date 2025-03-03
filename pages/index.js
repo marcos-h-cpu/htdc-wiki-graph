@@ -10,13 +10,13 @@ export default function Home() {
     edges: [],
   });
 
-useEffect(() => {
+  const [focusedNode, setFocusedNode] = useState(null);
+
+  useEffect(() => {
     if (newNode && newNode.id) {
       setGraphData((prevData) => ({
         nodes: [...prevData.nodes, { data: newNode }],
-        edges: [
-          ...prevData.edges,
-        ]
+        edges: [...prevData.edges],
       }));
     }
   }, [newNode]);
@@ -30,16 +30,33 @@ useEffect(() => {
       </Head>
 
       <main>
-        <CytoscapeComponent nodesData={[...graphData.nodes, ...graphData.edges]} />
+        <CytoscapeComponent 
+          nodesData={[...graphData.nodes, ...graphData.edges]} 
+          setFocusedNode={setFocusedNode} // Pass click handler
+        />
         <Input setNewNode={setNewNode} />
-
-        {/* <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '5px' }}>
-          <h3>Graph Data (JSON)</h3>
-          <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-            {JSON.stringify(graphData, null, 2)}
-          </pre>
-        </div> */}
       </main>
+
+      {focusedNode && (
+        <div style={{
+          width: '500px',
+          maxHeight: '300px',
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          padding: '10px',
+          background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(206, 223, 255, 0.5) 52.5%, rgba(0, 85, 255, 0.15) 100%)',
+          backdropFilter: 'blur(8px)',
+          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+          border: '1px solid #ddd',
+          borderRadius: '3px',
+          zIndex: 10
+        }}>
+          <h3>{focusedNode.title || "Untitled"}</h3>
+          <p>{focusedNode.content || "No content available"}</p>
+          <button onClick={() => setFocusedNode(null)}>Close</button>
+        </div>
+      )}
     </div>
   );
 }
