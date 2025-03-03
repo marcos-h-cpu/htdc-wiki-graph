@@ -1,11 +1,29 @@
+import { set } from 'date-fns';
 import { useState } from 'react';
-import styles from './Input.module.css';
 
 export default function Input({ setNewNode }) {
   const [url, setUrl] = useState('');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const urlPool =[
+    'https://en.wikipedia.org/wiki/Mathematical_Treatise_in_Nine_Sections',
+    'https://en.wikipedia.org/wiki/Crystal_structure',
+    'https://en.wikipedia.org/wiki/Yohji_Yamamoto',
+    'https://en.wikipedia.org/wiki/Ordre_des_Arts_et_des_Lettres',
+    'https://en.wikipedia.org/wiki/Cuisine_of_the_Midwestern_United_States',
+    'https://en.wikipedia.org/wiki/Prunus_virginiana',
+    'https://en.wikipedia.org/wiki/Astringent',
+    'https://en.wikipedia.org/wiki/Satyrium_liparops',
+    'https://en.wikipedia.org/wiki/Recreational_use_of_nitrous_oxide',
+  ]
+
+  const feelingLucky = () => {
+    const randomIndex = Math.floor(Math.random() * urlPool.length);
+    const randomUrl = urlPool[randomIndex];
+    setUrl(randomUrl);
+  }
 
   const fetchData = async () => {
     if (!url) return;
@@ -44,8 +62,11 @@ export default function Input({ setNewNode }) {
         style={{ width: '80%', padding: '10px', marginBottom: '10px' }}
       />
       <br />
-      <button onClick={fetchData} disabled={loading} style={{ cursor: 'pointer' }}>
+      <button onClick={fetchData} disabled={loading} >
         {loading ? 'Scraping...' : 'Scrape'}
+      </button>
+      <button onClick={feelingLucky} disabled={loading} style={{ marginLeft: '10px' }}>
+        Randomize
       </button>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}

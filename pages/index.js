@@ -32,7 +32,7 @@ export default function Home() {
       <main>
         <CytoscapeComponent 
           nodesData={[...graphData.nodes, ...graphData.edges]} 
-          setFocusedNode={setFocusedNode} // Pass click handler
+          setFocusedNode={setFocusedNode}
         />
         <Input setNewNode={setNewNode} />
       </main>

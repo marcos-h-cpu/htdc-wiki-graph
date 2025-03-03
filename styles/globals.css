@@ -4,4 +4,16 @@ body {
   background-color: #ffffff;
 }
 
-
+button {
+  border-radius: 3px;
+  color: rgb(95, 142, 243);
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 8px;
+  background: linear-gradient(360deg, #EAFCFF 0%, #FFFFFF 100%);
+  border: 1px solid #C6DDFF;
+}
