@@ -77,7 +77,7 @@ export default async function handler(req, res) {
                   const sectionLinks = Array.from(nextElem.querySelectorAll('a[href^="/wiki/"]'))
                       .map(a => {
                           const linkText = a.getAttribute('href').replace(/^\/wiki\//, '');
-                          return { id: linkText, title: linkText.replace(/_/g, ' ') }; // Add ID + formatted title
+                          return { linkId: linkText, title: linkText.replace(/_/g, ' '), belongsTo: nodeId }; // Add ID + formatted title
                       })
                       .filter(link => !/^[A-Z][a-z]+(_[A-Z][a-z]+)*$/.test(link.id)); // Exclude names
                   

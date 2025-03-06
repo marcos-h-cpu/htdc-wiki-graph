@@ -1,8 +1,7 @@
 .container {
     width: 200px;
     height: fit-content;
-    /* border: 1px solid #C6DDFF; */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); */
     z-index: 100;
 
 }
@@ -37,7 +36,7 @@
 .thumbnail {
     cursor: pointer;
     transition: transform 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); */
 }
 
 .thumbnail:hover {

@@ -43,14 +43,14 @@ export default function CytoscapeComponent({ nodesData = [], setFocusedNode }) {
                     height: 50,
                     title: newNode.data.title || "Untitled Node",
                     content: newNode.data.content || "No content available",
-                    ogImage: newNode.data.ogImage || "/test.jpg",
+                    ogImage: newNode.data.ogImage || "/logo.svg",
                     imageRatio: newNode.data.imageRatio || 1,
                 };
 
                 newNode.data.links?.forEach((link) => {
                     cy.nodes().forEach((existing) => {
                         const existingLinks = existing.data("links") || [];
-                        const hasMatchingLink = existingLinks.some((l) => l.id === link.id);
+                        const hasMatchingLink = existingLinks.some((l) => l.linkId === link.linkId);
 
                         if (hasMatchingLink) {
                             const sourceId = newNode.data.id;

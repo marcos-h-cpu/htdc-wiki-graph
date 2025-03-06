@@ -6,23 +6,46 @@ export default function Input({ setNewNode }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [suggestionBank, setSuggestionBank] = useState([
+    {
+      "id": "Ring_isomorphism",
+      "title": "Ring isomorphism"
+    },
+    {
+      "id": "Mathematical_Treatise_in_Nine_Sections",
+      "title": "Mathematical Treatise in Nine Sections"
+    },
+    {
+      "id": "Crystal_structure",
+      "title": "Crystal structure"
+    },
+    {
+      "id": "Yohji_Yamamoto",
+      "title": "Yohji Yamamoto"
+    },
+    {
+      "id": "Prunus_virginiana",
+      "title": "Prunus virginiana"
+    },
+    {
+      "id": "Astringent",
+      "title": "Astringent"
+    },
+    {
+      "id": "Satyrium_liparops",
+      "title": "Satyrium liparops"
+    },
+    {
+      "id": "Recreational_use_of_nitrous_oxide",
+      "title": "Recreational use of nitrous oxide"
+    },
+  ]);
 
-  const urlPool =[
-    'https://en.wikipedia.org/wiki/Mathematical_Treatise_in_Nine_Sections',
-    'https://en.wikipedia.org/wiki/Crystal_structure',
-    'https://en.wikipedia.org/wiki/Yohji_Yamamoto',
-    'https://en.wikipedia.org/wiki/Ordre_des_Arts_et_des_Lettres',
-    'https://en.wikipedia.org/wiki/Cuisine_of_the_Midwestern_United_States',
-    'https://en.wikipedia.org/wiki/Prunus_virginiana',
-    'https://en.wikipedia.org/wiki/Astringent',
-    'https://en.wikipedia.org/wiki/Satyrium_liparops',
-    'https://en.wikipedia.org/wiki/Recreational_use_of_nitrous_oxide',
-  ]
-
-  const feelingLucky = () => {
-    const randomIndex = Math.floor(Math.random() * urlPool.length);
-    const randomUrl = urlPool[randomIndex];
-    setUrl(randomUrl);
+  const suggestInput = () => {
+    const randomIndex = Math.floor(Math.random() * suggestionBank.length);
+    const randomUrl = suggestionBank[randomIndex];
+    console.log(suggestionBank)
+    setUrl(`https://en.wikipedia.org/wiki/${randomUrl.linkId}`);
   }
 
   const fetchData = async () => {
@@ -36,6 +59,7 @@ export default function Input({ setNewNode }) {
       if (response.ok) {
         setData(result);
         setNewNode(result); // Send the response to the parent component
+        setSuggestionBank(result.links);
       } else {
         setError(result.error);
       }
@@ -65,8 +89,8 @@ export default function Input({ setNewNode }) {
       <button onClick={fetchData} disabled={loading} >
         {loading ? 'Scraping...' : 'Scrape'}
       </button>
-      <button onClick={feelingLucky} disabled={loading} style={{ marginLeft: '10px' }}>
-        Randomize
+      <button onClick={suggestInput} disabled={loading} style={{ marginLeft: '10px' }}>
+        Suggestion
       </button>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}

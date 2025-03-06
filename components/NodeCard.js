@@ -28,18 +28,6 @@ export default function NodeCard({ id, left, top, width, height, title, content,
                 height={width}
                 onDoubleClick={handleImageClick}
             />
-
-            {/* {nodeInfoVisible && (
-                <div className={styles.hidden}>
-                    <div className={styles.container} style={{
-                        "width": width *6, "minWidth": "300px", "maxWidth": "500px",
-                        "height": width, "minHeight": "100px", "maxHeight": "300px",
-                        }}>
-                        <div className={`${styles.field} ${styles.bold}`}>Node: {title}</div>
-                        <div className={`${styles.field} ${styles.abstract}`}>{content}</div>
-                    </div>
-                </div>
-            )} */}
         </div>
     );
 }
