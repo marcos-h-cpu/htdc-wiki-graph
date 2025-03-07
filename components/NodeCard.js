@@ -11,7 +11,7 @@ export default function NodeCard({ id, left, top, width, height, title, content,
 
     return (
         <div 
-        onDoubleClick={() => onClick({ title, content })} 
+        onDoubleClick={() => onClick({ id, title, content })} 
         style={{ 
             position: 'absolute', 
             left, 

@@ -7,44 +7,19 @@ export default function Input({ setNewNode }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [suggestionBank, setSuggestionBank] = useState([
-    {
-      "id": "Ring_isomorphism",
-      "title": "Ring isomorphism"
-    },
-    {
-      "id": "Mathematical_Treatise_in_Nine_Sections",
-      "title": "Mathematical Treatise in Nine Sections"
-    },
-    {
-      "id": "Crystal_structure",
-      "title": "Crystal structure"
-    },
-    {
-      "id": "Yohji_Yamamoto",
-      "title": "Yohji Yamamoto"
-    },
-    {
-      "id": "Prunus_virginiana",
-      "title": "Prunus virginiana"
-    },
-    {
-      "id": "Astringent",
-      "title": "Astringent"
-    },
-    {
-      "id": "Satyrium_liparops",
-      "title": "Satyrium liparops"
-    },
-    {
-      "id": "Recreational_use_of_nitrous_oxide",
-      "title": "Recreational use of nitrous oxide"
-    },
+    {"linkId": "Ring_isomorphism"},
+    {"linkId": "Pseudoscorpion"},
+    {"linkId": "Mathematical_Treatise_in_Nine_Sections"},
+    {"linkId": "Crystal_structure"},
+    {"linkId": "Yohji_Yamamoto"},
+    {"linkId": "Ceramic_art"},
+    {"linkId": "Astringent"},
+    {"linkId": "Recreational_use_of_nitrous_oxide"}
   ]);
 
   const suggestInput = () => {
     const randomIndex = Math.floor(Math.random() * suggestionBank.length);
     const randomUrl = suggestionBank[randomIndex];
-    console.log(suggestionBank)
     setUrl(`https://en.wikipedia.org/wiki/${randomUrl.linkId}`);
   }
 

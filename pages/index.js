@@ -52,8 +52,10 @@ export default function Home() {
           borderRadius: '3px',
           zIndex: 10
         }}>
-          <h3>{focusedNode.title || "Untitled"}</h3>
-          <p>{focusedNode.content || "No content available"}</p>
+          <h3>
+          <a href={`https://en.wikipedia.org/wiki/${focusedNode.id}`}>{focusedNode.data.title || "Untitled"}</a>
+          </h3>
+          <p>{focusedNode.data.content || "No content available"}</p>
           <button onClick={() => setFocusedNode(null)}>Close</button>
         </div>
       )}

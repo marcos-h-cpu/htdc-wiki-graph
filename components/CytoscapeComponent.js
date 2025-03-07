@@ -104,7 +104,7 @@ export default function CytoscapeComponent({ nodesData = [], setFocusedNode }) {
                     key={id}
                     id={id}
                     {...data}
-                    onClick={() => setFocusedNode( data ) }
+                    onClick={() => setFocusedNode( {id, data} ) }
                 />
             ))}
         </div>
