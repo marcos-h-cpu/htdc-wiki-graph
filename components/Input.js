@@ -7,21 +7,32 @@ export default function Input({ setNewNode }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [suggestionBank, setSuggestionBank] = useState([
-    {"linkId": "Ring_isomorphism"},
-    {"linkId": "Pseudoscorpion"},
-    {"linkId": "Mathematical_Treatise_in_Nine_Sections"},
-    {"linkId": "Crystal_structure"},
-    {"linkId": "Yohji_Yamamoto"},
-    {"linkId": "Ceramic_art"},
-    {"linkId": "Astringent"},
-    {"linkId": "Recreational_use_of_nitrous_oxide"}
+    "Ring_isomorphism",
+    "Pseudoscorpion",
+    "Mathematical_Treatise_in_Nine_Sections",
+    "Crystal_structure",
+    "Yohji_Yamamoto",
+    "Astringent",
+    "Recreational_use_of_nitrous_oxide"
   ]);
 
   const suggestInput = () => {
+    if (!suggestionBank || suggestionBank.length === 0) {
+      console.error("Suggestion bank is empty or undefined.");
+      return;
+    }
+  
     const randomIndex = Math.floor(Math.random() * suggestionBank.length);
     const randomUrl = suggestionBank[randomIndex];
-    setUrl(`https://en.wikipedia.org/wiki/${randomUrl.linkId}`);
-  }
+    console.log(randomUrl)
+  
+    if (!randomUrl) {
+      console.error("Random URL is invalid:", randomUrl);
+      return;
+    }
+  
+    setUrl(`https://en.wikipedia.org/wiki/${randomUrl}`);
+  };
 
   const fetchData = async () => {
     if (!url) return;
@@ -31,10 +42,11 @@ export default function Input({ setNewNode }) {
     try {
       const response = await fetch(`/api/scrape?url=${encodeURIComponent(url)}`);
       const result = await response.json();
+
       if (response.ok) {
         setData(result);
-        setNewNode(result); // Send the response to the parent component
-        setSuggestionBank(result.links);
+        setNewNode(result); 
+        setSuggestionBank(result.links)
       } else {
         setError(result.error);
       }
@@ -43,7 +55,8 @@ export default function Input({ setNewNode }) {
     }
 
     setLoading(false);
-  };
+};
+
 
   return (
     <div style={{

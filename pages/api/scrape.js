@@ -61,34 +61,40 @@ export default async function handler(req, res) {
   
       const imageRatio = await getImageRatio(ogImage); // Get image ratio
   
-      const excludedSections = new Set(['Cast', 'Production', 'Accolades', 'Reception', 'Notes', 'References', 'See also', 'Further reading', 'Bibliography', 'External links', 'General references']);
-      const linksSet = new Set();
-  
-      // Get all section headers
-      const sections = document.querySelectorAll('.mw-heading.mw-heading2');
-  
-      sections.forEach((section) => {
-          const header = section.innerText.trim();
-          if (excludedSections.has(header)) return;
-  
-          let nextElem = section.nextElementSibling;
-          while (nextElem && !nextElem.classList.contains('mw-heading')) {
-              if (nextElem.tagName === 'P') {
-                  const sectionLinks = Array.from(nextElem.querySelectorAll('a[href^="/wiki/"]'))
-                      .map(a => {
-                          const linkText = a.getAttribute('href').replace(/^\/wiki\//, '');
-                          return { linkId: linkText, belongsTo: nodeId }; // Add ID + formatted title
-                      })
-                      .filter(link => !/^[A-Z][a-z]+(_[A-Z][a-z]+)*$/.test(link.id)); // Exclude names
-                  
-                  sectionLinks.forEach(link => linksSet.add(JSON.stringify(link))); // Store as string to ensure uniqueness
-              }
-              nextElem = nextElem.nextElementSibling;
-          }
+      const excludedSections = new Set([
+        'Cast', 'Production', 'Accolades', 'Reception', 
+        'Notes', 'References', 'See also', 'Further reading', 
+        'Bibliography', 'External links', 'General references'
+      ]);
+    
+      const sections = document.querySelectorAll('.mw-body-content .mw-heading.mw-heading2, .mw-body-content .mw-heading.mw-heading3');
+      
+      const linksSet = new Set(); // Use a Set to avoid duplicates
+    
+      sections.forEach(section => {
+        const header = section.innerText.trim();
+        if (excludedSections.has(header)) return; // Skip excluded sections
+    
+        let nextElem = section.nextElementSibling;
+    
+        // Traverse until the next section starts
+        while (nextElem && !nextElem.matches('.mw-heading.mw-heading2, .mw-heading.mw-heading3')) {
+            if (nextElem.tagName === 'P') {
+                // Extract links only from paragraphs
+                const sectionLinks = Array.from(nextElem.querySelectorAll('a[href^="/wiki/"]'))
+                    .map(a => a.getAttribute('href').replace(/^\/wiki\//, '')) // Remove "/wiki/"
+                    .filter(link => 
+                        !/^Wikipedia:|^File:/i.test(link) &&  // Ignore Wikipedia & File links
+                        !/^[A-Z][a-z]+(_[A-Z][a-z]+)+$/.test(link) // Ignore proper names
+                    );
+    
+                sectionLinks.forEach(link => linksSet.add(link)); 
+            }
+            nextElem = nextElem.nextElementSibling;
+        }
       });
-  
-      const links = Array.from(linksSet).map(link => JSON.parse(link)); // Convert back to array
-  
+    
+      const links = Array.from(linksSet)
       return { id: nodeId, title, content, links, ogImage, imageRatio };
   });
   
