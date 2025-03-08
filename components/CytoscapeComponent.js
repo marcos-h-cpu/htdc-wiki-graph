@@ -8,9 +8,12 @@ export default function CytoscapeComponent({ nodesData = [], setFocusedNode }) {
     const [nodeCardData, setNodeCardData] = useState({});
     const [zoom, setZoom] = useState(1);
 
+    // HashMap for quick link lookup
+    const linkToNodes = useRef(new Map());
+
     useEffect(() => {
         if (!cyRef.current) {
-            const cy = Cytoscape({
+            cyRef.current = Cytoscape({
                 container: containerRef.current,
                 elements: [],
                 style: [
@@ -19,49 +22,17 @@ export default function CytoscapeComponent({ nodesData = [], setFocusedNode }) {
                 ],
                 layout: { name: "cose" }
             });
-            cyRef.current = cy;
         }
 
         const cy = cyRef.current;
         if (!cy) return;
 
         const updatedNodeCardData = { ...nodeCardData };
+
         nodesData.forEach((newNode) => {
             if (!cy.$(`#${newNode.data.id}`).length) {
-                const randomX = Math.random() * cy.width();
-                const randomY = Math.random() * cy.height();
-
-                cy.add({
-                    ...newNode,
-                    position: { x: randomX, y: randomY }
-                });
-
-                updatedNodeCardData[newNode.data.id] = {
-                    left: randomX,
-                    top: randomY,
-                    width: 50,
-                    height: 50,
-                    title: newNode.data.title || "Untitled Node",
-                    content: newNode.data.content || "No content available",
-                    ogImage: newNode.data.ogImage || "/logo.svg",
-                    imageRatio: newNode.data.imageRatio || 1,
-                };
-
-                newNode.data.links?.forEach((link) => {
-                    cy.nodes().forEach((existing) => {
-                        const existingLinks = existing.data("links") || [];
-                        const hasMatchingLink = existingLinks.some((l) => l.linkId === link.linkId);
-
-                        if (hasMatchingLink) {
-                            const sourceId = newNode.data.id;
-                            const targetId = existing.id();
-
-                            if (sourceId !== targetId && !cy.$(`edge[source="${sourceId}"][target="${targetId}"]`).length) {
-                                cy.add({ data: { id: `${sourceId}-${targetId}`, source: sourceId, target: targetId } });
-                            }
-                        }
-                    });
-                });
+                addNodeToGraph(cy, newNode, updatedNodeCardData);
+                createEdges(cy, newNode);
             }
         });
 
@@ -73,20 +44,12 @@ export default function CytoscapeComponent({ nodesData = [], setFocusedNode }) {
                 cy.nodes().forEach((node) => {
                     const pos = node.renderedPosition();
                     const size = 50 * cy.zoom();
-
                     if (updatedData[node.id()]) {
-                        updatedData[node.id()] = {
-                            ...updatedData[node.id()],
-                            left: pos.x,
-                            top: pos.y,
-                            width: size,
-                            height: size
-                        };
+                        updatedData[node.id()] = { ...updatedData[node.id()], left: pos.x, top: pos.y, width: size, height: size };
                     }
                 });
                 return updatedData;
             });
-
             setZoom(cy.zoom());
         };
 
@@ -97,15 +60,54 @@ export default function CytoscapeComponent({ nodesData = [], setFocusedNode }) {
         };
     }, [nodesData]);
 
+    function addNodeToGraph(cy, newNode, updatedNodeCardData) {
+        const randomX = Math.random() * cy.width();
+        const randomY = Math.random() * cy.height();
+
+        cy.add({
+            ...newNode,
+            position: { x: randomX, y: randomY }
+        });
+
+        updatedNodeCardData[newNode.data.id] = {
+            left: randomX,
+            top: randomY,
+            width: 50,
+            height: 50,
+            title: newNode.data.title || "Untitled Node",
+            content: newNode.data.content || "No content available",
+            ogImage: newNode.data.ogImage || "/logo.svg",
+            imageRatio: newNode.data.imageRatio || 1,
+        };
+    }
+
+    function createEdges(cy, newNode) {
+        const nodeId = newNode.data.id;
+
+        newNode.data.links?.forEach((link) => {
+            const linkId = link.linkId;
+
+            if (!linkToNodes.current.has(linkId)) {
+                linkToNodes.current.set(linkId, new Set());
+            }
+
+            const matchingNodes = linkToNodes.current.get(linkId);
+
+            matchingNodes.forEach((existingNodeId) => {
+                if (nodeId !== existingNodeId && !cy.$(`edge[source="${nodeId}"][target="${existingNodeId}"]`).length) {
+                    cy.add({ data: { id: `${nodeId}-${existingNodeId}`, source: nodeId, target: existingNodeId } });
+                }
+            });
+
+            // Add the new node to the set for future lookups
+            matchingNodes.add(nodeId);
+        });
+    }
+
     return (
         <div ref={containerRef} style={{ width: "100%", height: "600px", position: "relative" }}>
             {Object.entries(nodeCardData).map(([id, data]) => (
-                <NodeCard
-                    key={id}
-                    id={id}
-                    {...data}
-                    onClick={() => setFocusedNode( {id, data} ) }
-                />
+                <NodeCard key={id} id={id} {...data} onClick={() => setFocusedNode({ id, data })} />
             ))}
         </div>
     );
