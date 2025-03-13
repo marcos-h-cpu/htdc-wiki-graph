@@ -69,11 +69,11 @@ export default async function handler(req, res) {
     
       const sections = document.querySelectorAll('.mw-body-content .mw-heading.mw-heading2, .mw-body-content .mw-heading.mw-heading3');
       
-      const linksSet = new Set(); // Use a Set to avoid duplicates
+      const linksSet = new Set();
     
       sections.forEach(section => {
         const header = section.innerText.trim();
-        if (excludedSections.has(header)) return; // Skip excluded sections
+        if (excludedSections.has(header)) return;
     
         let nextElem = section.nextElementSibling;
     
@@ -82,19 +82,20 @@ export default async function handler(req, res) {
             if (nextElem.tagName === 'P') {
                 // Extract links only from paragraphs
                 const sectionLinks = Array.from(nextElem.querySelectorAll('a[href^="/wiki/"]'))
-                    .map(a => a.getAttribute('href').replace(/^\/wiki\//, '')) // Remove "/wiki/"
+                    .map(a => a.getAttribute('href').replace(/^\/wiki\//, ''))
                     .filter(link => 
                         !/^Wikipedia:|^File:/i.test(link) &&  // Ignore Wikipedia & File links
                         !/^[A-Z][a-z]+(_[A-Z][a-z]+)+$/.test(link) // Ignore proper names
                     );
     
-                sectionLinks.forEach(link => linksSet.add(link)); 
+                sectionLinks.forEach(link => linksSet.add(link));
             }
             nextElem = nextElem.nextElementSibling;
         }
       });
     
-      const links = Array.from(linksSet)
+      const links = Array.from(linksSet);
+    
       return { id: nodeId, title, content, links, ogImage, imageRatio };
   });
   

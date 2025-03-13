@@ -54,9 +54,16 @@ export default function CytoscapeComponent({ nodesData = [], setFocusedNode }) {
         };
 
         cy.on("drag free zoom pan", updateNodeCardPositions);
+        cy.on("tap", "edge", (event) => {
+            const edge = event.target;
+            console.log("Edge clicked:", edge.data());
+    
+            alert(`Edge Data: ${JSON.stringify(edge.data(), null, 2)}`); // Show an alert with edge data for debugging
+        });
 
         return () => {
             cy.off("drag free zoom pan", updateNodeCardPositions);
+            cy.off("tap", "edge");
         };
     }, [nodesData]);
 
@@ -95,7 +102,7 @@ export default function CytoscapeComponent({ nodesData = [], setFocusedNode }) {
 
             matchingNodes.forEach((existingNodeId) => {
                 if (nodeId !== existingNodeId && !cy.$(`edge[source="${nodeId}"][target="${existingNodeId}"]`).length) {
-                    cy.add({ data: { id: `${nodeId}-${existingNodeId}`, source: nodeId, target: existingNodeId } });
+                    cy.add({ data: { id: `${nodeId}-${existingNodeId}`, source: nodeId, target: existingNodeId, connection: link } });
                 }
             });
 

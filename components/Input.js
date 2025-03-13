@@ -24,7 +24,6 @@ export default function Input({ setNewNode }) {
   
     const randomIndex = Math.floor(Math.random() * suggestionBank.length);
     const randomUrl = suggestionBank[randomIndex];
-    console.log(randomUrl)
   
     if (!randomUrl) {
       console.error("Random URL is invalid:", randomUrl);
@@ -45,6 +44,7 @@ export default function Input({ setNewNode }) {
 
       if (response.ok) {
         setData(result);
+        console.log(result)
         setNewNode(result); 
         setSuggestionBank(result.links)
       } else {
