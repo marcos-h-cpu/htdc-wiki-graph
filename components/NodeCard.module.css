@@ -1,38 +1,3 @@
-.container {
-    width: 200px;
-    height: fit-content;
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); */
-    z-index: 100;
-
-}
-
-.field {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 2px 8px;
-    height: 8%;
-    min-height: 18px;
-    background: linear-gradient(360deg, #EAFCFF 0%, #FFFFFF 100%);
-    border: 1px solid #C6DDFF;
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-}
-
-.bold {
-    font-weight: bold;
-}
-
-.abstract {
-    font-size: .75vw;
-    height: 90%;
-    max-height: 300px;
-    min-height: 100px;
-    text-align: start;
-}
-
 .thumbnail {
     cursor: pointer;
     transition: transform 0.2s ease;

@@ -61,7 +61,7 @@ export default function Input({ setNewNode }) {
   return (
     <div style={{
       width: '500px',
-      margin: 'auto', textAlign: 'left',
+      textAlign: 'left',
       position: 'fixed',
       top: '20px',
       left: '20px',

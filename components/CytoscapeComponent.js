@@ -112,7 +112,7 @@ export default function CytoscapeComponent({ nodesData = [], setFocusedNode }) {
     }
 
     return (
-        <div ref={containerRef} style={{ width: "100%", height: "600px", position: "relative" }}>
+        <div ref={containerRef} style={{ width: "99%", height: "99%", position: "relative", overflow: "hidden", border: "1px solid red", margin: "auto"}}>
             {Object.entries(nodeCardData).map(([id, data]) => (
                 <NodeCard key={id} id={id} {...data} onClick={() => setFocusedNode({ id, data })} />
             ))}
