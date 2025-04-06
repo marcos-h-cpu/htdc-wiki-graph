@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import CustomNode from "@/components/custom-node"
-import styles from "./wikipedia-graph.module.css"
 
 export default function WikipediaGraph() {
   const [url, setUrl] = useState("")
@@ -159,7 +158,7 @@ export default function WikipediaGraph() {
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="Enter Wikipedia URL"
-                className="w-96"
+                className="w-80"
               />
             </div>
             <Button type="submit" disabled={isLoading}>

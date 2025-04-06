@@ -9,7 +9,7 @@
     overflow: hidden;
     width: 80px;
     height: 80px;
-    border: rgba(13, 255, 0, 0.43) 1px solid;
+    /* border: rgba(13, 255, 0, 0.43) 1px solid; */
 }
 
 .hidden {

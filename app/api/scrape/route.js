@@ -60,14 +60,37 @@ export async function POST(request) {
       summary = summary.substring(0, 300) + "..."
     }
 
-    // Extract image if available
     let image = null
-    const imgElement = $(".infobox img, .thumbimage").first()
-    if (imgElement.length) {
-      image = imgElement.attr("src")
-      if (image && image.startsWith("//")) {
-        image = "https:" + image
+
+    // Attempt to get the og:image meta property
+    const ogImageElement = $('meta[property="og:image"]').attr("content")
+    if (ogImageElement) {
+      image = ogImageElement
+      console.log("Using og:image:", image)
+    } else {
+      // Fallback to the first image in an infobox
+      const infoboxImage = $(".infobox img").first()
+      if (infoboxImage.length) {
+        image = infoboxImage.attr("src")
+        console.log("Using infobox image:", image)
+      } else {
+        // Fallback to the first image inside a figure tag with typeof="mw:File/Thumb"
+        const figureImage = $('figure[typeof="mw:File/Thumb"] img').first()
+        if (figureImage.length) {
+          image = figureImage.attr("src")
+          console.log("Using figure image:", image)
+        }
       }
+    }
+
+    // Ensure the image URL is complete
+    if (image && image.startsWith("//")) {
+      image = "https:" + image
+      console.log("Formatted image URL:", image)
+    }
+
+    if (!image) {
+      console.log("No image found")
     }
 
     // Extract internal Wikipedia links from the first few paragraphs
@@ -98,6 +121,8 @@ export async function POST(request) {
         }
       }
     })
+
+    console.log("Response payload:", { title, summary, image, links })
 
     return NextResponse.json({
       title,
