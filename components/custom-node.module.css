@@ -1,0 +1,72 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 80px;
+    height: 80px;
+    border: rgba(13, 255, 0, 0.43) 1px solid;
+}
+
+.hidden {
+    opacity: 0;
+    /* display: none; */
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.visible {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.title {
+    font-size: small;
+    box-sizing: border-box;
+    
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    padding: 2px 8px;
+    gap: 10px;
+
+    text-align: center;
+    font-size: 9px;
+
+    width: 80px;
+    max-width: 140px;
+    min-height: 20px;
+    max-height: 40px;
+
+    /* background: linear-gradient(97.39deg, rgb(251, 251, 251) 15.05%, rgba(255, 255, 255, 0.8) 44.41%, rgb(245, 246, 251) 72.12%); */
+    background: linear-gradient(97.39deg, rgb(251, 251, 251) 15.05%, rgba(255, 255, 255) 44.41%, rgb(245, 246, 251) 72.12%);
+    
+    border: 0.5px solid #D3D3D3;
+    
+    /* backdrop-filter: blur(5px); */
+    border-radius: 5px;
+
+    cursor: pointer;
+}
+
+.thumbnail {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.thumbnail:hover {
+    transform: scale(1.05);
+}
