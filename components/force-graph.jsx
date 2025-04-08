@@ -28,7 +28,7 @@ export function ForceGraph({ data, onNodeClick }) {
     // Add zoom functionality
     const zoom = d3
       .zoom()
-      .scaleExtent([0.1, 4])
+      .scaleExtent([0.1, 10])
       .on("zoom", (event) => {
         g.attr("transform", event.transform)
       })

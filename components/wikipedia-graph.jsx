@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import Image from "next/image"
 import CustomNode from "@/components/custom-node"
 
 export default function WikipediaGraph() {
@@ -114,6 +115,7 @@ export default function WikipediaGraph() {
   const handleNodeClick = (nodeId) => {
     const node = graphData.nodes.find((n) => n.id === nodeId)
     if (node) {
+      setUrl(node.url)
       fetchArticleData(node.url)
     }
   }
@@ -197,7 +199,12 @@ export default function WikipediaGraph() {
           <ForceGraph data={filteredData} onNodeClick={handleNodeClick} />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-500">
-            Disappear Completely
+            <Image
+              src="/Logo.svg"
+              alt="No data"
+              width={500}
+              height={500} 
+            />
           </div>
         )}
       </div>
