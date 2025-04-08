@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import Image from "next/image"
 import CustomNode from "@/components/custom-node"
+import SelectedNode from "@/components/selected-node"
 
 export default function WikipediaGraph() {
   const [url, setUrl] = useState("")
@@ -16,6 +17,7 @@ export default function WikipediaGraph() {
   const [error, setError] = useState(null)
   const [graphData, setGraphData] = useState({ nodes: [], links: [] })
   const [searchTerm, setSearchTerm] = useState("")
+  const [selectedNode, setSelectedNode] = useState(null)
 
   const isValidWikipediaUrl = (url) => {
     return url.startsWith("https://en.wikipedia.org/wiki/") || url.startsWith("https://wikipedia.org/wiki/")
@@ -23,7 +25,7 @@ export default function WikipediaGraph() {
 
   const fetchArticleData = async (articleUrl) => {
     if (!isValidWikipediaUrl(articleUrl)) {
-      setError("Please enter a valid Wikipedia URL (e.g., https://en.wikipedia.org/wiki/Article_Name)")
+      setError("Please enter a valid URL")
       return
     }
 
@@ -115,8 +117,10 @@ export default function WikipediaGraph() {
   const handleNodeClick = (nodeId) => {
     const node = graphData.nodes.find((n) => n.id === nodeId)
     if (node) {
+      console.log("Node clicked:", node)
       setUrl(node.url)
       fetchArticleData(node.url)
+      setSelectedNode(node)
     }
   }
 
@@ -150,30 +154,38 @@ export default function WikipediaGraph() {
   }
 
   return (
-    <div className="w-full">
-      <div className="absolute top-6 left-2 z-10 flex flex-row">
-        <CardContent>
-          <form onSubmit={handleSubmit} className="flex md:flex-row gap-2">
-            <div className="flex-1">
+    <div>
+      <div className="absolute top-6 left-2 z-10">
+        <CardContent className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-row gap-2">
+            <div className="">
               <Input
                 type="text"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="Enter Wikipedia URL"
-                className="w-80"
+                className="w-[360px]"
               />
             </div>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? "Scraping..." : "Scrape"}
             </Button>
           </form>
+          {error && (
+            <Alert variant="destructive" className="flex justify-between items-center w-[270px]">
+              <AlertDescription>{error}</AlertDescription>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setError(null)}
+                className="ml-4 text-red-500"
+              >
+                Close
+              </Button>
+            </Alert>
+          )}
         </CardContent>
-
-      {error && (
-        <Alert variant="destructive" className="mb-6">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+        {selectedNode && <SelectedNode node={selectedNode} />}
       </div>
 
       {graphData.nodes.length > 0 && (
@@ -199,12 +211,7 @@ export default function WikipediaGraph() {
           <ForceGraph data={filteredData} onNodeClick={handleNodeClick} />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-500">
-            <Image
-              src="/Logo.svg"
-              alt="No data"
-              width={500}
-              height={500} 
-            />
+            <p>No graph data available. Please scrape a Wikipedia article.</p>
           </div>
         )}
       </div>

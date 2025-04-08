@@ -56,9 +56,9 @@ export async function POST(request) {
     })
 
     // Limit summary length
-    if (summary.length > 300) {
-      summary = summary.substring(0, 300) + "..."
-    }
+    // if (summary.length > 300) {
+    //   summary = summary.substring(0, 300) + "..."
+    // }
 
     let image = null
 
