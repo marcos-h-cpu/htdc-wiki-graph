@@ -86,8 +86,8 @@ export function ForceGraph({ data, onNodeClick }) {
       .data(nodes)
       .join("foreignObject")
       .attr("class", "node")
-      .attr("width", 80) // Adjust width for your CustomNode
-      .attr("height", 80) // Adjust height for your CustomNode
+      .attr("width", 80) // Adjust width for CustomNode
+      .attr("height", 80) // Adjust height for CustomNode
       .attr("x", (d) => d.x - 40) // Center the node horizontally
       .attr("y", (d) => d.y - 40) // Center the node vertically
       .html((d) => {
@@ -108,28 +108,6 @@ export function ForceGraph({ data, onNodeClick }) {
       }
     });
 
-
-
-    // // Create the nodes
-    // const node = g
-    //   .append("g")
-    //   .selectAll(".node")
-    //   .data(nodes)
-    //   .join("g")
-    //   .attr("class", "node")
-    //   .call(drag(simulation))
-
-    // // Add circles to nodes
-    // node.append("circle").attr("r", 8).attr("fill", "#000")
-
-    // // Add labels to nodes
-    // node
-    //   .append("text")
-    //   .attr("dx", 12)
-    //   .attr("dy", ".35em")
-    //   .text((d) => (d.title.length > 20 ? d.title.substring(0, 20) + "..." : d.title))
-    //   .attr("font-size", "10px")
-    //   .attr("pointer-events", "none")
 
     // Handle node click
     node.on("dblclick", (event, d) => {

@@ -107,6 +107,15 @@ export default function WikipediaGraph() {
     })
   }
 
+  const updateNode = (nodeId, newProperties) => {
+    setGraphData((prevData) => {
+      const updatedNodes = prevData.nodes.map((node) =>
+        node.id === nodeId ? { ...node, ...newProperties } : node
+      )
+      return { ...prevData, nodes: updatedNodes }
+    })
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (url) {
@@ -114,13 +123,28 @@ export default function WikipediaGraph() {
     }
   }
 
-  const handleNodeClick = (nodeId) => {
+  const handleNodeClick = async (nodeId) => {
     const node = graphData.nodes.find((n) => n.id === nodeId)
-    if (node) {
-      console.log("Node clicked:", node)
-      setUrl(node.url)
-      fetchArticleData(node.url)
-      setSelectedNode(node)
+    if (!node) return
+  
+    // Example: Fetch additional data for the node
+    try {
+      const response = await fetch(`/api/scrape`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: node.url }),
+      })
+      if (!response.ok) throw new Error("Failed to fetch node data")
+  
+      const data = await response.json()
+  
+      // Update the node with new properties
+      updateNode(nodeId, {
+        summary: data.summary,
+        image: data.image,
+      })
+    } catch (error) {
+      console.error("Error updating node:", error)
     }
   }
 

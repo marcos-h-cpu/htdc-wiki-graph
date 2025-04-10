@@ -95,7 +95,7 @@ export async function POST(request) {
 
     // Extract internal Wikipedia links from the first few paragraphs
     const links = []
-    const maxLinks = 3 // Limit number of links to prevent overwhelming the graph
+    const maxLinks = 5 // Limit number of links to prevent overwhelming the graph
 
     $(".mw-parser-output > p a").each((i, el) => {
       if (links.length >= maxLinks) return
