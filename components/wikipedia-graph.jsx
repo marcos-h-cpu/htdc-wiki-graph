@@ -142,10 +142,12 @@ export default function WikipediaGraph() {
       updateNode(nodeId, {
         summary: data.summary,
         image: data.image,
+        links: data.links
       })
     } catch (error) {
       console.error("Error updating node:", error)
     }
+    setSelectedNode(node)
   }
 
   const filteredNodes = searchTerm
@@ -179,56 +181,56 @@ export default function WikipediaGraph() {
 
   return (
     <div>
-      <div className="absolute top-6 left-2 z-10">
-        <CardContent className="flex flex-col gap-4">
-          <form onSubmit={handleSubmit} className="flex flex-row gap-2">
-            <div className="">
-              <Input
-                type="text"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="Enter Wikipedia URL"
-                className="w-[360px]"
-              />
-            </div>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Scraping..." : "Scrape"}
-            </Button>
-          </form>
-          {error && (
-            <Alert variant="destructive" className="flex justify-between items-center w-[270px]">
-              <AlertDescription>{error}</AlertDescription>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setError(null)}
-                className="ml-4 text-red-500"
-              >
-                Close
-              </Button>
-            </Alert>
-          )}
-        </CardContent>
-        {selectedNode && <SelectedNode node={selectedNode} />}
+      <div className="fixed top-4 left-4 z-10">
+      {selectedNode && <SelectedNode node={selectedNode} />}
       </div>
-
-      {graphData.nodes.length > 0 && (
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 flex flex-col gap-2 p-4">
-          <div className="relative w-full md:w-64">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 flex flex-col gap-2 p-4 justify-center items-center w-full">
+          {graphData.nodes.length > 0 && (
+            <div className="relative w-full md:w-64">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
               placeholder="Search nodes..."
-              className="pl-8"
+              className="pl-8 rounded-full"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button onClick={exportGraph} variant="outline">
-            Export Graph
-          </Button>
+          )}
+
+          <div className="flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[8px] px-[36px] w-full">
+          <CardContent className="flex flex-col gap-2 p-0">
+            <form onSubmit={handleSubmit} className="flex flex-row gap-1 text-xs">
+                <Input
+                  type="text"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="Enter Wikipedia URL"
+                  className="w-[300px] h-[30px] rounded-full px-5 text-[6px]"
+                />
+              <Button type="submit" disabled={isLoading} className="h-[30px] rounded-full px-4 py-2 text-xs">
+                {isLoading ? "Scraping..." : "Scrape"}
+              </Button>
+            </form>
+            {error && (
+              <Alert variant="destructive" className="flex justify-between items-center w-[270px]">
+                <AlertDescription>{error}</AlertDescription>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setError(null)}
+                  className="ml-4 text-red-500"
+                >
+                  Close
+                </Button>
+              </Alert>
+            )}
+          </CardContent>
+            <Button onClick={exportGraph} variant="outline" className="rounded-full h-[30px] px-4 py-2 text-xs">
+              Export Graph
+            </Button>
+          </div>
         </div>
-      )}
 
       <div className="fixed inset-0 w-full h-full border overflow-hidden">
         {graphData.nodes.length > 0 ? (
