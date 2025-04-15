@@ -18,6 +18,7 @@ export default function WikipediaGraph() {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] })
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedNode, setSelectedNode] = useState(null)
+  const [isSettingsPopupOpen, setIsSettingsPopupOpen] = useState(false)
 
   const isValidWikipediaUrl = (url) => {
     return url.startsWith("https://en.wikipedia.org/wiki/") || url.startsWith("https://wikipedia.org/wiki/")
@@ -128,25 +129,25 @@ export default function WikipediaGraph() {
     if (!node) return
   
     // Example: Fetch additional data for the node
-    try {
-      const response = await fetch(`/api/scrape`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: node.url }),
-      })
-      if (!response.ok) throw new Error("Failed to fetch node data")
+    // try {
+    //   const response = await fetch(`/api/scrape`, {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({ url: node.url }),
+    //   })
+    //   if (!response.ok) throw new Error("Failed to fetch node data")
   
-      const data = await response.json()
+    //   const data = await response.json()
   
-      // Update the node with new properties
-      updateNode(nodeId, {
-        summary: data.summary,
-        image: data.image,
-        links: data.links
-      })
-    } catch (error) {
-      console.error("Error updating node:", error)
-    }
+    //   // Update the node with new properties
+    //   updateNode(nodeId, {
+    //     summary: data.summary,
+    //     image: data.image,
+    //     links: data.links
+    //   })
+    // } catch (error) {
+    //   console.error("Error updating node:", error)
+    // }
     setSelectedNode(node)
   }
 
@@ -179,25 +180,54 @@ export default function WikipediaGraph() {
     linkElement.click()
   }
 
+  const importGraph = (file) => {
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      try {
+        const data = JSON.parse(event.target.result)
+        setGraphData(data)
+      } catch (error) {
+        setError("Invalid file format. Please upload a valid JSON file.")
+      }
+    }
+    reader.readAsText(file)
+  }
+  const handleFileChange = (event) => {
+    const file = event.target.files[0]
+    if (file) {
+      importGraph(file)
+    }
+  }
+  const handleFileUpload = () => {
+    const input = document.createElement("input")
+    input.type = "file"
+    input.accept = ".json"
+    input.onchange = handleFileChange
+    input.click()
+  }
+  const handleFileImport = () => {
+    handleFileUpload()
+  }
+
+
   return (
     <div>
       <div className="fixed top-4 left-4 z-10">
       {selectedNode && <SelectedNode node={selectedNode} />}
       </div>
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 flex flex-col gap-2 p-4 justify-center items-center w-full">
-          {graphData.nodes.length > 0 && (
-            <div className="relative w-full md:w-64">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search nodes..."
-              className="pl-8 rounded-full"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          )}
-
+              {graphData.nodes.length > 0 && (
+                <div className="relative w-full md:w-64">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Search nodes..."
+                  className="pl-8 rounded-full"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              )}
           <div className="flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[8px] px-[36px] w-full">
           <CardContent className="flex flex-col gap-2 p-0">
             <form onSubmit={handleSubmit} className="flex flex-row gap-1 text-xs">
@@ -226,9 +256,19 @@ export default function WikipediaGraph() {
               </Alert>
             )}
           </CardContent>
-            <Button onClick={exportGraph} variant="outline" className="rounded-full h-[30px] px-4 py-2 text-xs">
-              Export Graph
+            <Button onClick={() => setIsSettingsPopupOpen((prev) => !prev)} variant="outline" className="rounded-full h-[30px] px-4 py-2 text-xs">
+              File
             </Button>
+            <div className="absolute bottom-[70px] right-[52px] flex flex-row gap-1">
+              {isSettingsPopupOpen && (
+                <div className="bg-white border border-gray-300 rounded-md p-2 z-20">
+                  <ul className="flex flex-col gap-1">
+                    <li className="cursor-pointer hover:text-blue-500 text-xs" onClick={handleFileImport}>Import</li>
+                    <li className="cursor-pointer hover:text-blue-500 text-xs" onClick={exportGraph}>Export</li>
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
