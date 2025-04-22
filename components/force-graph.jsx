@@ -49,7 +49,7 @@ export function ForceGraph({ data, onNodeClick }) {
           .id((d) => d.id)
           .distance(200),
       )
-      .force("charge", d3.forceManyBody().strength(-500))
+      .force("charge", d3.forceManyBody().strength(-250))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("x", d3.forceX(width / 2).strength(0.1))
       .force("y", d3.forceY(height / 2).strength(0.1))
@@ -74,7 +74,6 @@ export function ForceGraph({ data, onNodeClick }) {
         return `M${d.source.x},${d.source.y} A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
       });
     
-      // node.attr("transform", (d) => `translate(${d.x},${d.y})`);
       node
         .attr("x", (d) => d.x - 50) // Update x position
         .attr("y", (d) => d.y - 50); // Update y position
@@ -110,7 +109,7 @@ export function ForceGraph({ data, onNodeClick }) {
 
 
     // Handle node click
-    node.on("dblclick", (event, d) => {
+    node.on("click", (event, d) => {
       onNodeClick(d.id)
     })
 

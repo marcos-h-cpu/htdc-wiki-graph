@@ -47,6 +47,7 @@ export default function WikipediaGraph() {
       }
 
       const data = await response.json()
+      console.log(data)
 
       // Update graph with new data
       updateGraph(data, articleUrl)
@@ -60,15 +61,15 @@ export default function WikipediaGraph() {
 
   const updateGraph = (data, sourceUrl) => {
     // Extract the article ID from the URL
-    const urlParts = sourceUrl.split("/wiki/")
-    const sourceId = urlParts[urlParts.length - 1]
-
+    const urlParts = sourceUrl.split("/wiki/");
+    const sourceId = urlParts[urlParts.length - 1];
+  
     // Create the source node if it doesn't exist
-    const sourceExists = graphData.nodes.some((node) => node.id === sourceId)
-
-    const newNodes = [...graphData.nodes]
-    const newLinks = [...graphData.links]
-
+    const sourceExists = graphData.nodes.some((node) => node.id === sourceId);
+  
+    const newNodes = [...graphData.nodes];
+    const newLinks = [...graphData.links];
+  
     if (!sourceExists) {
       newNodes.push({
         id: sourceId,
@@ -76,37 +77,27 @@ export default function WikipediaGraph() {
         url: sourceUrl,
         summary: data.summary,
         image: data.image,
-      })
+        links: data.links || [],
+      });
     }
-
-    // Add new nodes and links
-    data.links.forEach((link) => {
-      const targetId = link.url.split("/wiki/")[1]
-
-      // Add target node if it doesn't exist
-      if (!newNodes.some((node) => node.id === targetId)) {
-        newNodes.push({
-          id: targetId,
-          title: link.title,
-          url: link.url,
-          summary: "",
-        })
-      }
-
-      // Add link if it doesn't exist
-      if (!newLinks.some((l) => l.source === sourceId && l.target === targetId)) {
-        newLinks.push({
-          source: sourceId,
-          target: targetId,
-        })
-      }
-    })
-
+  
+    // Add a link between the selected node and the new node
+    if (
+      selectedNode && // Ensure selectedNode.links exists
+      selectedNode.links.some((link) => link.url === (sourceUrl)) && // Check if the new node's ID exists in selectedNode.links
+      !newLinks.some((link) => link.source === selectedNode.id && link.target === sourceId) // Avoid duplicate links
+    ) {
+      newLinks.push({
+        source: selectedNode.id,
+        target: sourceId,
+      });
+    }
+  
     setGraphData({
       nodes: newNodes,
       links: newLinks,
-    })
-  }
+    });
+  };
 
   const updateNode = (nodeId, newProperties) => {
     setGraphData((prevData) => {
@@ -127,29 +118,30 @@ export default function WikipediaGraph() {
   const handleNodeClick = async (nodeId) => {
     const node = graphData.nodes.find((n) => n.id === nodeId)
     if (!node) return
-  
-    // Example: Fetch additional data for the node
-    // try {
-    //   const response = await fetch(`/api/scrape`, {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({ url: node.url }),
-    //   })
-    //   if (!response.ok) throw new Error("Failed to fetch node data")
-  
-    //   const data = await response.json()
-  
-    //   // Update the node with new properties
-    //   updateNode(nodeId, {
-    //     summary: data.summary,
-    //     image: data.image,
-    //     links: data.links
-    //   })
-    // } catch (error) {
-    //   console.error("Error updating node:", error)
-    // }
     setSelectedNode(node)
   }
+
+  const deselectNode = () => {
+    setSelectedNode(null)
+  }
+
+  const handleLinkClick = async (link) => {
+    try {
+      const response = await fetch("/api/scrape", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: link.url }),
+      })
+      const data = await response.json()
+
+      updateGraph(data, link.url)
+
+    } catch (error) {
+      console.error("Error fetching article data:", error);
+    }
+  };
 
   const filteredNodes = searchTerm
     ? graphData.nodes.filter((node) => node.title.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -213,7 +205,7 @@ export default function WikipediaGraph() {
   return (
     <div>
       <div className="fixed top-4 left-4 z-10">
-      {selectedNode && <SelectedNode node={selectedNode} />}
+      {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode}/>}
       </div>
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 flex flex-col gap-2 p-4 justify-center items-center w-full">
               {graphData.nodes.length > 0 && (
@@ -259,7 +251,7 @@ export default function WikipediaGraph() {
             <Button onClick={() => setIsSettingsPopupOpen((prev) => !prev)} variant="outline" className="rounded-full h-[30px] px-4 py-2 text-xs">
               File
             </Button>
-            <div className="absolute bottom-[70px] right-[52px] flex flex-row gap-1">
+            <div className="absolute bottom-[70px] right-[53px] flex flex-row gap-1">
               {isSettingsPopupOpen && (
                 <div className="bg-white border border-gray-300 rounded-md p-2 z-20">
                   <ul className="flex flex-col gap-1">
@@ -277,7 +269,7 @@ export default function WikipediaGraph() {
           <ForceGraph data={filteredData} onNodeClick={handleNodeClick} />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-500">
-            <p>No graph data available. Please scrape a Wikipedia article.</p>
+            <p>No graph data available.</p>
           </div>
         )}
       </div>

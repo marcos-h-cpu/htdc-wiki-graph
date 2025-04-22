@@ -1,11 +1,12 @@
 import Image from "next/image"
 
-export default function SelectedNode({ node }) {
+export default function SelectedNode({ node, handleLinkClick, deselectNode }) {
     return (
         <>
         <div className="flex flex-col items-left w-[500px] gap-0">
             <a href={node.url}><p className="text-gray-700 text-s">{node.title}</p></a>
             <p className="text-gray-700 text-xs mt-2">{node.summary}</p>
+            <p onClick={deselectNode} className="cursor-pointer text-xs hover:underline" >Close</p>
         </div>
         <div className="mt-4 fixed top-2 right-4 z-10">
             {node.links && (
@@ -33,7 +34,7 @@ export default function SelectedNode({ node }) {
                                     <p
                                         key={linkIndex}
                                         className="text-blue-500 text-xs cursor-pointer text-right hover:underline"
-                                        onClick={() => console.log(link)}
+                                        onClick={() => handleLinkClick(link)}
                                     >
                                         {link.title}
                                     </p>
