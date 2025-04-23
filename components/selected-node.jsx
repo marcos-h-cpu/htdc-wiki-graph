@@ -17,18 +17,20 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode }) {
 
                         // Distribute links into rows (5, 4, 3, 2, 1)
                         const rows = [
-                            sortedLinks.slice(0, 5),
-                            sortedLinks.slice(5, 9),
-                            sortedLinks.slice(9, 12),
-                            sortedLinks.slice(12, 14),
-                            sortedLinks.slice(14, 15),
+                            sortedLinks.slice(0, 3),
+                            sortedLinks.slice(3, 6),
+                            sortedLinks.slice(6, 9),
+                            sortedLinks.slice(9, 11),
+                            sortedLinks.slice(11, 13),
+                            sortedLinks.slice(13, 14),
+                            sortedLinks.slice(14, 15)
                         ];
 
                         return rows.map((row, rowIndex) => (
                             <div
                                 key={rowIndex}
                                 className="flex justify-end gap-2"
-                                style={{ width: `${200 - rowIndex * 20}%` }} // Decrease width for each row
+                                style={{ width: `${150 - rowIndex * 10}%` }}
                             >
                                 {row.map((link, linkIndex) => (
                                     <p

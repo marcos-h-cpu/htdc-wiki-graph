@@ -46,19 +46,19 @@ export async function POST(request) {
     // Extract title
     const title = $("#firstHeading").text().trim()
 
-    // Extract first paragraph for summary
-    let summary = ""
+    // Scrape first three paragraphs for the summary
+    let summary = "";
     $(".mw-parser-output > p").each((i, el) => {
-      const text = $(el).text().trim()
-      if (text.length > 0 && !summary) {
-        summary = text
-      }
-    })
+      if (i >= 3) return false;
 
-    // Limit summary length
-    // if (summary.length > 300) {
-    //   summary = summary.substring(0, 300) + "..."
-    // }
+      let text = $(el).text().trim();
+
+      text = text.replace(/\[.*?\]/g, "");
+
+      if (text.length > 0) {
+        summary += text + "\n\n";
+      }
+    });
 
     let image = null
 
