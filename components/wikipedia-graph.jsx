@@ -220,7 +220,7 @@ export default function WikipediaGraph() {
                 />
               </div>
               )}
-          <div className="flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[8px] px-[36px] w-full">
+          <div className="flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[8px] px-[36px] w-full backdrop-blur-md bg-opacity-50">
           <CardContent className="flex flex-col gap-2 p-0">
             <form onSubmit={handleSubmit} className="flex flex-row gap-1 text-xs">
                 <Input

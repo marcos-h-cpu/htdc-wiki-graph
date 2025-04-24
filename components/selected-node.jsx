@@ -1,12 +1,18 @@
 import Image from "next/image"
+import { Button } from "@/components/ui/button"
+
 
 export default function SelectedNode({ node, handleLinkClick, deselectNode }) {
     return (
         <>
-        <div className="flex flex-col items-left w-[500px] gap-0">
-            <a href={node.url}><p className="text-gray-700 text-s">{node.title}</p></a>
-            <p className="text-gray-700 text-xs mt-2">{node.summary}</p>
-            <p onClick={deselectNode} className="cursor-pointer text-xs hover:underline" >Close</p>
+        <div className="flex flex-col items-left w-[460px] gap-2 bg-gray-100 rounded-sm border py-[10px] px-[10px] backdrop-blur-md bg-opacity-50">
+            <p className="mt-0">
+                <a href={node.url}><p className="text-gray-700 text-s">{node.title}</p></a>
+                <p className="text-xs">{node.summary}</p>
+            </p>
+            <Button variant="ghost" onClick={deselectNode} className="h-[24px] w-[50px] rounded-full px-4 py-2 text-xs border bg-white">
+                Close
+              </Button>
         </div>
         <div className="mt-4 fixed top-2 right-4 z-10">
             {node.links && (
