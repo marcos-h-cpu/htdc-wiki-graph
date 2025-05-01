@@ -4,12 +4,11 @@ import { useRef, useEffect, useState } from "react"
 import * as d3 from "d3"
 import ReactDOM from "react-dom/client";
 import CustomNode from "@/components/custom-node"
+import styles from "./force-graph.module.css"
 
 export function ForceGraph({ data, onNodeClick }) {
   const svgRef = useRef(null)
-  const tooltipRef = useRef(null)
-  const [hoveredNode, setHoveredNode] = useState(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const simulationRef = useRef(null); // Store the simulation instance
 
   useEffect(() => {
     if (!svgRef.current || data.nodes.length === 0) return
@@ -22,7 +21,6 @@ export function ForceGraph({ data, onNodeClick }) {
 
     const svg = d3.select(svgRef.current).attr("viewBox", [0, 0, width, height])
 
-    // Create a group for the graph elements
     const g = svg.append("g")
 
     // Add zoom functionality
@@ -54,10 +52,12 @@ export function ForceGraph({ data, onNodeClick }) {
       .force("x", d3.forceX(width / 2).strength(0.1))
       .force("y", d3.forceY(height / 2).strength(0.1))
 
+    simulationRef.current = simulation; // Store the simulation in the ref
+
     // Create the links
     const link = g
       .append("g")
-      .attr("stroke", "#f745b9")
+      .attr("stroke", "#00897b")
       .attr("stroke-opacity", .9)
       .selectAll("path")
       .data(links)
@@ -75,8 +75,8 @@ export function ForceGraph({ data, onNodeClick }) {
       });
     
       node
-        .attr("x", (d) => d.x - 50) // Update x position
-        .attr("y", (d) => d.y - 50); // Update y position
+        .attr("x", (d) => d.x - 50)
+        .attr("y", (d) => d.y - 50)
     }
 
     const node = g
@@ -108,7 +108,6 @@ export function ForceGraph({ data, onNodeClick }) {
     });
 
 
-    // Handle node click
     node.on("click", (event, d) => {
       onNodeClick(d.id)
     })
@@ -143,9 +142,76 @@ export function ForceGraph({ data, onNodeClick }) {
     }
   }, [data, onNodeClick])
 
+  // Function to update forces dynamically
+  const updateForce = (forceName, value) => {
+    if (simulationRef.current) {
+      if (forceName === "charge") {
+        simulationRef.current.force("charge").strength(value);
+        console.log("Charge strength updated to:", value);
+      } else if (forceName === "linkDistance") {
+        simulationRef.current.force("link").distance(value);
+      } else if (forceName === "x") {
+        simulationRef.current.force("x", d3.forceX().strength(value));
+      } else if (forceName === "y") {
+        simulationRef.current.force("y", d3.forceY().strength(value));
+      }
+      simulationRef.current.alpha(1).restart(); // Restart the simulation to apply changes
+    }
+  };
+
   return (
     <div className="relative w-full h-full">
       <svg ref={svgRef} width="100%" height="100%" />
+      <div className="absolute top-[2vh] right-[1vw] flex flex-row gap-2 bg-gray-100 p-2 rounded-sm border backdrop-blur-md bg-opacity-50 text-xs">
+        <label className="flex flex-col mb-2">
+          <span className="mb-2">Repulsion</span>
+          <input
+            type="range"
+            min="0"
+            max="500"
+            step="50"
+            defaultValue="250"
+            onChange={(e) => updateForce("charge", -(+e.target.value))}
+            className={styles.rangeInput}
+          />
+        </label>
+        <label className="flex flex-col mb-2">
+          <span className="mb-2">Reach</span>
+          <input
+            type="range"
+            min="50"
+            max="500"
+            step="10"
+            defaultValue="200"
+            onChange={(e) => updateForce("linkDistance", +e.target.value)}
+            className={styles.rangeInput}
+          />
+        </label>
+        <label className="flex flex-col mb-2">
+          <span className="mb-2">X-Force</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step=".1"
+            defaultValue=".1"
+            onChange={(e) => updateForce("x", +e.target.value)}
+            className={styles.rangeInput}
+          />
+        </label>
+        <label className="flex flex-col mb-2">
+          <span className="mb-2">Y-Force</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step=".1"
+            defaultValue=".1"
+            onChange={(e) => updateForce("y", +e.target.value)}
+            className={styles.rangeInput}
+          />
+        </label>
+      </div>
     </div>
   )
 }

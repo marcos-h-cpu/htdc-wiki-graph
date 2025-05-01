@@ -207,9 +207,8 @@ export default function WikipediaGraph() {
       <div className="fixed top-4 left-4 z-10">
       {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode}/>}
       </div>
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 flex flex-col gap-2 p-4 justify-center items-center w-full">
-              {graphData.nodes.length > 0 && (
-                <div className="relative w-full md:w-64">
+      {graphData.nodes.length > 0 && (
+                <div className="absolute bottom-[4vw] left-1/2 -translate-x-1/2 w-full md:w-64 z-40">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
@@ -219,8 +218,9 @@ export default function WikipediaGraph() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              )}
-          <div className="flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[8px] px-[36px] w-full backdrop-blur-md bg-opacity-50">
+        )}
+        <div className=" flex flex-col gap-2 p-4 justify-center items-center w-full">
+          <div className="mb-2 absolute bottom-0 left-1/2 -translate-x-1/2 z-10 flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[8px] px-[36px] w-[99vw] backdrop-blur-md bg-opacity-50">
           <CardContent className="flex flex-col gap-2 p-0">
             <form onSubmit={handleSubmit} className="flex flex-row gap-1 text-xs">
                 <Input
@@ -248,10 +248,10 @@ export default function WikipediaGraph() {
               </Alert>
             )}
           </CardContent>
-            <Button onClick={() => setIsSettingsPopupOpen((prev) => !prev)} variant="outline" className="rounded-full h-[30px] px-4 py-2 text-xs">
-              File
-            </Button>
-            <div className="absolute bottom-[70px] right-[53px] flex flex-row gap-1">
+          <Button onClick={() => setIsSettingsPopupOpen((prev) => !prev)} variant="outline" className="rounded-full h-[30px] px-4 py-2 text-xs">
+            File
+          </Button>
+            <div className="absolute bottom-[4vw] right-[53px] flex flex-row gap-1">
               {isSettingsPopupOpen && (
                 <div className="bg-white border border-gray-300 rounded-md p-2 z-20">
                   <ul className="flex flex-col gap-1">
