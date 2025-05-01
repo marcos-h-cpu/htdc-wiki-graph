@@ -147,7 +147,6 @@ export function ForceGraph({ data, onNodeClick }) {
     if (simulationRef.current) {
       if (forceName === "charge") {
         simulationRef.current.force("charge").strength(value);
-        console.log("Charge strength updated to:", value);
       } else if (forceName === "linkDistance") {
         simulationRef.current.force("link").distance(value);
       } else if (forceName === "x") {

@@ -1,5 +1,4 @@
 import WikipediaGraph from "@/components/wikipedia-graph"
-import CustomNode from "@/components/custom-node"
 
 export default function Home() {
   const testnode = {
