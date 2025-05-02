@@ -9,12 +9,23 @@
     overflow: hidden;
     width: 80px;
     height: 80px;
-    /* border: rgba(13, 255, 0, 0.43) 1px solid; */
+}
+
+.container_carousel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 20px;
+    height: 30px;
 }
 
 .hidden {
     opacity: 0;
-    /* display: none; */
     visibility: hidden;
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
@@ -69,4 +80,13 @@
 
 .thumbnail:hover {
     transform: scale(1.05);
+}
+
+.thumbnail_carousel {
+    position: relative;
+    cursor: pointer;
+}
+
+.thumbnail_carousel:hover {
+    opacity: .5;
 }

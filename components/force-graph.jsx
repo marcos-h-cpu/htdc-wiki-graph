@@ -178,7 +178,7 @@ export function ForceGraph({ data, onNodeClick }) {
           <span className="mb-2">Reach</span>
           <input
             type="range"
-            min="50"
+            min="10"
             max="500"
             step="10"
             defaultValue="200"

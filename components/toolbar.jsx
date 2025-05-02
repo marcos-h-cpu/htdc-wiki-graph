@@ -3,13 +3,16 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Carousel } from "./ui/carousel";
 import { useState } from "react";
 
-export default function Toolbar({updateGraph, setGraphData}) {
+export default function Toolbar(props) {
     const [url, setUrl] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
     const [isSettingsPopupOpen, setIsSettingsPopupOpen] = useState(false)
+
+    const {updateGraph, setGraphData} = props
 
 
     const isValidWikipediaUrl = (url) => {
@@ -106,9 +109,9 @@ export default function Toolbar({updateGraph, setGraphData}) {
 
     return (
         <>
-        <div className="flex flex-col gap-2 p-4 justify-center items-center w-full">
-          <div className="mb-2 absolute bottom-0 left-1/2 -translate-x-1/2 z-10 flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[8px] px-[36px] w-[99vw] backdrop-blur-md bg-opacity-50">
-          <CardContent className="flex flex-col gap-2 p-0">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 mb-3 flex flex-col gap-2 justify-end items-end w-[99vw] z-30">
+          <div className="flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[8px] px-[36px] w-full backdrop-blur-md bg-opacity-50">
+          <CardContent className="flex flex-col gap-2 p-0 w-[380px]">
             <form onSubmit={handleSubmit} className="flex flex-row gap-1 text-xs">
                 <Input
                   type="text"
@@ -135,19 +138,19 @@ export default function Toolbar({updateGraph, setGraphData}) {
               </Alert>
             )}
           </CardContent>
-          <Button onClick={() => setIsSettingsPopupOpen((prev) => !prev)} variant="outline" className="rounded-full h-[30px] px-4 py-2 text-xs">
-            File
-          </Button>
-            <div className="absolute bottom-[4vw] right-[53px] flex flex-row gap-1">
-              {isSettingsPopupOpen && (
-                <div className="bg-white border border-gray-300 rounded-md p-2 z-20">
-                  <ul className="flex flex-col gap-1">
-                    <li className="cursor-pointer hover:text-blue-500 text-xs" onClick={handleFileImport}>Import</li>
-                    <li className="cursor-pointer hover:text-blue-500 text-xs" onClick={exportGraph}>Export</li>
-                  </ul>
-                </div>
-              )}
-            </div>
+          <div className="w-[380px] overflow-hidden">
+            {props.children}
+          </div>
+
+          <div className="flex flex-row justify-end gap-1 w-[380px]">
+            {isSettingsPopupOpen && (
+                    <ul className="flex flex-row gap-1 justify-center items-center bg-white border rounded-full z-20 h-[30px] px-4 py-2">
+                        <li className="cursor-pointer hover:text-teal-600 text-xs" onClick={handleFileImport}>Import</li>
+                        <li className="cursor-pointer hover:text-teal-600 text-xs" onClick={exportGraph}>Export</li>
+                    </ul>
+                )}
+            <Button onClick={() => setIsSettingsPopupOpen((prev) => !prev)} variant="outline" className="rounded-full h-[30px] px-4 py-2 text-xs">File</Button>
+          </div>
           </div>
         </div>
         </>

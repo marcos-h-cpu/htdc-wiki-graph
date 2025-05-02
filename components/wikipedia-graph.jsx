@@ -6,6 +6,9 @@ import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import SelectedNode from "@/components/selected-node"
 import Toolbar from "@/components/toolbar"
+import NodeCarousel from "@/components/node-carousel"
+import CustomNode from "@/components/custom-node"
+
 
 export default function WikipediaGraph() {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] })
@@ -100,7 +103,17 @@ export default function WikipediaGraph() {
 
   return (
     <div>
-      <Toolbar updateGraph={updateGraph} setGraphData={setGraphData}/>
+      <Toolbar updateGraph={updateGraph} setGraphData={setGraphData}>
+        <NodeCarousel>
+          {graphData.nodes && graphData.nodes.length > 0 ? (
+            graphData.nodes.map((node) => (
+              <CustomNode key={node.id} node={node} onClick={() => handleNodeClick(node.id)} isCarouselNode={true} />
+            ))
+          ) : (
+            <p className="h-[7px] text-muted-foreground">No nodes available</p>
+          )}
+        </NodeCarousel>
+      </Toolbar>
       <div className="fixed top-4 left-4 z-10">
       {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode}/>}
       </div>
