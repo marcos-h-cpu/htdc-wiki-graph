@@ -88,5 +88,6 @@
 }
 
 .thumbnail_carousel:hover {
-    opacity: .5;
+    transform: scale(1.15);
+    /* border: 0.5px solid #49ff4f; */
 }

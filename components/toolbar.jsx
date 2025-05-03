@@ -138,7 +138,7 @@ export default function Toolbar(props) {
               </Alert>
             )}
           </CardContent>
-          <div className="w-[380px] overflow-hidden">
+          <div className="w-[380px]">
             {props.children}
           </div>
 
