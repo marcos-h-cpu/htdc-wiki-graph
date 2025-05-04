@@ -6,7 +6,7 @@ import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import SelectedNode from "@/components/selected-node"
 import Toolbar from "@/components/toolbar"
-import NodeCarousel from "@/components/node-carousel"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import CustomNode from "@/components/custom-node"
 
 
@@ -104,15 +104,21 @@ export default function WikipediaGraph() {
   return (
     <div>
       <Toolbar updateGraph={updateGraph} setGraphData={setGraphData}>
-        <NodeCarousel>
-          {graphData.nodes && graphData.nodes.length > 0 ? (
-            graphData.nodes.map((node) => (
-              <CustomNode key={node.id} node={node} onClick={() => handleNodeClick(node.id)} isCarouselNode={true} />
-            ))
-          ) : (
-            <p className="h-[7px] text-muted-foreground">No nodes available</p>
-          )}
-        </NodeCarousel>
+        <Carousel opts={{ slidesToScroll: 4, slidesToShow: 8 }}>
+          <CarouselContent>
+            {graphData.nodes.map((node) => (
+              <CarouselItem key={node.id} className="w-[20px] h-[30px]">
+                <CustomNode
+                  node={node}
+                  onClick={() => handleNodeClick(node.id)}
+                  isCarouselNode={true}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </Toolbar>
       <div className="fixed top-4 left-4 z-10">
       {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode}/>}

@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function NodeCarousel({ children }) {
   const [page, setPage] = useState(0);
-  const itemsPerPage = 16;
+  const itemsPerPage = 10;
 
   const childrenArray = React.Children.toArray(children);
   const totalPages = Math.ceil(childrenArray.length / itemsPerPage);
@@ -27,7 +27,7 @@ export default function NodeCarousel({ children }) {
   };
 
   return (
-    <div className="flex flex-row items-center justify-between w-full overflow-hidden">
+    <div className="flex flex-row items-center justify-center w-full overflow-hidden">
 
         <button
           onClick={handlePrev}
@@ -39,7 +39,7 @@ export default function NodeCarousel({ children }) {
             alt="Previous Page" 
             width={20} 
             height={20} 
-            className="h-4 w-4 transform rotate-180" // Flips the SVG horizontally
+            className="h-4 w-4 transform rotate-180"
           />
         </button>
         <div className="flex overflow-x-auto gap-0 p-0 h-[full]">
