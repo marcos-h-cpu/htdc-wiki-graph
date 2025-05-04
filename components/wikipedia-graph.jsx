@@ -62,6 +62,12 @@ export default function WikipediaGraph() {
     setSelectedNode(node)
   }
 
+  const handleCarouselNodeClick = async (nodeId) => {
+    const node = graphData.nodes.find((n) => n.id === nodeId)
+    setSearchTerm(node.title)
+
+  }
+
   const deselectNode = () => {
     setSelectedNode(null)
   }
@@ -110,7 +116,7 @@ export default function WikipediaGraph() {
               <CarouselItem key={node.id} className="w-[20px] h-[30px]">
                 <CustomNode
                   node={node}
-                  onClick={() => handleNodeClick(node.id)}
+                  onClick={() => handleCarouselNodeClick(node.id)}
                   isCarouselNode={true}
                 />
               </CarouselItem>

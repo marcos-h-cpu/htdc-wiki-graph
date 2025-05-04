@@ -50,7 +50,7 @@ export function ForceGraph({ data, onNodeClick }) {
       .force("charge", d3.forceManyBody().strength(-250))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("x", d3.forceX(width / 2).strength(0.1))
-      .force("y", d3.forceY(height / 2).strength(0.1))
+      .force("y", d3.forceY(height / 2).strength(0.5))
 
     simulationRef.current = simulation; // Store the simulation in the ref
 
