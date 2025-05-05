@@ -56,6 +56,19 @@ export default function WikipediaGraph() {
     });
   };
 
+  const exportGraph = () => {
+    const dataStr = JSON.stringify(graphData, null, 2)
+    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr)
+
+    const exportFileDefaultName = "wikipedia-graph.json"
+
+    const linkElement = document.createElement("a")
+    linkElement.setAttribute("href", dataUri)
+    linkElement.setAttribute("download", exportFileDefaultName)
+    linkElement.click()
+  }
+
+
   const handleNodeClick = async (nodeId) => {
     const node = graphData.nodes.find((n) => n.id === nodeId)
     if (!node) return
@@ -109,7 +122,7 @@ export default function WikipediaGraph() {
 
   return (
     <div>
-      <Toolbar updateGraph={updateGraph} setGraphData={setGraphData}>
+      <Toolbar updateGraph={updateGraph} setGraphData={setGraphData} exportGraph={exportGraph}>
         <Carousel opts={{ slidesToScroll: 4, slidesToShow: 8 }}>
           <CarouselContent>
             {graphData.nodes.map((node) => (

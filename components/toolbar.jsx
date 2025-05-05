@@ -12,7 +12,7 @@ export default function Toolbar(props) {
     const [error, setError] = useState(null)
     const [isSettingsPopupOpen, setIsSettingsPopupOpen] = useState(false)
 
-    const {updateGraph, setGraphData} = props
+    const {updateGraph, setGraphData, exportGraph} = props
 
 
     const isValidWikipediaUrl = (url) => {
@@ -60,18 +60,6 @@ export default function Toolbar(props) {
           fetchArticleData(url)
         }
     }
-
-    const exportGraph = () => {
-        const dataStr = JSON.stringify(graphData, null, 2)
-        const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr)
-    
-        const exportFileDefaultName = "wikipedia-graph.json"
-    
-        const linkElement = document.createElement("a")
-        linkElement.setAttribute("href", dataUri)
-        linkElement.setAttribute("download", exportFileDefaultName)
-        linkElement.click()
-      }
     
     const importGraph = (file) => {
         const reader = new FileReader()
