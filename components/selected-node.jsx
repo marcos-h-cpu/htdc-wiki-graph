@@ -1,20 +1,19 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import styles from "./selected-node.module.css";
 
-export default function SelectedNode({ node, handleLinkClick, deselectNode }) {
+export default function SelectedNode({ node, handleLinkClick, deselectNode, graphData }) {
   const [view, setView] = useState("summary");
 
   return (
     <>
       <div>
         {view === "summary" && (
-          <div className="flex flex-col items-left max-h-[80vh] w-[30vw] gap-2 bg-gray-100 rounded-sm border py-[2vh] px-[1vw] backdrop-blur-md bg-opacity-50 z-20 fixed left-[1vw] top-[2vh]">
-            <div className="mt-0 custom-scrollbar overflow-y-auto overflow-x-hidden">
-              <a href={node.url}>
-                <p className="text-gray-700 text-s">{node.title}</p>
-              </a>
-              <p className="text-xs">{node.summary}</p>
+          <div className="flex flex-col items-left max-h-[80vh] w-[30vw] gap-1 bg-gray-100 rounded-sm border py-[5px] px-[10px] backdrop-blur-md bg-opacity-50 z-20 fixed left-[1vw] top-[2vh]">
+            <a href={node.url} className="text-gray-700 text-s p-1">{node.title}</a>
+            <div className={`mt-0 max-h-[50vh] overflow-y-auto overflow-x-hidden !p-2 ${styles.scroll}`}>
+              <p className="text-xs p-1">{node.summary}</p>
             </div>
             <div className="flex gap-2">
               <Button
@@ -36,50 +35,49 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode }) {
         )}
 
         {view === "details" && (
-          <div className="flex flex-col items-left max-h-[80vh] w-[30vw] gap-1 bg-gray-100 rounded-sm border py-[2vh] px-[1vw] backdrop-blur-md bg-opacity-50 z-20 fixed left-[1vw] top-[2vh]">
-            <p className="text-gray-700 text-s">{node.title}</p>
-            <div className="border-t border-gray-300 my-2"></div>
+          <div className="flex flex-col items-left max-h-[80vh] w-[30vw] gap-1 bg-gray-100 rounded-sm border py-[5px] px-[10px] backdrop-blur-md bg-opacity-50 z-20 fixed left-[1vw] top-[2vh]">
+          <p className="text-gray-700 text-s p-1">{node.title}</p>
+          <div className={`mt-0 max-h-[50vh] overflow-y-auto overflow-x-hidden !p-2 ${styles.scroll}`}>
             <p className="text-gray-700 text-s">Image Source</p>
-            <p className="text-teal-600 text-[10px] max-h-[50px] overflow-hidden">
+            <p className="text-teal-600 text-xs w-full overflow-ellipsis nowrap">
               {node.image}
             </p>
             <div className="border-t border-gray-300 my-2"></div>
             <p className="text-gray-700 text-s">Links</p>
             <div className="mt-0">
               {node.links && (
-                <div className="flex flex-col items-left gap-2">
-                  {(() => {
-                    const sortedLinks = [...node.links].sort(
-                      (a, b) => b.title.length - a.title.length
-                    );
+                <div className="grid grid-cols-2 gap-2">
+                  {node.links.map((link, index) => {
+                    const linkedNode = graphData.nodes.find((n) => n.url === link.url);
 
-                    const rows = [
-                      sortedLinks.slice(0, 2),
-                      sortedLinks.slice(2, 5),
-                      sortedLinks.slice(5, 8),
-                      sortedLinks.slice(8, 11),
-                      sortedLinks.slice(11, 13),
-                      sortedLinks.slice(13, 15),
-                    ];
-
-                    return rows.map((row, rowIndex) => (
-                      <div key={rowIndex} className="flex gap-2">
-                        {row.map((link, linkIndex) => (
-                          <p
-                            key={linkIndex}
-                            className="text-teal-600 text-[10px] cursor-pointer text-center hover:underline"
+                    return (
+                      <div
+                        key={index}
+                        className="border p-1 flex flex-row justify-between items-center relative group cursor-pointer"
+                      >
+                        <p className="h-[18px] max-h-[18px] w-[full] text-gray-700 text-xs text-left overflow-ellipsis overflow-hidden">
+                          {link.title}
+                        </p>
+                        {linkedNode ? (
+                          <span>
+                            
+                          </span>
+                        ) : (
+                          <span
+                            className="cursor-pointer"
                             onClick={() => handleLinkClick(link)}
                           >
-                            {link.title}
-                          </p>
-                        ))}
+                            +
+                          </span>
+                        )}
                       </div>
-                    ));
-                  })()}
+                    );
+                  })}
                 </div>
               )}
             </div>
-            <div className="flex gap-2">
+          </div>
+          <div className="flex gap-2">
               <Button
                 variant="ghost"
                 onClick={() => setView("summary")}
@@ -94,7 +92,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode }) {
               >
                 Close
               </Button>
-            </div>
+          </div>
           </div>
         )}
       </div>
