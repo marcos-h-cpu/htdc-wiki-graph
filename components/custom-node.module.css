@@ -75,19 +75,19 @@
 
 .thumbnail {
     cursor: pointer;
-    transition: transform 0.2s ease-in-out;
+    transition: transform 0.3s ease-in-out;
 }
 
 .thumbnail:hover {
-    transform: scale(1.05);
+    transform: scale(.75);
 }
 
 .thumbnail_carousel {
     position: relative;
     cursor: pointer;
+    transition: transform 0.3s ease-in-out;
 }
 
 .thumbnail_carousel:hover {
-    transform: scale(1.15);
-    /* border: 0.5px solid #49ff4f; */
+    transform: scale(.5);
 }

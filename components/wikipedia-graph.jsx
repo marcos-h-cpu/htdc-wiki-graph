@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import * as d3 from "d3"
 import ReactDOM from "react-dom/client";
 import CustomNode from "@/components/custom-node"
-import styles from "./force-graph.module.css"
+import styles from "./wikipedia-graph.module.css"
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -313,7 +313,7 @@ export default function WikipediaGraph() {
   return (
     <div>
       <div className="fixed top-4 left-4 z-10">
-        {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode}/>}
+        {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} graphData={graphData}/>}
       </div>
       <div className="fixed top-4 right-4 z-10">
         <div className="flex flex-row justify-end gap-1 w-[380px]">
@@ -323,11 +323,11 @@ export default function WikipediaGraph() {
                 <li className="cursor-pointer hover:text-teal-600 text-xs" onClick={exportGraph}>Export</li>
             </ul>
             )}
-          <Button onClick={() => setIsSettingsPopupOpen((prev) => !prev)} variant="outline" className="rounded-full h-[30px] px-4 py-2 text-xs">File</Button>
+          <Button onClick={() => setIsSettingsPopupOpen((prev) => !prev)} variant="outline" className="rounded-full h-[30px] px-4 py-2 text-xs">Settings</Button>
         </div>
       
       </div>
-      <Toolbar updateGraph={updateGraph} setGraphData={setGraphData} exportGraph={exportGraph}>
+      <Toolbar setGraphData={setGraphData}>
         <Carousel className="w-[300px]" opts={{ slidesToScroll: 4, slidesToShow: 8 }}>
           <CarouselContent>
             {graphData.nodes.map((node) => (

@@ -61,38 +61,6 @@ export default function Toolbar(props) {
           fetchArticleData(url)
         }
     }
-    
-    const importGraph = (file) => {
-        const reader = new FileReader()
-        reader.onload = (event) => {
-          try {
-            const data = JSON.parse(event.target.result)
-            setGraphData(data)
-          } catch (error) {
-            setError("Invalid file format. Please upload a valid JSON file.")
-          }
-        }
-        reader.readAsText(file)
-    }
-
-    const handleFileChange = (event) => {
-        const file = event.target.files[0]
-        if (file) {
-            importGraph(file)
-        }
-    }
-
-    const handleFileUpload = () => {
-        const input = document.createElement("input")
-        input.type = "file"
-        input.accept = ".json"
-        input.onchange = handleFileChange
-        input.click()
-    }
-    
-    const handleFileImport = () => {
-        handleFileUpload()
-    }
 
 
 
