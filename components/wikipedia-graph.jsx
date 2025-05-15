@@ -86,7 +86,7 @@ export default function WikipediaGraph() {
         )
         .force("charge", d3.forceManyBody().strength(-250))
         .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("x", d3.forceX(width / 2).strength(0.1))
+        .force("x", d3.forceX(width / 2).strength(0.5))
         .force("y", d3.forceY(height / 2).strength(0.5))
   
       simulationRef.current = simulation; // Store the simulation in the ref
@@ -327,8 +327,20 @@ export default function WikipediaGraph() {
         </div>
       
       </div>
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col gap-2 justify-between items-center w-[99vw] z-30 z-40">
+      {graphData.nodes.length > 0 && (
+                <div className="md:w-64 mb-1">
+                <Input
+                  type="text"
+                  placeholder="Search"
+                  className="pl-5 rounded-full h-[30px] text-left"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+      )}
       <Toolbar setGraphData={setGraphData}>
-        <Carousel className="w-[300px]" opts={{ slidesToScroll: 4, slidesToShow: 8 }}>
+        <Carousel opts={{ slidesToScroll: 4, slidesToShow: 8 }}>
           <CarouselContent>
             {graphData.nodes.map((node) => (
               <CarouselItem key={node.id} className="w-[20px] h-[30px]">
@@ -343,9 +355,11 @@ export default function WikipediaGraph() {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-        <div className="flex flex-row gap-3 p-1 text-xs w-[480px]">
-          <label className="flex flex-col mb-1">
-            <span className="mb-1">Repulsion</span>
+
+        <div className="flex flex-row justify-center items-center gap-2 p-1 text-[8px]">
+        <div className="flex flex-col gap-1">
+          <label className="flex flex-row justify-start gap-1">
+            <span className="mb-0">Repulsion</span>
             <input
               type="range"
               min="0"
@@ -356,8 +370,8 @@ export default function WikipediaGraph() {
               className={styles.rangeInput}
             />
           </label>
-          <label className="flex flex-col mb-1">
-            <span className="mb-1">Reach</span>
+          <label className="flex flex-row justify-start gap-1">
+            <span className="mb-0">Reach</span>
             <input
               type="range"
               min="10"
@@ -368,45 +382,41 @@ export default function WikipediaGraph() {
               className={styles.rangeInput}
             />
           </label>
-          <label className="flex flex-col mb-1">
-            <span className="mb-1">X-Force</span>
+        </div>
+        <div className="flex flex-col gap-1">
+        <label className="flex flex-row justify-start gap-1">
+            <span className="mb-0">X-Force</span>
             <input
               type="range"
               min="0"
               max="1"
-              step=".1"
-              defaultValue=".1"
+              step=".10"
+              defaultValue=".50"
               onChange={(e) => updateForce("x", +e.target.value)}
               className={styles.rangeInput}
             />
           </label>
-          <label className="flex flex-col mb-1">
-            <span className="mb-1">Y-Force</span>
+          <label className="flex flex-row justify-start gap-1">
+            <span className="mb-0">Y-Force</span>
             <input
               type="range"
               min="0"
               max="1"
-              step=".1"
-              defaultValue=".1"
+              step=".10"
+              defaultValue=".50"
               onChange={(e) => updateForce("y", +e.target.value)}
               className={styles.rangeInput}
             />
           </label>
+          
+
+        </div>
+
         </div>
 
       </Toolbar>
-      {graphData.nodes.length > 0 && (
-                <div className="absolute bottom-[4.5vw] left-1/2 -translate-x-1/2 w-full md:w-64 z-40">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Search nodes..."
-                  className="pl-8 rounded-full"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-        )}
+      </div>
+
 
       <div className="fixed inset-0 w-full h-full border overflow-hidden">
         {graphData.nodes.length > 0 ? (

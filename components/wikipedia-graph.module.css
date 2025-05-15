@@ -8,9 +8,9 @@
     appearance: none;
     -webkit-appearance: none;
   border: 1px solid #1de9b6;
-  height: 14px;
-  width: 6px;
-  border-radius: 30%;
+  height: 12px;
+  width: 12px;
+  border-radius: 100%;
   background: #00897b;
   cursor: pointer;
   margin-top: -5px;
@@ -20,9 +20,9 @@
     appearance: none;
     -webkit-appearance: none;
   border: 1px solid #1de9b6;
-  height: 14px;
-  width: 6px;
-  border-radius: 30%;
+  height: 12px;
+  width: 12px;
+  border-radius: 100%;
   background: #00897b;
   cursor: pointer;
 }
@@ -30,16 +30,16 @@
 
 .rangeInput::-webkit-slider-runnable-track {
     height: 4px;
-    background: #e0f2f1;
-    border-radius: 10%;
+    background: #ffffff;
+    border-radius: 2px;
     border: 1px solid #c5c4c4;
     cursor: pointer;
 }
 
 .rangeInput::-moz-range-track {
     width: 80%; /* Reduce the width for a narrower track */
-    height: 6px; /* Keep the height as is or adjust if needed */
-    background: #e0f2f1;
+    height: 4px; /* Keep the height as is or adjust if needed */
+    background: #ffffff;
     border-radius: 3px;
     border: 1px solid #c5c4c4;
     cursor: pointer;
