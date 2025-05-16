@@ -76,21 +76,16 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
                             return (
                               <div
                                 key={index}
-                                className="p-1 flex flex-row justify-between items-center cursor-pointer"
+                                className="p-1 flex flex-row justify-between items-center"
                               >
-                                <p className=" max-h-[18px] text-gray-700 text-xs text-left overflow-ellipsis overflow-hidden">
+                                <p
+                                  className={`max-h-[18px] text-xs text-left overflow-ellipsis overflow-hidden ${
+                                    linkedNode ? "text-teal-600" : "text-gray-700 cursor-pointer"
+                                  }`}
+                                  onClick={!linkedNode ? () => handleLinkClick(link) : undefined}
+                                >
                                   {link.title}
                                 </p>
-                                {linkedNode ? (
-                                  <span></span>
-                                ) : (
-                                  <span
-                                    className="cursor-pointer"
-                                    onClick={() => handleLinkClick(link)}
-                                  >
-                                    
-                                  </span>
-                                )}
                               </div>
                             );
                           })}
