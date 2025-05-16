@@ -37,8 +37,7 @@
 }
 
 .rangeInput::-moz-range-track {
-    width: 80%; /* Reduce the width for a narrower track */
-    height: 4px; /* Keep the height as is or adjust if needed */
+    height: 5px; /* Keep the height as is or adjust if needed */
     background: #ffffff;
     border-radius: 3px;
     border: 1px solid #c5c4c4;

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { XMarkIcon } from "@heroicons/react/24/outline"; // Import the X icon
 import styles from "./selected-node.module.css";
 
 export default function SelectedNode({ node, handleLinkClick, deselectNode, graphData }) {
@@ -11,11 +12,12 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
       <div className="flex flex-col items-left w-[30vw] gap-1 z-20 fixed left-[1vw] top-[2vh]">
         <div className="flex flex-row justify-between items-center">
         <a href={node.url} className="text-gray-700 text-md p-0">{node.title}</a>
+        
         <div className="flex gap-1 items-center">
           <select
             onChange={(e) => setView(e.target.value)}
             value={view}
-            className="px-4 py-2 text-xs cursor-pointer flex items-center w-[110px]"
+            className="py-2 text-xs cursor-pointer flex items-center px-1"
           >
             <option value="summary">Summary</option>
             <option value="details">Links</option>
@@ -25,9 +27,10 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           <Button
             variant="ghost"
             onClick={deselectNode}
-            className="h-[24px] rounded-full px-4 py-2 text-xs border bg-white"
+            className="h-[24px] w-[24px] flex items-center justify-center"
+            aria-label="Close"
           >
-            Close
+            <XMarkIcon className="h-4 w-4 text-red-500" />
           </Button>
         </div>
         </div>
@@ -48,7 +51,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           <div>
             <div className={`mt-0 max-h-[50vh] overflow-y-auto overflow-x-hidden !p-0 ${styles.scroll}`}>
 
-              <div className="mt-0">
+              <div>
                 {node.links && (
                   <div className="flex flex-col gap-0">
                     {(() => {
