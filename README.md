@@ -6,5 +6,5 @@ By focusing on the user’s path this project offers a more personal and digesti
 
 Ultimately, this project is both a technical exercise in graph-based visualization and a reflection on how we consume knowledge online. By making the rabbit hole visible, we can better understand our patterns of curiosity and learn to retain more along the way.
 
-
-![howtodisappearcompletely - Google Chrome 5_3_2025 10_41_28 PM](https://github.com/user-attachments/assets/facaeb18-b1f1-440f-9a8e-9a67a1439b7f)
+<img width="400" alt="Screenshot 2025-05-17 151256" src="https://github.com/user-attachments/assets/2ab3c3bb-398d-4cd0-b4a0-e5ba3232f021" />
+<img width="400" alt="Graphic" src="https://github.com/user-attachments/assets/a3f8fe52-835c-44d6-a580-b92cdd71d5a5" />
