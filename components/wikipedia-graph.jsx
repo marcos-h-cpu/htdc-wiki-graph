@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import * as d3 from "d3"
 import ReactDOM from "react-dom/client";
 import CustomNode from "@/components/custom-node"
@@ -20,22 +20,28 @@ export default function WikipediaGraph() {
   const [selectedNode, setSelectedNode] = useState(null)
   const [isSettingsPopupOpen, setIsSettingsPopupOpen] = useState(false)
 
-  const filteredNodes = searchTerm
-  ? graphData.nodes.filter((node) => node.title.toLowerCase().includes(searchTerm.toLowerCase()))
-  : graphData.nodes
+  const filteredData = useMemo(() => {
+    const filteredNodes = searchTerm
+      ? graphData.nodes.filter((node) =>
+          node.title.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : graphData.nodes;
 
-  const filteredLinks = searchTerm
-    ? graphData.links.filter((link) => {
-        const sourceNode = graphData.nodes.find((n) => n.id === link.source)
-        const targetNode = graphData.nodes.find((n) => n.id === link.target)
-        return sourceNode && filteredNodes.includes(sourceNode) && targetNode && filteredNodes.includes(targetNode)
-      })
-    : graphData.links
+    const filteredLinks = searchTerm
+      ? graphData.links.filter((link) => {
+          const sourceNode = graphData.nodes.find((n) => n.id === link.source);
+          const targetNode = graphData.nodes.find((n) => n.id === link.target);
+          return (
+            sourceNode &&
+            filteredNodes.includes(sourceNode) &&
+            targetNode &&
+            filteredNodes.includes(targetNode)
+          );
+        })
+      : graphData.links;
 
-  const filteredData = {
-    nodes: filteredNodes,
-    links: filteredLinks,
-  }
+    return { nodes: filteredNodes, links: filteredLinks };
+  }, [graphData, searchTerm]);
 
   // Force graph simulation
   const svgRef = useRef(null)
@@ -178,7 +184,7 @@ export default function WikipediaGraph() {
       return () => {
         simulation.stop()
       }
-    }, [graphData])
+    }, [filteredData])
   
   const updateForce = (forceName, value) => {
       if (simulationRef.current) {
@@ -338,7 +344,9 @@ export default function WikipediaGraph() {
                   placeholder="Search"
                   className="pl-5 rounded-full h-[30px] text-left"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => 
+                    setSearchTerm(e.target.value)
+                  }
                 />
               </div>
       )}

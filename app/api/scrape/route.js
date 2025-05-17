@@ -122,7 +122,6 @@ export async function POST(request) {
       }
     })
 
-    console.log("Response payload:", { title, summary, image, links })
 
     return NextResponse.json({
       title,
