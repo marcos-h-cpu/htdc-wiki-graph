@@ -350,7 +350,7 @@ export default function WikipediaGraph() {
                 />
               </div>
       )}
-      <Toolbar setGraphData={setGraphData}>
+      <Toolbar setGraphData={setGraphData} updateGraph={updateGraph}>
         <Carousel opts={{ slidesToScroll: 4, slidesToShow: 8 }}>
           <CarouselContent>
             {graphData.nodes.map((node) => (
