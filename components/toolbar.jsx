@@ -43,7 +43,6 @@ export default function Toolbar(props) {
           }
     
           const data = await response.json()
-          console.log(data)
     
           // Update graph with new data
           updateGraph(data, articleUrl)

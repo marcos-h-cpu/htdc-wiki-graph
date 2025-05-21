@@ -5,7 +5,6 @@ import * as d3 from "d3"
 import ReactDOM from "react-dom/client";
 import CustomNode from "@/components/custom-node"
 import styles from "./wikipedia-graph.module.css"
-import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import SelectedNode from "@/components/selected-node"
@@ -19,6 +18,7 @@ export default function WikipediaGraph() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedNode, setSelectedNode] = useState(null)
   const [isSettingsPopupOpen, setIsSettingsPopupOpen] = useState(false)
+  const [linkHashMap, setLinkHashMap] = useState(new Map())
 
   const filteredData = useMemo(() => {
     const filteredNodes = searchTerm
@@ -51,7 +51,6 @@ export default function WikipediaGraph() {
     const node = graphData.nodes.find((n) => n.id === nodeId)
     if (!node) return
     setSelectedNode(node)
-    console.log(node)
   }
 
   useEffect(() => {
@@ -232,7 +231,28 @@ export default function WikipediaGraph() {
       newLinks.push({
         source: selectedNode.id,
         target: sourceId,
+        connectionType: "Child"
       });
+    }
+
+    for (const link of data.links) {
+      if (!linkHashMap.has(link.title)) {
+        linkHashMap.set(link.title, [sourceId])
+      } else {
+        if (linkHashMap.has(link.title)) {
+          const existingLinks = linkHashMap.get(link.title)
+          for (const existingLink of existingLinks) {
+            if (!newLinks.some((l) => l.source === existingLink && l.target === sourceId)) {
+              newLinks.push({
+                source: existingLink,
+                target: sourceId,
+                connectionType: link.url
+              })
+              console.log("Link added:", existingLink, sourceId, link.url)
+            }
+          }
+        }
+      }
     }
   
     setGraphData({
