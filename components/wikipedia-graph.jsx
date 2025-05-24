@@ -69,7 +69,7 @@ export default function WikipediaGraph() {
       // Add zoom functionality
       const zoom = d3
         .zoom()
-        .scaleExtent([0.1, 10])
+        .scaleExtent([0.01, 5])
         .on("zoom", (event) => {
           g.attr("transform", event.transform)
         })
@@ -101,7 +101,7 @@ export default function WikipediaGraph() {
       const link = g
         .append("g")
         .attr("stroke", "#00897b")
-        .attr("stroke-opacity", .9)
+        .attr("stroke-opacity", .25)
         .selectAll("path")
         .data(links)
         .join("path")
