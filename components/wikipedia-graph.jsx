@@ -92,7 +92,7 @@ export default function WikipediaGraph() {
         )
         .force("charge", d3.forceManyBody().strength(-250))
         .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("x", d3.forceX(width / 2).strength(0.5))
+        .force("x", d3.forceX(width / 2).strength(0.1))
         .force("y", d3.forceY(height / 2).strength(0.5))
   
       simulationRef.current = simulation; // Store the simulation in the ref
@@ -253,7 +253,7 @@ export default function WikipediaGraph() {
           }
         }
       }
-    }
+}
   
     setGraphData({
       nodes: newNodes,
@@ -262,29 +262,46 @@ export default function WikipediaGraph() {
   };
 
   const exportGraph = () => {
-    const dataStr = JSON.stringify(graphData, null, 2)
-    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr)
+    const fileName = prompt("Enter a name for the export file:", "wikipedia-graph.json");
+    if (!fileName) return; // Exit if the user cancels or doesn't provide a name
 
-    const exportFileDefaultName = "wikipedia-graph.json"
+    const dataToExport = {
+      graphData,
+      linkHashMap: Array.from(linkHashMap.entries()), // Convert Map to array for JSON serialization
+    };
 
-    const linkElement = document.createElement("a")
-    linkElement.setAttribute("href", dataUri)
-    linkElement.setAttribute("download", exportFileDefaultName)
-    linkElement.click()
+    const dataStr = JSON.stringify(dataToExport, null, 2);
+    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = fileName.endsWith(".json") ? fileName : `${fileName}.json`;
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
+    linkElement.click();
   }
 
 
   const importGraph = (file) => {
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = (event) => {
       try {
-        const data = JSON.parse(event.target.result)
-        setGraphData(data)
+        const importedData = JSON.parse(event.target.result);
+
+        // Validate and set graph data
+        if (importedData.graphData) {
+          setGraphData(importedData.graphData);
+        }
+
+        // Validate and set linkHashMap
+        if (importedData.linkHashMap) {
+          setLinkHashMap(new Map(importedData.linkHashMap)); // Convert array back to Map
+        }
       } catch (error) {
-        setError("Invalid file format. Please upload a valid JSON file.")
+        setError("Invalid file format. Please upload a valid JSON file.");
       }
-    }
-    reader.readAsText(file)
+    };
+    reader.readAsText(file);
   }
 
   const handleFileChange = (event) => {
