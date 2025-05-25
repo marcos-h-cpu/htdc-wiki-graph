@@ -100,8 +100,8 @@ export default function WikipediaGraph() {
       // Create the links
       const link = g
         .append("g")
-        .attr("stroke", "#00897b")
-        .attr("stroke-opacity", .25)
+        .attr("stroke", "#006FFF")
+        .attr("stroke-opacity", .3)
         .selectAll("path")
         .data(links)
         .join("path")

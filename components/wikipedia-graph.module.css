@@ -7,39 +7,39 @@
 .rangeInput::-webkit-slider-thumb {
     appearance: none;
     -webkit-appearance: none;
-  border: 1px solid #1de9b6;
+  border: 1px solid #c5c4c4;
   height: 12px;
   width: 12px;
   border-radius: 100%;
-  background: #00897b;
+  background: #ffffff;
   cursor: pointer;
-  margin-top: -5px;
+  margin-top: -3px;
 }
 
 .rangeInput::-moz-range-thumb {
     appearance: none;
     -webkit-appearance: none;
-  border: 1px solid #1de9b6;
+  border: 1px solid #c5c4c4;
   height: 12px;
   width: 12px;
   border-radius: 100%;
-  background: #00897b;
+  background: #ffffff;
   cursor: pointer;
 }
 
 
 .rangeInput::-webkit-slider-runnable-track {
-    height: 4px;
+    height: 6px;
     background: #ffffff;
-    border-radius: 2px;
+    border-radius: 4px;
     border: 1px solid #c5c4c4;
     cursor: pointer;
 }
 
 .rangeInput::-moz-range-track {
-    height: 5px; /* Keep the height as is or adjust if needed */
+    height: 6px;
     background: #ffffff;
-    border-radius: 3px;
+    border-radius: 4px;
     border: 1px solid #c5c4c4;
     cursor: pointer;
 }
