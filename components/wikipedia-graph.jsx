@@ -130,8 +130,8 @@ export default function WikipediaGraph() {
         .attr("class", "node")
         .attr("width", 80) // Adjust width for CustomNode
         .attr("height", 80) // Adjust height for CustomNode
-        .attr("x", (d) => d.x - 40) // Center the node horizontally
-        .attr("y", (d) => d.y - 40) // Center the node vertically
+        .attr("x", (d) => d.x - 20) // Center the node horizontally
+        .attr("y", (d) => d.y - 20) // Center the node vertically
         .html((d) => {
           // Create a placeholder div for React to render into
           return `<div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
@@ -322,8 +322,6 @@ export default function WikipediaGraph() {
   const handleFileImport = () => {
       handleFileUpload()
   }
-
-
 
   const handleCarouselNodeClick = async (nodeId) => {
     const node = graphData.nodes.find((n) => n.id === nodeId)

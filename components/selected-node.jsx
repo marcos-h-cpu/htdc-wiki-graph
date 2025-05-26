@@ -139,9 +139,9 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showEdges && (
-            <div className="mb-4">
+            <div>
               <h3 className="text-sm">Edges</h3>
-              <table className="table-auto border-collapse border border-gray-300 w-full text-xs">
+              <table className="table-auto border-collapse border border-gray-300 text-xs max-w-full">
                 <thead>
                   <tr>
                     <th className="border border-gray-300 px-2 py-1 text-left">Source</th>
@@ -155,19 +155,19 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
                     .map((link, index) => (
                       <tr key={index} className="hover:bg-blue-100 !bg-opacity-25">
                         <td
-                          className="border border-gray-300 px-2 py-1 text-xs overflow-hidden text-ellipsis whitespace-nowrap"
+                          className="border border-gray-300 px-2 py-1 text-[9px] overflow-hidden text-ellipsis whitespace-nowrap"
                           title={link.source}
                         >
                           {link.source}
                         </td>
                         <td
-                          className="border border-gray-300 px-2 py-1 text-xs overflow-hidden text-ellipsis whitespace-nowrap"
+                          className="border border-gray-300 px-2 py-1 text-[9px]  overflow-hidden text-ellipsis whitespace-nowrap"
                           title={link.target}
                         >
                           {link.target}
                         </td>
                         <td
-                          className="border border-gray-300 px-2 py-1 text-xs overflow-hidden text-ellipsis whitespace-nowrap"
+                          className="border border-gray-300 px-2 py-1 text-[9px] overflow-hidden text-ellipsis whitespace-nowrap"
                           title={link.connectionType}
                         >
                           {link.connectionType === "Child" ? (

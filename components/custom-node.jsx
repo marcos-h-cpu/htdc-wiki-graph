@@ -15,7 +15,7 @@ export default function CustomNode({ node, onClick, isCarouselNode }) {
                     src={node.image || "/placeholder.png"}
                     alt={node.title}
                     width={20}
-                    height={20}
+                    height={30}
                     layout="intrinsic"
                 />
             </div>
@@ -29,14 +29,14 @@ export default function CustomNode({ node, onClick, isCarouselNode }) {
         >
             
             {!node.image ? (
-                <p className={`${styles.title} text-gray-600`}>{node.title}</p>
+                <p className={`${styles.title} text-black-600`}>{node.title}</p>
             ) : (
                 <>
                     <Image className={styles.thumbnail}
                         src={node.image || "/placeholder.png"}
                         alt={node.title}
                         width={50}
-                        height={50}
+                        height={100}
                         layout="intrinsic"
                     />
                 </>
