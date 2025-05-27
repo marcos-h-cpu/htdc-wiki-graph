@@ -23,12 +23,12 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
               className="h-[24px] w-[24px] flex items-center justify-center"
               aria-label="Close"
             >
-              <XMarkIcon className="h-4 w-4 text-black-500" />
+              <XMarkIcon className="h-4 w-4 text-black-700" />
             </Button>
           </div>
         </div>
 
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-4">
           <div
             onClick={() => setShowSummary(!showSummary)}
             className={`text-xs cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}
@@ -57,7 +57,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
 
         <div>
           {showSummary && (
-            <div className="flex flex-col items-left mb-4">
+            <div className="flex flex-col items-left mb-0">
               <h3 className="text-sm">Summary</h3>
               <div className="mt-0 !p-0">
                 {node.summary.split("\n\n").map((paragraph, index) => (
@@ -70,7 +70,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showDetails && (
-            <div className="mb-4">
+            <div className="mb-0">
               <h3 className="text-sm">Links</h3>
               <div className="mt-0 max-h-[50vh] overflow-y-auto overflow-x-hidden !p-0">
                 <div>
@@ -121,7 +121,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showImageDetails && (
-            <div className="mb-4">
+            <div className="mb-0">
               <h3 className="text-sm">Image</h3>
               <div className="flex flex-col items-center">
                 {node.image ? (

@@ -358,18 +358,44 @@ export default function WikipediaGraph() {
         {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} graphData={graphData}/>}
       </div>
       <div className="fixed top-4 right-4 z-10">
-        <div className="flex flex-row justify-end gap-1">
+        <div className="bg-gray-100 rounded-md border backdrop-blur-md bg-opacity-50"> 
+        <span
+            onClick={() => setIsSettingsPopupOpen((prev) => !prev)}
+            className="h-[30px] px-4 py-2 text-sm cursor-pointer"
+          >
+            Settings
+        </span>
+        
           {isSettingsPopupOpen && (
-            <ul className="flex flex-row gap-1 justify-center items-center bg-white border rounded-full z-20 h-[30px] px-4 py-2">
-                <li className="cursor-pointer hover:text-teal-600 text-xs" onClick={handleFileImport}>Import</li>
-                <li className="cursor-pointer hover:text-teal-600 text-xs" onClick={exportGraph}>Export</li>
-            </ul>
-            )}
-          <Button onClick={() => setIsSettingsPopupOpen((prev) => !prev)} variant="outline" className="rounded-full h-[30px] px-2 py-2">
-            <Cog6ToothIcon className="h-4 w-4 text-gray-700" />
-          </Button>
+              <ul className="flex flex-col gap-1 p-2">
+                <li
+                  className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                  onClick={handleFileImport}
+                >
+                  Import
+                </li>
+                <li
+                  className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                  onClick={exportGraph}
+                >
+                  Export
+                </li>
+                <li
+                  className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                  onClick={() => alert("Settings option clicked!")}
+                >
+                  Settings
+                </li>
+                <li
+                  className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                  onClick={() => alert("Help option clicked!")}
+                >
+                  Help
+                </li>
+              </ul>
+          )}
         </div>
-      
+        
       </div>
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col gap-2 justify-between items-center w-[99vw] z-30 z-40">
       {graphData.nodes.length > 0 && (
