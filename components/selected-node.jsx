@@ -55,10 +55,10 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           </div>
         </div>
 
-        <div>
+        <div className="flex flex-col gap-4">
           {showSummary && (
-            <div className="flex flex-col items-left mb-0">
-              <h3 className="text-sm">Summary</h3>
+            <div className="flex flex-col items-left border-t">
+              <h3 className="text-sm mt-2">Summary</h3>
               <div className="mt-0 !p-0">
                 {node.summary.split("\n\n").map((paragraph, index) => (
                   <p key={index} className="text-xs p-0">
@@ -70,8 +70,8 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showDetails && (
-            <div className="mb-0">
-              <h3 className="text-sm">Links</h3>
+            <div className="border-t">
+              <h3 className="text-sm mt-2">Links</h3>
               <div className="mt-0 max-h-[50vh] overflow-y-auto overflow-x-hidden !p-0">
                 <div>
                   {node.links && (
@@ -121,8 +121,8 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showImageDetails && (
-            <div className="mb-0">
-              <h3 className="text-sm">Image</h3>
+            <div className="border-t">
+              <h3 className="text-sm mt-2">Image</h3>
               <div className="flex flex-col items-center">
                 {node.image ? (
                   <Image
@@ -139,8 +139,8 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showEdges && (
-            <div>
-              <h3 className="text-sm">Edges</h3>
+            <div className="border-t">
+              <h3 className="text-sm mt-2">Edges</h3>
               <table className="table-auto border-collapse border border-gray-300 text-xs max-w-full">
                 <thead>
                   <tr>
