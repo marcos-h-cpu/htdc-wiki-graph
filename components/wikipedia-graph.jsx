@@ -17,7 +17,9 @@ export default function WikipediaGraph() {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] })
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedNode, setSelectedNode] = useState(null)
-  const [isSettingsPopupOpen, setIsSettingsPopupOpen] = useState(false)
+  const [isFileOptionsOpen, setisFileOptionsOpen] = useState(false)
+  const [isViewOptionsOpen, setIsViewOptionsOpen] = useState(false)
+  const [isEditOptionsOpen, setIsEditOptionsOpen] = useState(false)
   const [linkHashMap, setLinkHashMap] = useState(new Map())
 
   const filteredData = useMemo(() => {
@@ -357,17 +359,21 @@ export default function WikipediaGraph() {
       <div className="fixed top-4 left-4 z-10">
         {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} graphData={graphData}/>}
       </div>
-      <div className="fixed top-4 right-4 z-10">
-        <div className="bg-gray-100 rounded-md border backdrop-blur-md bg-opacity-50"> 
-        <span
-            onClick={() => setIsSettingsPopupOpen((prev) => !prev)}
-            className="h-[30px] px-4 py-2 text-sm cursor-pointer"
-          >
-            Settings
-        </span>
+      <div className=" fixed top-4 right-4 z-10 bg-gray-100 rounded-md border backdrop-blur-md bg-opacity-50">
+        <div className="flex flex-row gap-2 items-center justify-start px-4 py-2">
+          <div onClick={() => setisFileOptionsOpen((prev) => !prev)} className="text-sm cursor-pointer">
+              File
+          </div>
+          <div onClick={() => setIsViewOptionsOpen((prev) => !prev)} className="text-sm cursor-pointer">
+              View
+          </div>
+          <div onClick={() => setIsEditOptionsOpen((prev) => !prev)} className="text-sm cursor-pointer">
+              Edit
+          </div>
+        </div>
         
-          {isSettingsPopupOpen && (
-              <ul className="flex flex-col gap-1 p-2">
+          {isFileOptionsOpen && (
+              <ul className="flex flex-col gap-1 p-2 border-t">
                 <li
                   className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
                   onClick={handleFileImport}
@@ -382,19 +388,45 @@ export default function WikipediaGraph() {
                 </li>
                 <li
                   className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
-                  onClick={() => alert("Settings option clicked!")}
+                  onClick={() => setGraphData({ nodes: [], links: [] })}
                 >
-                  Settings
-                </li>
-                <li
-                  className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
-                  onClick={() => alert("Help option clicked!")}
-                >
-                  Help
+                  Clear Graph
                 </li>
               </ul>
           )}
-        </div>
+          {isViewOptionsOpen && (
+            <ul className="flex flex-col gap-1 p-2 border-t">
+              <li
+                className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                onClick={() => setIsViewOptionsOpen(false)}
+              >
+                View Options
+              </li>
+              <li
+                className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                onClick={() => setIsViewOptionsOpen(false)}
+              >
+                View Options
+              </li>
+            </ul>
+          )}
+          {isEditOptionsOpen && (
+            <ul className="flex flex-col gap-1 p-2 border-t">
+              <li
+                className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                onClick={() => setIsEditOptionsOpen(false)}
+              >
+                Edit Options
+              </li>
+              <li
+                className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                onClick={() => setIsEditOptionsOpen(false)}
+              >
+                Edit Options
+              </li>
+            </ul>
+          )}
+          
         
       </div>
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col gap-2 justify-between items-center w-[99vw] z-30 z-40">
