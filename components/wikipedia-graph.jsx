@@ -6,11 +6,10 @@ import ReactDOM from "react-dom/client";
 import CustomNode from "@/components/custom-node"
 import styles from "./wikipedia-graph.module.css"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import SelectedNode from "@/components/selected-node"
 import Toolbar from "@/components/toolbar"
+import HoverHighlight from "@/components/hover-highlight"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
-import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 
 
 export default function WikipediaGraph() {
@@ -20,6 +19,7 @@ export default function WikipediaGraph() {
   const [isFileOptionsOpen, setisFileOptionsOpen] = useState(false)
   const [isViewOptionsOpen, setIsViewOptionsOpen] = useState(false)
   const [isEditOptionsOpen, setIsEditOptionsOpen] = useState(false)
+  const [highlightNode, setHighlightNode] = useState(null)
   const [linkHashMap, setLinkHashMap] = useState(new Map())
 
   const filteredData = useMemo(() => {
@@ -90,12 +90,12 @@ export default function WikipediaGraph() {
           d3
             .forceLink(links)
             .id((d) => d.id)
-            .distance(200),
+            .distance(10),
         )
-        .force("charge", d3.forceManyBody().strength(-250))
+        .force("charge", d3.forceManyBody().strength(-500))
         .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("x", d3.forceX(width / 2).strength(0.1))
-        .force("y", d3.forceY(height / 2).strength(0.5))
+        .force("x", d3.forceX(width / 2).strength(0))
+        .force("y", d3.forceY(height / 2).strength(0))
   
       simulationRef.current = simulation; // Store the simulation in the ref
   
@@ -147,7 +147,7 @@ export default function WikipediaGraph() {
         if (container) {
           const root = ReactDOM.createRoot(container);
           root.render(
-            <CustomNode node={node} onClick={() => handleNodeClick(node.id)} />
+            <CustomNode node={node} onClick={() => handleNodeClick(node.id)} setHighlightNode={setHighlightNode} />
           );
         }
       });
@@ -359,7 +359,7 @@ export default function WikipediaGraph() {
       <div className="fixed top-4 left-4 z-10">
         {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} graphData={graphData}/>}
       </div>
-      <div className=" fixed top-4 right-4 z-10 bg-gray-100 rounded-md border backdrop-blur-md bg-opacity-50">
+      <div className="fixed top-4 right-4 z-10 bg-gray-100 rounded-md border backdrop-blur-md bg-opacity-50">
         <div className="flex flex-row gap-2 items-center justify-start px-4 py-2">
           <div onClick={() => setisFileOptionsOpen((prev) => !prev)} className="text-sm cursor-pointer">
               File
@@ -429,6 +429,9 @@ export default function WikipediaGraph() {
           
         
       </div>
+      <div className="fixed right-4 top-1/2 -translate-y-1/2 z-10">
+          <HoverHighlight node={highlightNode} />
+      </div>
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col gap-2 justify-between items-center w-[99vw] z-30 z-40">
       {graphData.nodes.length > 0 && (
                 <div className="md:w-64 mb-1">
@@ -469,7 +472,7 @@ export default function WikipediaGraph() {
               min="0"
               max="500"
               step="50"
-              defaultValue="250"
+              defaultValue="500"
               onChange={(e) => updateForce("charge", -(+e.target.value))}
               className={styles.rangeInput}
             />
@@ -481,7 +484,7 @@ export default function WikipediaGraph() {
               min="10"
               max="500"
               step="10"
-              defaultValue="200"
+              defaultValue="10"
               onChange={(e) => updateForce("linkDistance", +e.target.value)}
               className={styles.rangeInput}
             />
@@ -495,7 +498,7 @@ export default function WikipediaGraph() {
               min="0"
               max="1"
               step=".10"
-              defaultValue=".50"
+              defaultValue="0"
               onChange={(e) => updateForce("x", +e.target.value)}
               className={styles.rangeInput}
             />
@@ -507,7 +510,7 @@ export default function WikipediaGraph() {
               min="0"
               max="1"
               step=".10"
-              defaultValue=".50"
+              defaultValue="0"
               onChange={(e) => updateForce("y", +e.target.value)}
               className={styles.rangeInput}
             />

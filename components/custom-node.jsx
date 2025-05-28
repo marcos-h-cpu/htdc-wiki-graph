@@ -3,7 +3,7 @@ import Image from "next/image"
 import styles from "./custom-node.module.css"
 import { useState } from "react"
 
-export default function CustomNode({ node, onClick, isCarouselNode }) {
+export default function CustomNode({ node, onClick, isCarouselNode, setHighlightNode }) {
     if (isCarouselNode) {
         return (
             <div 
@@ -25,6 +25,8 @@ export default function CustomNode({ node, onClick, isCarouselNode }) {
     return (
         <div 
             onClick={onClick}
+            onMouseEnter={() => setHighlightNode(node)} // Set highlight on hover
+            onMouseLeave={() => setHighlightNode(null)} // Clear highlight when hover ends
             className={styles.container}
         >
             
@@ -32,7 +34,8 @@ export default function CustomNode({ node, onClick, isCarouselNode }) {
                 <p className={`${styles.title} text-black-600`}>{node.title}</p>
             ) : (
                 <>
-                    <Image className={styles.thumbnail}
+                    <Image 
+                        className={styles.thumbnail}
                         src={node.image || "/placeholder.png"}
                         alt={node.title}
                         width={50}
