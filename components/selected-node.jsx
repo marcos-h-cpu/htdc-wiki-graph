@@ -60,7 +60,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
             <div className="flex flex-col items-left border-t">
               <h3 className="text-sm mt-2">Summary</h3>
               <div className="mt-0 !p-0">
-                {node.summary.split("\n").map((paragraph, index) => (
+                {node.summary.split("\n\n").map((paragraph, index) => (
                   <p key={index} className="text-xs p-0">
                     {paragraph}
                   </p>
