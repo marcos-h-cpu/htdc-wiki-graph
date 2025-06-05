@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import SelectedNode from "@/components/selected-node"
 import Toolbar from "@/components/toolbar"
 import HoverHighlight from "@/components/hover-highlight"
+import GraphDataRud from "@/components/graphdata-rud"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 
 
@@ -19,6 +20,7 @@ export default function WikipediaGraph() {
   const [isFileOptionsOpen, setisFileOptionsOpen] = useState(false)
   const [isViewOptionsOpen, setIsViewOptionsOpen] = useState(false)
   const [isEditOptionsOpen, setIsEditOptionsOpen] = useState(false)
+  const [graphDataMenuOpen, setGraphDataMenuOpen] = useState(false)
   const [highlightNode, setHighlightNode] = useState(null)
   const [linkHashMap, setLinkHashMap] = useState(new Map())
 
@@ -414,15 +416,9 @@ export default function WikipediaGraph() {
             <ul className="flex flex-col gap-1 p-2 border-t">
               <li
                 className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
-                onClick={() => setIsEditOptionsOpen(false)}
+                onClick={() => setGraphDataMenuOpen((prev) => !prev)}
               >
-                Edit Options
-              </li>
-              <li
-                className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
-                onClick={() => setIsEditOptionsOpen(false)}
-              >
-                Edit Options
+                Edit Data
               </li>
             </ul>
           )}
@@ -432,6 +428,12 @@ export default function WikipediaGraph() {
       <div className="fixed right-4 top-1/2 -translate-y-1/2 z-10">
           <HoverHighlight node={highlightNode} />
       </div>
+
+      {graphDataMenuOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <GraphDataRud graphData={graphData} setGraphDataMenuOpen={setGraphDataMenuOpen} setGraphData={setGraphData} />
+        </div>
+      )}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col gap-2 justify-between items-center w-[99vw] z-30 z-40">
       {graphData.nodes.length > 0 && (
                 <div className="md:w-64 mb-1">
@@ -536,6 +538,7 @@ export default function WikipediaGraph() {
           </div>
         )}
       </div>
+
     </div>
   )
 }

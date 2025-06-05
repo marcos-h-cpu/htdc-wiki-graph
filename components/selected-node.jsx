@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { XMarkIcon } from "@heroicons/react/24/outline"; // Import the X icon
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import styles from "./selected-node.module.css";
 
 export default function SelectedNode({ node, handleLinkClick, deselectNode, graphData }) {
