@@ -377,19 +377,19 @@ export default function WikipediaGraph() {
           {isFileOptionsOpen && (
               <ul className="flex flex-col gap-1 p-2 border-t">
                 <li
-                  className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                  className="cursor-pointer px-2 py-1 text-sm"
                   onClick={handleFileImport}
                 >
                   Import
                 </li>
                 <li
-                  className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                  className="cursor-pointer px-2 py-1 text-sm"
                   onClick={exportGraph}
                 >
                   Export
                 </li>
                 <li
-                  className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                  className="cursor-pointer px-2 py-1 text-sm"
                   onClick={() => setGraphData({ nodes: [], links: [] })}
                 >
                   Clear Graph
@@ -399,13 +399,13 @@ export default function WikipediaGraph() {
           {isViewOptionsOpen && (
             <ul className="flex flex-col gap-1 p-2 border-t">
               <li
-                className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                className="cursor-pointer px-2 py-1 text-sm"
                 onClick={() => setIsViewOptionsOpen(false)}
               >
                 View Options
               </li>
               <li
-                className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                className="cursor-pointer px-2 py-1 text-sm"
                 onClick={() => setIsViewOptionsOpen(false)}
               >
                 View Options
@@ -415,7 +415,7 @@ export default function WikipediaGraph() {
           {isEditOptionsOpen && (
             <ul className="flex flex-col gap-1 p-2 border-t">
               <li
-                className="cursor-pointer hover:bg-gray-100 px-2 py-1 text-sm"
+                className="cursor-pointer px-2 py-1 text-sm"
                 onClick={() => setGraphDataMenuOpen((prev) => !prev)}
               >
                 Edit Data

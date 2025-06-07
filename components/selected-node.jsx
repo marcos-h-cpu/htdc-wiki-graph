@@ -19,25 +19,25 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           <div className="flex flex-row gap-1">
             <div
               onClick={() => setShowSummary(!showSummary)}
-              className={`text-[9px] cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}
+              className={`text-xs cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}
             >
               Summary
             </div>
             <div
               onClick={() => setShowDetails(!showDetails)}
-              className={`text-[9px] cursor-pointer ${showDetails ? "text-blue-500" : "text-gray-700"}`}
+              className={`text-xs cursor-pointer ${showDetails ? "text-blue-500" : "text-gray-700"}`}
             >
               Links
             </div>
             <div
               onClick={() => setShowImageDetails(!showImageDetails)}
-              className={`text-[9px] cursor-pointer ${showImageDetails ? "text-blue-500" : "text-gray-700"}`}
+              className={`text-xs cursor-pointer ${showImageDetails ? "text-blue-500" : "text-gray-700"}`}
             >
               Image
             </div>
             <div
               onClick={() => setShowEdges(!showEdges)}
-              className={`text-[9px] cursor-pointer ${showEdges ? "text-blue-500" : "text-gray-700"}`}
+              className={`text-xs cursor-pointer ${showEdges ? "text-blue-500" : "text-gray-700"}`}
             >
               Edges
             </div>
@@ -70,51 +70,31 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           {showDetails && (
             <div className="border-t px-3 mb-2">
               <h3 className="text-sm mt-2">Links</h3>
-              <div className="mt-0 max-h-[50vh] overflow-y-auto overflow-x-hidden !p-0">
-                <div>
-                  {node.links && (
-                    <div className="flex flex-col gap-0">
-                      {(() => {
-                        const sortedLinks = [...node.links].sort((a, b) => b.title.length - a.title.length);
-                        const itemsPerRowConfig = [2, 2, 3, 3, 2, 2, 1];
-                        const rows = [];
-                        let index = 0;
+                <div className="flex flex-wrap gap-1">
+                  {node.links &&
+                    [...node.links]
+                      .sort((a, b) => b.title.length - a.title.length)
+                      .map((link, index) => {
+                        const linkedNode = graphData.nodes.find((n) => n.url === link.url);
 
-                        itemsPerRowConfig.forEach((itemsPerRow) => {
-                          if (index < sortedLinks.length) {
-                            rows.push(sortedLinks.slice(index, index + itemsPerRow));
-                            index += itemsPerRow;
-                          }
-                        });
-
-                        return rows.map((row, rowIndex) => (
-                          <div key={rowIndex} className="flex flex-row gap-0">
-                            {row.map((link, index) => {
-                              const linkedNode = graphData.nodes.find((n) => n.url === link.url);
-
-                              return (
-                                <div
-                                  key={index}
-                                  className="p-1 flex flex-row justify-between items-center"
-                                >
-                                  <p
-                                    className={`max-h-[18px] text-xs text-left overflow-ellipsis overflow-hidden ${
-                                      linkedNode ? "text-teal-600" : "text-gray-700 cursor-pointer"
-                                    }`}
-                                    onClick={!linkedNode ? () => handleLinkClick(link) : undefined}
-                                  >
-                                    {link.title}
-                                  </p>
-                                </div>
-                              );
-                            })}
+                        return (
+                          <div
+                            key={index}
+                            className="flex-shrink-0"
+                            style={{ maxWidth: "fit-content" }}
+                          >
+                            <p
+                              className={`text-xs text-left overflow-ellipsis overflow-hidden ${
+                                linkedNode ? "text-blue-400" : "text-gray-700 cursor-pointer  hover:text-blue-800"
+                              }`}
+                              onClick={!linkedNode ? () => handleLinkClick(link) : undefined}
+                            >
+                              {link.title}
+                            </p>
                           </div>
-                        ));
-                      })()}
-                    </div>
-                  )}
+                        );
+                      })}
                 </div>
-              </div>
             </div>
           )}
 
@@ -137,14 +117,17 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showEdges && (
-            <div className="border-t px-3 mb-2">
+            <div className="border-t mb-2 px-2">
               <h3 className="text-sm mt-2">Edges</h3>
-              <table className="table-auto border-collapse border border-gray-300 text-xs max-w-full">
+              <table
+                className="table-auto border-collapse border border-gray-300 text-xs w-full"
+                style={{ tableLayout: "fixed" }}
+              >
                 <thead>
                   <tr>
-                    <th className="border border-gray-300 px-2 py-1 text-left">Source</th>
-                    <th className="border border-gray-300 px-2 py-1 text-left">Target</th>
-                    <th className="border border-gray-300 px-2 py-1 text-left">Connection</th>
+                    <th className="border border-gray-300 px-2 py-1 text-left text-xs">Source</th>
+                    <th className="border border-gray-300 px-2 py-1 text-left text-xs">Target</th>
+                    <th className="border border-gray-300 px-2 py-1 text-left text-xs">Connection</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -153,19 +136,19 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
                     .map((link, index) => (
                       <tr key={index} className="hover:bg-blue-100 !bg-opacity-25">
                         <td
-                          className="border border-gray-300 px-2 py-1 text-[9px] overflow-hidden text-ellipsis whitespace-nowrap"
+                          className="border border-gray-300 px-2 py-1 text-xs overflow-hidden text-ellipsis whitespace-nowrap"
                           title={link.source}
                         >
                           {link.source}
                         </td>
                         <td
-                          className="border border-gray-300 px-2 py-1 text-[9px]  overflow-hidden text-ellipsis whitespace-nowrap"
+                          className="border border-gray-300 px-2 py-1 text-xs  overflow-hidden text-ellipsis whitespace-nowrap"
                           title={link.target}
                         >
                           {link.target}
                         </td>
                         <td
-                          className="border border-gray-300 px-2 py-1 text-[9px] overflow-hidden text-ellipsis whitespace-nowrap"
+                          className="border border-gray-300 px-2 py-1 text-xs overflow-hidden text-ellipsis whitespace-nowrap"
                           title={link.connectionType}
                         >
                           {link.connectionType === "Child" ? (
