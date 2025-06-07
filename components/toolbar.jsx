@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
@@ -74,25 +73,12 @@ export default function Toolbar(props) {
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="Enter Wikipedia URL"
-                  className=" h-[30px] rounded-full px-5 text-[6px]"
+                  className={`h-[30px] rounded-full px-5 text-[6px] ${error ? "border-red-500" : "border"}`}
                 />
               <Button type="submit" disabled={isLoading} className="h-[30px] rounded-full px-4 py-2 text-xs">
                 {isLoading ? "Scraping..." : "Scrape"}
               </Button>
             </form>
-            {error && (
-              <Alert variant="destructive" className="flex justify-between items-center w-[270px]">
-                <AlertDescription>{error}</AlertDescription>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setError(null)}
-                  className="ml-4 text-red-500"
-                >
-                  Close
-                </Button>
-              </Alert>
-            )}
           </CardContent>
           {React.Children.map(props.children, (child, index) => (
             <div key={index} className="w-1/4">
