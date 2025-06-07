@@ -361,7 +361,7 @@ export default function WikipediaGraph() {
       <div className="fixed top-4 left-4 z-10">
         {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} graphData={graphData}/>}
       </div>
-      <div className="fixed top-4 right-4 z-10 bg-gray-100 rounded-md border backdrop-blur-md bg-opacity-50">
+      <div className="fixed top-4 right-4 z-10 bg-gray-100 bg-opacity-80 backdrop-blur-xl rounded-md border">
         <div className="flex flex-row gap-2 items-center justify-start px-4 py-2">
           <div onClick={() => setisFileOptionsOpen((prev) => !prev)} className="text-sm cursor-pointer">
               File
