@@ -52,7 +52,7 @@ export default function GraphDataRud({ graphData, setGraphDataMenuOpen, setGraph
                     </div>
 
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 h-full">
                     {tempData.nodes && tempData.nodes.length > 0 ? (
                         tempData.nodes.map((node, index) => (
                             <CollapsibleNode
@@ -63,7 +63,9 @@ export default function GraphDataRud({ graphData, setGraphDataMenuOpen, setGraph
                             />
                         ))
                     ) : (
-                        <p className="text-gray-600">No data available</p>
+                        <div className="flex items-center justify-center items-center h-full text-gray-500">
+                            <p className="text-xs">No graph data available.</p>
+                        </div>
                     )}
                 </div>
             </div>
@@ -115,11 +117,11 @@ function CollapsibleNode({ node, graphData, setTempData }) {
                 value={node.image || ""}
                 onChange={(e) => handleNodeChange("image", e.target.value)}
                 onBlur={() => setIsEditingImage(false)} // Exit edit mode on blur
-                className="border rounded px-1 py-0.5 text-xs w-full"
+                className="border rounded px-1 py-0.5 text-xs w-1/2"
               />
             ) : (
               <span
-                className="cursor-pointer text-red-400 hover:text-red-600"
+                className="cursor-pointer text-red-400 hover:text-red-800"
                 onClick={() => setIsEditingImage(true)} // Enter edit mode on click
               >
                 {node.image || "No image available"}
@@ -130,7 +132,7 @@ function CollapsibleNode({ node, graphData, setTempData }) {
             <strong>Links:</strong>{" "}
             {node.links && node.links.length > 0
               ? node.links.map((link, i) => (
-                  <span key={i} className="text-blue-300 hover:text-blue-600 cursor-pointer">
+                  <span key={i} className="text-blue-300 hover:text-blue-800 cursor-pointer">
                     {link.title} ({link.url})
                     {i < node.links.length - 1 ? ", " : ""}
                   </span>
@@ -141,7 +143,7 @@ function CollapsibleNode({ node, graphData, setTempData }) {
             <strong>Edges:</strong>{" "}
             {connectedEdges.length > 0
               ? connectedEdges.map((edge, i) => (
-                  <span key={i} className="text-green-400 hover:text-green-600 cursor-pointer">
+                  <span key={i} className="text-green-400 hover:text-green-800 cursor-pointer">
                     {edge.source} → {edge.target}
                     {i < connectedEdges.length - 1 ? ", " : ""}
                   </span>

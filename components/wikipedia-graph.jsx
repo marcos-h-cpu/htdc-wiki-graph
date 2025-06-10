@@ -362,14 +362,14 @@ export default function WikipediaGraph() {
         {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} graphData={graphData}/>}
       </div>
       <div className="fixed top-4 right-4 z-10 bg-gray-100 bg-opacity-80 backdrop-blur-xl rounded-md border">
-        <div className="flex flex-row gap-2 items-center justify-start px-4 py-2">
-          <div onClick={() => setisFileOptionsOpen((prev) => !prev)} className="text-sm cursor-pointer">
+        <div className="flex flex-row gap-2 items-center justify-start px-2 py-1">
+          <div onClick={() => setisFileOptionsOpen((prev) => !prev)} className="text-xs cursor-pointer">
               File
           </div>
-          <div onClick={() => setIsViewOptionsOpen((prev) => !prev)} className="text-sm cursor-pointer">
+          <div onClick={() => setIsViewOptionsOpen((prev) => !prev)} className="text-xs cursor-pointer">
               View
           </div>
-          <div onClick={() => setIsEditOptionsOpen((prev) => !prev)} className="text-sm cursor-pointer">
+          <div onClick={() => setIsEditOptionsOpen((prev) => !prev)} className="text-xs cursor-pointer">
               Edit
           </div>
         </div>
@@ -377,19 +377,19 @@ export default function WikipediaGraph() {
           {isFileOptionsOpen && (
               <ul className="flex flex-col gap-1 p-2 border-t">
                 <li
-                  className="cursor-pointer px-2 py-1 text-sm"
+                  className="cursor-pointer text-xs"
                   onClick={handleFileImport}
                 >
                   Import
                 </li>
                 <li
-                  className="cursor-pointer px-2 py-1 text-sm"
+                  className="cursor-pointer text-xs"
                   onClick={exportGraph}
                 >
                   Export
                 </li>
                 <li
-                  className="cursor-pointer px-2 py-1 text-sm"
+                  className="cursor-pointer text-xs"
                   onClick={() => setGraphData({ nodes: [], links: [] })}
                 >
                   Clear Graph
@@ -399,13 +399,13 @@ export default function WikipediaGraph() {
           {isViewOptionsOpen && (
             <ul className="flex flex-col gap-1 p-2 border-t">
               <li
-                className="cursor-pointer px-2 py-1 text-sm"
+                className="cursor-pointer text-xs"
                 onClick={() => setIsViewOptionsOpen(false)}
               >
                 View Options
               </li>
               <li
-                className="cursor-pointer px-2 py-1 text-sm"
+                className="cursor-pointer text-xs"
                 onClick={() => setIsViewOptionsOpen(false)}
               >
                 View Options
@@ -415,7 +415,7 @@ export default function WikipediaGraph() {
           {isEditOptionsOpen && (
             <ul className="flex flex-col gap-1 p-2 border-t">
               <li
-                className="cursor-pointer px-2 py-1 text-sm"
+                className="cursor-pointer text-xs"
                 onClick={() => setGraphDataMenuOpen((prev) => !prev)}
               >
                 Edit Data
@@ -423,7 +423,6 @@ export default function WikipediaGraph() {
             </ul>
           )}
           
-        
       </div>
       <div className="fixed right-4 top-1/2 -translate-y-1/2 z-10">
           <HoverHighlight node={highlightNode} />
@@ -436,17 +435,15 @@ export default function WikipediaGraph() {
       )}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col gap-2 justify-between items-center w-[99vw] z-30 z-40">
       {graphData.nodes.length > 0 && (
-                <div className="md:w-64 mb-1">
                 <Input
                   type="text"
                   placeholder="Search"
-                  className="pl-5 rounded-full h-[30px] text-left"
+                  className="px-5 w-[200px] rounded-full !text-xs h-[24px] text-left"
                   value={searchTerm}
                   onChange={(e) => 
                     setSearchTerm(e.target.value)
                   }
                 />
-              </div>
       )}
       <Toolbar setGraphData={setGraphData} updateGraph={updateGraph}>
         <Carousel opts={{ slidesToScroll: 4, slidesToShow: 8 }}>
@@ -534,7 +531,7 @@ export default function WikipediaGraph() {
           </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-500">
-            <p>No graph data available.</p>
+            <p className="text-xs">No graph data available.</p>
           </div>
         )}
       </div>
