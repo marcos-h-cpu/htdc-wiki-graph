@@ -106,8 +106,9 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
                   <Image
                     src={node.image}
                     alt={node.title}
-                    width={250}
-                    height={200}
+                    layout="responsive"
+                    width={100}
+                    height={75}
                   />
                 ) : (
                   <p className="text-gray-500 text-xs">No image available</p>
