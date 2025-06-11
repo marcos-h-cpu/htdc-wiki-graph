@@ -6,5 +6,7 @@ By focusing on the user’s path this project offers a more personal and digesti
 
 Ultimately, this project is both a technical exercise in graph-based visualization and a reflection on how we consume knowledge online. By making the rabbit hole visible, we can better understand our patterns of curiosity and learn to retain more along the way.
 
-<img width="400" alt="Screenshot 2025-05-17 151256" src="https://github.com/user-attachments/assets/2ab3c3bb-398d-4cd0-b4a0-e5ba3232f021" />
-<img width="400" alt="Graphic" src="https://github.com/user-attachments/assets/a3f8fe52-835c-44d6-a580-b92cdd71d5a5" />
+<img width="960" alt="Histopathology" src="https://github.com/user-attachments/assets/a94648d8-fbc4-4dc2-9692-de1d06b714a3" />
+<img width="960" alt="Tissue (Biology)" src="https://github.com/user-attachments/assets/2d8fd239-364f-4ed1-8c2c-8646b030888c" />
+<img width="960" alt="Edit Menu" src="https://github.com/user-attachments/assets/34608acb-078a-4e1a-ac35-7b50db9c34bc" />
+
