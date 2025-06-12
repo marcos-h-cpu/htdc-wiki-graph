@@ -12,41 +12,42 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
 
   return (
     <>
-      <div className={`flex flex-col items-left z-20 fixed left-[1vw] top-[2vh] w-[30vw] max-h-[80vh] overflow-y-auto overflow-x-hidden !bg-gray-100 !rounded-md border backdrop-blur-md !bg-opacity-50 ${styles.scroll}`}>
+      <div className={`flex flex-col items-left z-20 fixed left-[1vw] top-[2vh] min-w-[30vw] max-h-[80vh] overflow-y-auto overflow-x-hidden !bg-gray-100 !rounded-md border backdrop-blur-md !bg-opacity-50 ${styles.scroll}`}>
         <div className="flex flex-row justify-between items-center px-2 py-1 border-b sticky top-0 bg-gray-100 bg-opacity-80 backdrop-blur-xl">
           <div className="flex flex-col gap-0 p-0">
-          <a href={node.url} className="text-gray-700 text-sm font-bold p-0">{node.title}</a>
-          <div className="flex flex-row gap-1">
-            <div
-              onClick={() => setShowSummary(!showSummary)}
-              className={`text-xs cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}
-            >
-              Summary
-            </div>
-            <div
-              onClick={() => setShowDetails(!showDetails)}
-              className={`text-xs cursor-pointer ${showDetails ? "text-blue-500" : "text-gray-700"}`}
-            >
-              Links
-            </div>
-            <div
-              onClick={() => setShowImageDetails(!showImageDetails)}
-              className={`text-xs cursor-pointer ${showImageDetails ? "text-blue-500" : "text-gray-700"}`}
-            >
-              Image
-            </div>
-            <div
-              onClick={() => setShowEdges(!showEdges)}
-              className={`text-xs cursor-pointer ${showEdges ? "text-blue-500" : "text-gray-700"}`}
-            >
-              Edges
-            </div>
-          </div>
+            <div className="flex flex-row items-end gap-1 pr-4">
+                <a href={node.url} className="text-gray-700 text-xs font-bold">{node.title}</a>
+                <span className="text-xs text-gray-500">({node.id})</span>
+                <div
+                  onClick={() => setShowSummary(!showSummary)}
+                  className={`text-xs hover:text-blue-800 cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}
+                >
+                  Summary
+                </div>
+                <div
+                  onClick={() => setShowDetails(!showDetails)}
+                  className={`text-xs hover:text-blue-800 cursor-pointer ${showDetails ? "text-blue-500" : "text-gray-700"}`}
+                >
+                  Links
+                </div>
+                <div
+                  onClick={() => setShowImageDetails(!showImageDetails)}
+                  className={`text-xs hover:text-blue-800 cursor-pointer ${showImageDetails ? "text-blue-500" : "text-gray-700"}`}
+                >
+                  Image
+                </div>
+                <div
+                  onClick={() => setShowEdges(!showEdges)}
+                  className={`text-xs hover:text-blue-800 cursor-pointer ${showEdges ? "text-blue-500" : "text-gray-700"}`}
+                >
+                  Edges
+                </div>
+              </div>
           </div>
           <Button
               variant="ghost"
               onClick={deselectNode}
-              className="h-[24px] w-[24px] flex items-center justify-center"
+              className="h-[16px] !w-[16px] flex items-center justify-center !p-0"
               aria-label="Close"
             >
               <XMarkIcon className="h-4 w-4 text-black-700" />
@@ -55,9 +56,9 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
 
         <div className="flex flex-col gap-4">
           {showSummary && (
-            <div className="flex flex-col items-left border-t px-3 mb-2">
-              <h3 className="text-sm mt-2">Summary</h3>
-              <div className="mt-0 !p-0">
+            <div className="flex flex-col items-left border-t px-3 mb-2 max-w-[30vw]">
+              <h3 className="text-xs mt-2">Summary</h3>
+              <div>
                 {node.summary.split("\n\n").map((paragraph, index) => (
                   <p key={index} className="text-xs p-0">
                     {paragraph}
@@ -68,9 +69,8 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showDetails && (
-            <div className="border-t px-3 mb-2">
-              <h3 className="text-sm mt-2">Links</h3>
-                <div className="flex flex-wrap gap-1">
+            <div className="border-t px-3 mb-2 max-w-[30vw]">
+                <div className="flex flex-wrap gap-1 mt-2 ">
                   {node.links &&
                     [...node.links]
                       .sort((a, b) => b.title.length - a.title.length)
@@ -99,9 +99,8 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showImageDetails && (
-            <div className="border-t px-3 mb-2">
-              <h3 className="text-sm mt-2">Image</h3>
-              <div className="flex flex-col items-center">
+            <div className="border-t px-3 mb-2 max-w-[30vw]">
+              <div className="flex flex-col items-center mt-2">
                 {node.image ? (
                   <Image
                     src={node.image}
@@ -118,10 +117,9 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showEdges && (
-            <div className="border-t mb-2 px-2">
-              <h3 className="text-sm mt-2">Edges</h3>
+            <div className="border-t mb-2 px-2  max-w-[30vw]">
               <table
-                className="table-auto border-collapse border border-gray-300 text-xs w-full"
+                className="table-auto border-collapse border border-gray-300 text-xs w-full mt-2"
                 style={{ tableLayout: "fixed" }}
               >
                 <thead>

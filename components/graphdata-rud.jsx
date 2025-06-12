@@ -22,33 +22,31 @@ export default function GraphDataRud({ graphData, setGraphDataMenuOpen, setGraph
     return (
         <>
             <div className={`!bg-gray-100 !rounded-md border backdrop-blur-lg !bg-opacity-80 w-[93vw] h-[93vh] overflow-y-auto overflow-x-hidden !p-0 flex gap-0 ${styles.scroll}`}>
-                <div className="sticky top-0 bg-gray-100 bg-opacity-50 backdrop-blur-xl z-10 px-4 py-2 border-b flex flex-col gap-0">
+                <div className="sticky top-0 bg-gray-100 bg-opacity-50 backdrop-blur-xl z-10 px-2 py-1 border-b flex flex-col gap-0">
                     <div className="flex flex-row justify-between items-center">
-                        <div className="flex flex-row justify-start items-center gap-2 mt-0">
-                            <h2 className="text-gray-700 text-md font-bold">Graph Data</h2>
+                        <div className="flex flex-row justify-start items-center gap-1">
+                            <h2 className="text-gray-700 text-xs font-bold p-0">Graph Data</h2>
                             <span
                                 onClick={handleDiscardChanges}
-                                className="text-[9px] px-2 py-1 rounded-full text-black cursor-pointer bg-gray-100 border hover:bg-gray-200"
+                                className="text-xs hover:text-red-600 cursor-pointer"
                             >
                                 Discard Changes
                             </span>
                             <span
                                 onClick={handleSaveChanges}
-                                className="text-[9px] px-2 py-1 rounded-full text-white cursor-pointer bg-gray-900 hover:bg-gray-800"
+                                className="text-xs hover:text-green-600 cursor-pointer"
                             >
                                 Save Changes
                             </span>
                         </div>
-                        <div className="flex gap-2 items-center">
-                            <Button
-                                variant="ghost"
-                                onClick={() => setGraphDataMenuOpen(false)}
-                                className="h-[24px] w-[24px] flex items-center justify-center"
-                                aria-label="Close"
+                        <Button
+                            variant="ghost"
+                            onClick={() => setGraphDataMenuOpen(false)}   
+                            className="h-[16px] !w-[16px] flex items-center justify-center !p-0"
+                            aria-label="Close"
                             >
-                                <XMarkIcon className="h-4 w-4 text-black-700" />
-                            </Button>
-                        </div>
+                            <XMarkIcon className="h-4 w-4 text-black-700" />
+                        </Button>
                     </div>
 
                 </div>
