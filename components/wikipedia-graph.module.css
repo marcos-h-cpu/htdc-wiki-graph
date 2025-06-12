@@ -1,7 +1,7 @@
 .rangeInput {
     -webkit-appearance: none;
     background: transparent; 
-    width: 100px;
+    width: 80px;
 }
 
 .rangeInput::-webkit-slider-thumb {

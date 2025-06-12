@@ -462,7 +462,7 @@ export default function WikipediaGraph() {
           <CarouselNext />
         </Carousel>
 
-        <div className="flex flex-row justify-center items-center gap-2 p-1 text-[8px]">
+        <div className="flex flex-row justify-end items-center gap-2 p-1 text-xs">
         <div className="flex flex-col gap-1">
           <label className="flex flex-row justify-start gap-1">
             <span className="mb-0">Repulsion</span>

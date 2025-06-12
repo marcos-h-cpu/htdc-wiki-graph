@@ -65,7 +65,7 @@ export default function Toolbar(props) {
     return (
         <>
         
-          <div className="flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[8px] px-[36px] backdrop-blur-md bg-opacity-50 w-full">
+          <div className="flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[5px] px-[32px] backdrop-blur-md bg-opacity-50 w-full">
           <CardContent className="flex flex-col gap-2 p-0 w-1/4">
             <form onSubmit={handleSubmit} className="flex flex-row gap-1 items-center text-xs">
                 <Input
