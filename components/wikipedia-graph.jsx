@@ -11,15 +11,17 @@ import Toolbar from "@/components/toolbar"
 import HoverHighlight from "@/components/hover-highlight"
 import GraphDataRud from "@/components/graphdata-rud"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import { Cog6ToothIcon as Settings } from "@heroicons/react/24/outline"
+import { XMarkIcon,  } from "@heroicons/react/24/outline";
+import { Button } from "@/components/ui/button";
+
 
 
 export default function WikipediaGraph() {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] })
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedNode, setSelectedNode] = useState(null)
-  const [isFileOptionsOpen, setisFileOptionsOpen] = useState(false)
-  const [isViewOptionsOpen, setIsViewOptionsOpen] = useState(false)
-  const [isEditOptionsOpen, setIsEditOptionsOpen] = useState(false)
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false)
   const [graphDataMenuOpen, setGraphDataMenuOpen] = useState(false)
   const [highlightNode, setHighlightNode] = useState(null)
   const [linkHashMap, setLinkHashMap] = useState(new Map())
@@ -105,7 +107,7 @@ export default function WikipediaGraph() {
       const link = g
         .append("g")
         .attr("stroke", "#006FFF")
-        .attr("stroke-opacity", .3)
+        .attr("stroke-opacity", .5)
         .selectAll("path")
         .data(links)
         .join("path")
@@ -190,19 +192,22 @@ export default function WikipediaGraph() {
     }, [filteredData])
   
   const updateForce = (forceName, value) => {
-      if (simulationRef.current) {
-        if (forceName === "charge") {
-          simulationRef.current.force("charge").strength(value);
-        } else if (forceName === "linkDistance") {
-          simulationRef.current.force("link").distance(value);
-        } else if (forceName === "x") {
-          simulationRef.current.force("x", d3.forceX().strength(value));
-        } else if (forceName === "y") {
-          simulationRef.current.force("y", d3.forceY().strength(value));
-        }
-        simulationRef.current.alpha(1).restart(); // Restart the simulation to apply changes
-      }
-    };
+  if (simulationRef.current) {
+    if (forceName === "charge") {
+      simulationRef.current.force("charge").strength(value);
+    } else if (forceName === "linkDistance") {
+      simulationRef.current.force("link").distance(value);
+    } else if (forceName === "x") {
+      simulationRef.current.force("x", d3.forceX().strength(value));
+    } else if (forceName === "y") {
+      simulationRef.current.force("y", d3.forceY().strength(value));
+    } else if (forceName === "linkOpacity") {
+      const svg = d3.select(svgRef.current);
+      svg.selectAll("path").attr("stroke-opacity", value);
+    }
+    simulationRef.current.alpha(1).restart(); // Restart the simulation to apply changes
+  }
+};
   
   const updateGraph = (data, sourceUrl) => {
     // Extract the article ID from the URL
@@ -361,68 +366,73 @@ export default function WikipediaGraph() {
       <div className="fixed top-4 left-4 z-10">
         {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} graphData={graphData}/>}
       </div>
-      <div className="fixed top-4 right-4 z-10 bg-gray-100 bg-opacity-80 backdrop-blur-xl rounded-md border">
-        <div className="flex flex-row gap-2 items-center justify-start px-2 py-1">
-          <div onClick={() => setisFileOptionsOpen((prev) => !prev)} className="text-xs cursor-pointer">
-              File
+      <div className="fixed top-4 right-4 z-10 flex flex-col items-end">
+          <div
+            onClick={() => setIsOptionsOpen((prev) => !prev)}
+            className="text-xs cursor-pointer"
+          >
+            {!isOptionsOpen && <Settings className="h-4 w-4 text-black-700" />}
           </div>
-          <div onClick={() => setIsViewOptionsOpen((prev) => !prev)} className="text-xs cursor-pointer">
-              View
-          </div>
-          <div onClick={() => setIsEditOptionsOpen((prev) => !prev)} className="text-xs cursor-pointer">
-              Edit
-          </div>
-        </div>
-        
-          {isFileOptionsOpen && (
-              <ul className="flex flex-col gap-1 p-2 border-t">
+          {isOptionsOpen && (
+            <div className="bg-gray-100 bg-opacity-50 backdrop-blur-md rounded-md border w-[20vw]">
+              <div className="flex flex-row justify-between items-center p-1">
+                <span className="text-xs text-gray-900">Options</span>
+                <Button
+                    variant="ghost"
+                    onClick={() => setIsOptionsOpen(false)}
+                    className="h-[16px] !w-[16px] flex items-center justify-center !p-0"
+                    aria-label="Close"
+                  >
+                    <XMarkIcon className="h-4 w-4 text-black-700" />
+                </Button>
+              </div>
+              <ul className="flex flex-col gap-1 p-2 border-t text-gray-600">
                 <li
-                  className="cursor-pointer text-xs"
+                  className="cursor-pointer text-xs hover:text-gray-900"
                   onClick={handleFileImport}
                 >
-                  Import
+                  Import Graph
                 </li>
                 <li
-                  className="cursor-pointer text-xs"
+                  className="cursor-pointer text-xs hover:text-gray-900"
                   onClick={exportGraph}
                 >
-                  Export
+                  Save
                 </li>
                 <li
-                  className="cursor-pointer text-xs"
+                  className="cursor-pointer text-xs hover:text-gray-900"
                   onClick={() => setGraphData({ nodes: [], links: [] })}
                 >
-                  Clear Graph
+                  New Graph
                 </li>
               </ul>
+              <ul className="flex flex-col gap-1 p-2 border-t text-gray-600">
+                <li className="cursor-pointer text-xs hover:text-gray-900">
+                <label className="flex flex-row justify-start gap-1">
+                  <span className="mb-0">Link Opacity</span>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step=".10"
+                    defaultValue=".5"
+                    onChange={(e) => updateForce("linkOpacity", +e.target.value)}
+                    className={styles.rangeInput}
+                  />
+                </label>
+                </li>
+
+              </ul>
+              <ul className="flex flex-col gap-1 p-2 border-t text-gray-600">
+                <li
+                  className="cursor-pointer text-xs hover:text-gray-900"
+                  onClick={() => setGraphDataMenuOpen((prev) => !prev)}
+                >
+                  Edit Data
+                </li>
+              </ul>
+            </div>
           )}
-          {isViewOptionsOpen && (
-            <ul className="flex flex-col gap-1 p-2 border-t">
-              <li
-                className="cursor-pointer text-xs"
-                onClick={() => setIsViewOptionsOpen(false)}
-              >
-                View Options
-              </li>
-              <li
-                className="cursor-pointer text-xs"
-                onClick={() => setIsViewOptionsOpen(false)}
-              >
-                View Options
-              </li>
-            </ul>
-          )}
-          {isEditOptionsOpen && (
-            <ul className="flex flex-col gap-1 p-2 border-t">
-              <li
-                className="cursor-pointer text-xs"
-                onClick={() => setGraphDataMenuOpen((prev) => !prev)}
-              >
-                Edit Data
-              </li>
-            </ul>
-          )}
-          
       </div>
       <div className="fixed right-4 top-1/2 -translate-y-1/2 z-10">
           <HoverHighlight node={highlightNode} />
