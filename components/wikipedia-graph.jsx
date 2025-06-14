@@ -367,15 +367,9 @@ export default function WikipediaGraph() {
         {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} graphData={graphData}/>}
       </div>
       <div className="fixed top-4 right-4 z-10 flex flex-col items-end">
-          <div
-            onClick={() => setIsOptionsOpen((prev) => !prev)}
-            className="text-xs cursor-pointer"
-          >
-            {!isOptionsOpen && <Settings className="h-4 w-4 text-black-700" />}
-          </div>
           {isOptionsOpen && (
             <div className="bg-gray-100 bg-opacity-50 backdrop-blur-md rounded-md border w-[20vw]">
-              <div className="flex flex-row justify-between items-center p-1">
+              <div className="flex flex-row justify-between items-center py-1 px-2">
                 <span className="text-xs text-gray-900">Options</span>
                 <Button
                     variant="ghost"
@@ -406,22 +400,77 @@ export default function WikipediaGraph() {
                   New Graph
                 </li>
               </ul>
-              <ul className="flex flex-col gap-1 p-2 border-t text-gray-600">
-                <li className="cursor-pointer text-xs hover:text-gray-900">
+              <ul className="flex flex-col gap-1 p-2 border-t text-gray-600 text-xs">
+                <li className="cursor-pointer hover:text-gray-900">
+                  <label className="flex flex-row justify-start gap-1">
+                    <span className="mb-0">Link Opacity</span>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step=".10"
+                      defaultValue=".5"
+                      onChange={(e) => updateForce("linkOpacity", +e.target.value)}
+                      className={styles.rangeInput}
+                    />
+                  </label>
+                </li>
+                <li className="cursor-pointer hover:text-gray-900">
                 <label className="flex flex-row justify-start gap-1">
-                  <span className="mb-0">Link Opacity</span>
+                  <span className="mb-0">Repulsion</span>
+                  <input
+                    type="range"
+                    min="0"
+                    max="500"
+                    step="50"
+                    defaultValue="500"
+                    onChange={(e) => updateForce("charge", -(+e.target.value))}
+                    className={styles.rangeInput}
+                  />
+                </label>
+                </li>
+                <li className="cursor-pointer hover:text-gray-900">
+                  <label className="flex flex-row justify-start gap-1">
+                    <span className="mb-0">Reach</span>
+                    <input
+                      type="range"
+                      min="10"
+                      max="500"
+                      step="10"
+                      defaultValue="20"
+                      onChange={(e) => updateForce("linkDistance", +e.target.value)}
+                      className={styles.rangeInput}
+                    />
+                  </label>
+                </li>
+                <li className="cursor-pointer hover:text-gray-900">
+                  <label className="flex flex-row justify-start gap-1">
+                    <span className="mb-0">X-Force</span>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step=".10"
+                      defaultValue="0"
+                      onChange={(e) => updateForce("x", +e.target.value)}
+                      className={styles.rangeInput}
+                    />
+                  </label>
+                </li>
+                <li>
+                <label className="flex flex-row justify-start gap-1">
+                  <span className="mb-0">Y-Force</span>
                   <input
                     type="range"
                     min="0"
                     max="1"
                     step=".10"
-                    defaultValue=".5"
-                    onChange={(e) => updateForce("linkOpacity", +e.target.value)}
+                    defaultValue="0"
+                    onChange={(e) => updateForce("y", +e.target.value)}
                     className={styles.rangeInput}
                   />
                 </label>
                 </li>
-
               </ul>
               <ul className="flex flex-col gap-1 p-2 border-t text-gray-600">
                 <li
@@ -473,60 +522,9 @@ export default function WikipediaGraph() {
         </Carousel>
 
         <div className="flex flex-row justify-end items-center gap-2 p-1 text-xs">
-        <div className="flex flex-col gap-1">
-          <label className="flex flex-row justify-start gap-1">
-            <span className="mb-0">Repulsion</span>
-            <input
-              type="range"
-              min="0"
-              max="500"
-              step="50"
-              defaultValue="500"
-              onChange={(e) => updateForce("charge", -(+e.target.value))}
-              className={styles.rangeInput}
-            />
-          </label>
-          <label className="flex flex-row justify-start gap-1">
-            <span className="mb-0">Reach</span>
-            <input
-              type="range"
-              min="10"
-              max="500"
-              step="10"
-              defaultValue="10"
-              onChange={(e) => updateForce("linkDistance", +e.target.value)}
-              className={styles.rangeInput}
-            />
-          </label>
-        </div>
-        <div className="flex flex-col gap-1">
-        <label className="flex flex-row justify-start gap-1">
-            <span className="mb-0">X-Force</span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step=".10"
-              defaultValue="0"
-              onChange={(e) => updateForce("x", +e.target.value)}
-              className={styles.rangeInput}
-            />
-          </label>
-          <label className="flex flex-row justify-start gap-1">
-            <span className="mb-0">Y-Force</span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step=".10"
-              defaultValue="0"
-              onChange={(e) => updateForce("y", +e.target.value)}
-              className={styles.rangeInput}
-            />
-          </label>
-          
-
-        </div>
+          <Button onClick={() => setIsOptionsOpen((prev) => !prev)} className="h-[24px] rounded-full px-2 py-1 text-xs text-gray-700 border bg-gray-0 hover:bg-gray-300">
+            Options
+          </Button>
 
         </div>
 
