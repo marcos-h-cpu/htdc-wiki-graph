@@ -17,28 +17,16 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           <div className="flex flex-col gap-0 p-0">
             <div className="flex flex-row items-end gap-1 pr-4">
                 <a href={node.url} className="text-gray-700 text-xs font-bold">{node.title}</a>
-                <div
-                  onClick={() => setShowSummary(!showSummary)}
-                  className={`text-xs hover:text-blue-800 cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}
-                >
+                <div onClick={() => setShowSummary(!showSummary)} className={`text-xs hover:text-blue-800 cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}>
                   Summary
                 </div>
-                <div
-                  onClick={() => setShowDetails(!showDetails)}
-                  className={`text-xs hover:text-blue-800 cursor-pointer ${showDetails ? "text-blue-500" : "text-gray-700"}`}
-                >
+                <div onClick={() => setShowDetails(!showDetails)} className={`text-xs hover:text-blue-800 cursor-pointer ${showDetails ? "text-blue-500" : "text-gray-700"}`}>
                   Links
                 </div>
-                <div
-                  onClick={() => setShowImageDetails(!showImageDetails)}
-                  className={`text-xs hover:text-blue-800 cursor-pointer ${showImageDetails ? "text-blue-500" : "text-gray-700"}`}
-                >
+                <div onClick={() => setShowImageDetails(!showImageDetails)} className={`text-xs hover:text-blue-800 cursor-pointer ${showImageDetails ? "text-blue-500" : "text-gray-700"}`}>
                   Image
                 </div>
-                <div
-                  onClick={() => setShowEdges(!showEdges)}
-                  className={`text-xs hover:text-blue-800 cursor-pointer ${showEdges ? "text-blue-500" : "text-gray-700"}`}
-                >
+                <div onClick={() => setShowEdges(!showEdges)} className={`text-xs hover:text-blue-800 cursor-pointer ${showEdges ? "text-blue-500" : "text-gray-700"}`}>
                   Edges
                 </div>
               </div>

@@ -450,7 +450,7 @@ export default function WikipediaGraph() {
                       type="range"
                       min="0"
                       max="1"
-                      step=".10"
+                      step=".2"
                       defaultValue="0"
                       onChange={(e) => updateForce("x", +e.target.value)}
                       className={styles.rangeInput}
@@ -464,7 +464,7 @@ export default function WikipediaGraph() {
                     type="range"
                     min="0"
                     max="1"
-                    step=".10"
+                    step=".2"
                     defaultValue="0"
                     onChange={(e) => updateForce("y", +e.target.value)}
                     className={styles.rangeInput}
@@ -525,7 +525,6 @@ export default function WikipediaGraph() {
           <Button onClick={() => setIsOptionsOpen((prev) => !prev)} className="h-[24px] rounded-full px-2 py-1 text-xs text-gray-700 border bg-gray-0 hover:bg-gray-300">
             Options
           </Button>
-
         </div>
 
       </Toolbar>
