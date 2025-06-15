@@ -21,7 +21,11 @@ export default function GraphDataRud({ graphData, setGraphDataMenuOpen, setGraph
 
     return (
         <>
-            <div className={`!bg-gray-100 !rounded-md border backdrop-blur-lg !bg-opacity-80 w-[93vw] h-[93vh] overflow-y-auto overflow-x-hidden !p-0 flex gap-0 ${styles.scroll}`}>
+            <div
+                className="fixed inset-0 bg-gray-100 bg-opacity-50 backdrop-blur-md z-40"
+                onClick={() => setGraphDataMenuOpen(false)}
+            ></div>
+            <div className={`!bg-gray-100 !rounded-md border !bg-opacity-10 w-[93vw] h-[90vh] overflow-y-auto !p-0 z-50 ${styles.scroll}`}>
                 <div className="sticky top-0 bg-gray-100 bg-opacity-50 backdrop-blur-xl z-10 px-2 py-1 border-b flex flex-col gap-0">
                     <div className="flex flex-row justify-between items-center">
                         <div className="flex flex-row justify-start items-center gap-1">
