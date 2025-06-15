@@ -20,7 +20,7 @@
     appearance: none;
     -webkit-appearance: none;
   border: 1px solid #c5c4c4;
-  height: 12px;
+  height: 14px;
   width: 6px;
   border-radius: 100%;
   background: #ffffff;
@@ -42,4 +42,44 @@
     border-radius: 4px;
     border: 1px solid #c5c4c4;
     cursor: pointer;
+}
+
+.rainbowSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 80px;
+  height: 6px;
+  border-radius: 4px;
+  border: 1px solid #c5c4c4;
+  background: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet);
+  cursor: pointer;
+}
+
+.rainbowSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 6px;
+  height: 14px;
+  border-radius: 4px;
+  background: #ffffff;
+  border: 1px solid #c5c4c4;
+  cursor: pointer;
+}
+
+.rainbowSlider::-moz-range-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #c5c4c4;
+  cursor: pointer;
+}
+
+.colorPreview {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #c5c4c4;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 }

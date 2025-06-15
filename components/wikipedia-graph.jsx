@@ -11,8 +11,7 @@ import Toolbar from "@/components/toolbar"
 import HoverHighlight from "@/components/hover-highlight"
 import GraphDataRud from "@/components/graphdata-rud"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
-import { Cog6ToothIcon as Settings } from "@heroicons/react/24/outline"
-import { XMarkIcon,  } from "@heroicons/react/24/outline";
+import { XMarkIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
 
 
@@ -26,6 +25,8 @@ export default function WikipediaGraph() {
   const [highlightNode, setHighlightNode] = useState(null)
   const [linkHashMap, setLinkHashMap] = useState(new Map())
   const [linkOpacity, setLinkOpacity] = useState(0.5)
+  const [colorHue, setColorHue] = useState(0)
+  const [linkColor, setLinkColor] = useState("hsl(0, 100%, 50%)")
   const [repulsion, setRepulsion] = useState(500)
   const [linkDistance, setLinkDistance] = useState(20)
   const [xForce, setXForce] = useState(0)
@@ -409,7 +410,7 @@ export default function WikipediaGraph() {
 
     const link = g
       .append("g")
-      .attr("stroke", "#006FFF")
+      .attr("stroke", linkColor)
       .attr("stroke-opacity", linkOpacity)
       .selectAll("path")
       .data(links)
@@ -463,7 +464,7 @@ export default function WikipediaGraph() {
       <div className="fixed top-4 left-4 z-10">
         {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} graphData={graphData}/>}
       </div>
-      <div className="fixed top-4 right-4 z-10 flex flex-col items-end">
+      <div className="fixed top-4 right-4 z-20 flex flex-col items-end">
           {isOptionsOpen && (
             <div className="bg-gray-100 bg-opacity-50 backdrop-blur-md rounded-md border w-[20vw]">
               <div className="flex flex-row justify-between items-center py-1 px-2">
@@ -522,6 +523,42 @@ export default function WikipediaGraph() {
                       className={styles.rangeInput}
                     />
                   </label>
+                </li>
+                <li className="cursor-pointer hover:text-gray-900">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      rerenderGraph();
+                    }}
+                    className="flex flex-row justify-start gap-2 items-center"
+                  >
+                    <label className="flex flex-row items-center gap-1">
+                      <span className="mb-0">Link Color</span>
+                      <div className="colorPreview" style={{ backgroundColor: linkColor }}></div>
+                      <input
+                        type="range"
+                        min="0"
+                        max="275"
+                        step="1"
+                        value={colorHue}
+                        onChange={(e) => {
+                          const hue = e.target.value;
+                          const newColor = `hsl(${hue}, 100%, 50%)`;
+                          setColorHue(hue);
+                          setLinkColor(newColor);
+                          console.log(newColor);
+                        }}
+                        className={styles.rainbowSlider}
+                      />
+                    </label>
+                    <button
+                      type="submit"
+                      className="p-1 text-xs rounded-full bg-white hover:bg-gray-100 border"
+                      aria-label="Apply"
+                    >
+                      <CheckIcon className="h-2 w-2 text-black-700" />
+                    </button>
+                  </form>
                 </li>
                 <li className="cursor-pointer hover:text-gray-900">
                 <label className="flex flex-row justify-start gap-1">
