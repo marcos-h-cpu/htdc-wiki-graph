@@ -25,6 +25,11 @@ export default function WikipediaGraph() {
   const [graphDataMenuOpen, setGraphDataMenuOpen] = useState(false)
   const [highlightNode, setHighlightNode] = useState(null)
   const [linkHashMap, setLinkHashMap] = useState(new Map())
+  const [linkOpacity, setLinkOpacity] = useState(0.5)
+  const [repulsion, setRepulsion] = useState(500)
+  const [linkDistance, setLinkDistance] = useState(20)
+  const [xForce, setXForce] = useState(0)
+  const [yForce, setYForce] = useState(0)
 
   const filteredData = useMemo(() => {
     const filteredNodes = searchTerm
@@ -192,22 +197,22 @@ export default function WikipediaGraph() {
     }, [filteredData])
   
   const updateForce = (forceName, value) => {
-  if (simulationRef.current) {
-    if (forceName === "charge") {
-      simulationRef.current.force("charge").strength(value);
-    } else if (forceName === "linkDistance") {
-      simulationRef.current.force("link").distance(value);
-    } else if (forceName === "x") {
-      simulationRef.current.force("x", d3.forceX().strength(value));
-    } else if (forceName === "y") {
-      simulationRef.current.force("y", d3.forceY().strength(value));
-    } else if (forceName === "linkOpacity") {
-      const svg = d3.select(svgRef.current);
-      svg.selectAll("path").attr("stroke-opacity", value);
+    if (simulationRef.current) {
+      if (forceName === "charge") {
+        simulationRef.current.force("charge").strength(value);
+      } else if (forceName === "linkDistance") {
+        simulationRef.current.force("link").distance(value);
+      } else if (forceName === "x") {
+        simulationRef.current.force("x", d3.forceX().strength(value));
+      } else if (forceName === "y") {
+        simulationRef.current.force("y", d3.forceY().strength(value));
+      } else if (forceName === "linkOpacity") {
+        const svg = d3.select(svgRef.current);
+        svg.selectAll("path").attr("stroke-opacity", value);
+      }
+      simulationRef.current.alpha(1).restart(); // Restart the simulation to apply changes
     }
-    simulationRef.current.alpha(1).restart(); // Restart the simulation to apply changes
-  }
-};
+  };
   
   const updateGraph = (data, sourceUrl) => {
     // Extract the article ID from the URL
@@ -360,6 +365,98 @@ export default function WikipediaGraph() {
     }
   };
 
+  const rerenderGraph = () => {
+    if (!svgRef.current || graphData.nodes.length === 0) return;
+
+    const width = svgRef.current.clientWidth;
+    const height = svgRef.current.clientHeight;
+
+    // Clear previous graph
+    d3.select(svgRef.current).selectAll("*").remove();
+
+    const svg = d3.select(svgRef.current).attr("viewBox", [0, 0, width, height]);
+
+    const g = svg.append("g");
+
+    // Add zoom functionality
+    const zoom = d3
+      .zoom()
+      .scaleExtent([0.01, 5])
+      .on("zoom", (event) => {
+        g.attr("transform", event.transform);
+      });
+
+    svg.call(zoom);
+
+    const links = filteredData.links.map((d) => ({ ...d }));
+    const nodes = filteredData.nodes.map((d) => ({ ...d }));
+
+    const simulation = d3
+      .forceSimulation(nodes)
+      .force(
+        "link",
+        d3
+          .forceLink(links)
+          .id((d) => d.id)
+          .distance(linkDistance)
+      )
+      .force("charge", d3.forceManyBody().strength(-repulsion))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("x", d3.forceX(width / 2).strength(xForce))
+      .force("y", d3.forceY(height / 2).strength(yForce));
+
+    simulationRef.current = simulation;
+
+    const link = g
+      .append("g")
+      .attr("stroke", "#006FFF")
+      .attr("stroke-opacity", linkOpacity)
+      .selectAll("path")
+      .data(links)
+      .join("path")
+      .attr("fill", "none")
+      .attr("stroke-width", 1);
+
+    const node = g
+      .append("g")
+      .selectAll(".node")
+      .data(nodes)
+      .join("foreignObject")
+      .attr("class", "node")
+      .attr("width", 80)
+      .attr("height", 80)
+      .attr("x", (d) => d.x - 20)
+      .attr("y", (d) => d.y - 20)
+      .html((d) => {
+        return `<div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
+                  <div id="node-${d.id}"></div>
+                </div>`;
+      });
+
+      nodes.forEach((node) => {
+        const container = document.getElementById(`node-${node.id}`);
+        if (container) {
+          const root = ReactDOM.createRoot(container);
+          root.render(
+            <CustomNode node={node} onClick={() => handleNodeClick(node.id)} setHighlightNode={setHighlightNode} />
+          );
+        }
+      });
+
+    simulation.on("tick", () => {
+      link.attr("d", (d) => {
+        const dx = d.target.x - d.source.x,
+              dy = d.target.y - d.source.y,
+              dr = Math.sqrt(dx * dx + dy * dy) * 0.9;
+
+        return `M${d.source.x},${d.source.y} A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+      });
+
+      node
+        .attr("x", (d) => d.x - 50)
+        .attr("y", (d) => d.y - 50);
+    });
+  };
 
   return (
     <div>
@@ -395,7 +492,18 @@ export default function WikipediaGraph() {
                 </li>
                 <li
                   className="cursor-pointer text-xs hover:text-gray-900"
-                  onClick={() => setGraphData({ nodes: [], links: [] })}
+                  onClick={rerenderGraph}
+                >
+                  Rerender Graph
+                </li>
+                <li
+                  className="cursor-pointer text-xs hover:text-gray-900"
+                  onClick={() => {
+                    setGraphData({ nodes: [], links: [] })
+                    setLinkHashMap(new Map())
+                    setSelectedNode(null)
+                    setSearchTerm("")
+                  }}
                 >
                   New Graph
                 </li>
@@ -410,7 +518,7 @@ export default function WikipediaGraph() {
                       max="1"
                       step=".10"
                       defaultValue=".5"
-                      onChange={(e) => updateForce("linkOpacity", +e.target.value)}
+                      onChange={(e) => {updateForce("linkOpacity", +e.target.value); setLinkOpacity(+e.target.value)}}
                       className={styles.rangeInput}
                     />
                   </label>
@@ -424,7 +532,7 @@ export default function WikipediaGraph() {
                     max="500"
                     step="50"
                     defaultValue="500"
-                    onChange={(e) => updateForce("charge", -(+e.target.value))}
+                    onChange={(e) => {updateForce("charge", -(+e.target.value)); setRepulsion(+e.target.value)}}
                     className={styles.rangeInput}
                   />
                 </label>
@@ -438,7 +546,7 @@ export default function WikipediaGraph() {
                       max="500"
                       step="10"
                       defaultValue="20"
-                      onChange={(e) => updateForce("linkDistance", +e.target.value)}
+                      onChange={(e) => {updateForce("linkDistance", +e.target.value); setLinkDistance(+e.target.value)}}
                       className={styles.rangeInput}
                     />
                   </label>
@@ -452,7 +560,7 @@ export default function WikipediaGraph() {
                       max="1"
                       step=".2"
                       defaultValue="0"
-                      onChange={(e) => updateForce("x", +e.target.value)}
+                      onChange={(e) => {updateForce("x", +e.target.value); setXForce(+e.target.value)}}
                       className={styles.rangeInput}
                     />
                   </label>
@@ -466,7 +574,7 @@ export default function WikipediaGraph() {
                     max="1"
                     step=".2"
                     defaultValue="0"
-                    onChange={(e) => updateForce("y", +e.target.value)}
+                    onChange={(e) => {updateForce("y", +e.target.value); setYForce(+e.target.value)}}
                     className={styles.rangeInput}
                   />
                 </label>
