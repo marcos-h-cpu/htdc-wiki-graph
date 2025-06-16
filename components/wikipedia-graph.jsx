@@ -432,17 +432,18 @@ export default function WikipediaGraph() {
         return `<div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
                   <div id="node-${d.id}"></div>
                 </div>`;
-      });
+      })
+      .call(drag(simulation)); // Apply drag functionality
 
-      nodes.forEach((node) => {
-        const container = document.getElementById(`node-${node.id}`);
-        if (container) {
-          const root = ReactDOM.createRoot(container);
-          root.render(
-            <CustomNode node={node} onClick={() => handleNodeClick(node.id)} setHighlightNode={setHighlightNode} />
-          );
-        }
-      });
+    nodes.forEach((node) => {
+      const container = document.getElementById(`node-${node.id}`);
+      if (container) {
+        const root = ReactDOM.createRoot(container);
+        root.render(
+          <CustomNode node={node} onClick={() => handleNodeClick(node.id)} setHighlightNode={setHighlightNode} />
+        );
+      }
+    });
 
     simulation.on("tick", () => {
       link.attr("d", (d) => {
@@ -457,7 +458,31 @@ export default function WikipediaGraph() {
         .attr("x", (d) => d.x - 50)
         .attr("y", (d) => d.y - 50);
     });
+
+    
   };
+
+  // Drag functionality
+  function drag(simulation) {
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+
+    return d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
+  }
 
   return (
     <div>
