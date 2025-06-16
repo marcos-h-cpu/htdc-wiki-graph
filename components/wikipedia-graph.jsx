@@ -534,7 +534,7 @@ export default function WikipediaGraph() {
                   >
                     <label className="flex flex-row items-center gap-1">
                       <span className="mb-0">Link Color</span>
-                      <div className="colorPreview" style={{ backgroundColor: linkColor }}></div>
+                      <div style={{ backgroundColor: linkColor }}></div>
                       <input
                         type="range"
                         min="0"
@@ -555,8 +555,9 @@ export default function WikipediaGraph() {
                       type="submit"
                       className="p-1 text-xs rounded-full bg-white hover:bg-gray-100 border"
                       aria-label="Apply"
+                      style={{ backgroundColor: linkColor }}
                     >
-                      <CheckIcon className="h-2 w-2 text-black-700" />
+                      <CheckIcon className={`h-2 w-2 text-white ${styles.blendIcon}`} />
                     </button>
                   </form>
                 </li>

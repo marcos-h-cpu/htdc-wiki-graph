@@ -51,7 +51,7 @@
   height: 6px;
   border-radius: 4px;
   border: 1px solid #c5c4c4;
-  background: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet);
+  background: linear-gradient(to right, red, orange, yellow, rgb(50, 241, 50), cyan, blue, violet);
   cursor: pointer;
 }
 
@@ -82,4 +82,10 @@
   border-radius: 50%;
   border: 1px solid #c5c4c4;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.blendIcon {
+  mix-blend-mode: exclusion;
+  position: relative;
+  z-index: 1;
 }
