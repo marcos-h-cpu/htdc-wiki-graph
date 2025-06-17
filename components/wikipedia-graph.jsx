@@ -602,21 +602,21 @@ export default function WikipediaGraph() {
                 <li>
                   <label className="flex flex-row justify-start gap-1 items-center">
                     <span className="mb-0">Link Curve:</span>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                       <button
-                        className="px-2 py-1 text-xs border rounded-full hover:bg-gray-100"
+                        className="px-1 text-xs border rounded-full hover:bg-gray-100"
                         onClick={() => setLinkCurve(100)}
                       >
                         Straight
                       </button>
                       <button
-                        className="px-2 py-1 text-xs border rounded-full hover:bg-gray-100"
+                        className="px-1 text-xs border rounded-full hover:bg-gray-100"
                         onClick={() => {setLinkCurve(0.9)}}
                       >
                         Curved
                       </button>
                       <button
-                        className="px-2 py-1 text-xs border rounded-full hover:bg-gray-100"
+                        className="px-1 text-xs border rounded-full hover:bg-gray-100"
                         onClick={() => setLinkCurve(0.1)}
                       >
                         Half Moon
