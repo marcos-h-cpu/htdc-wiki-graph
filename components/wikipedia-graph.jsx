@@ -362,11 +362,18 @@ export default function WikipediaGraph() {
       const data = await response.json()
 
       updateGraph(data, link.url)
+      rerenderGraph();
 
     } catch (error) {
       console.error("Error fetching article data:", error);
     }
   };
+
+  useEffect(() => {
+    if (graphData.nodes.length > 0 || graphData.links.length > 0) {
+      rerenderGraph();
+    }
+  }, [graphData]);
 
   const rerenderGraph = () => {
     if (!svgRef.current || graphData.nodes.length === 0) return;
