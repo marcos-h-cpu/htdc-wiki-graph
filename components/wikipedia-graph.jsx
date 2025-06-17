@@ -31,6 +31,7 @@ export default function WikipediaGraph() {
   const [linkDistance, setLinkDistance] = useState(20)
   const [xForce, setXForce] = useState(0)
   const [yForce, setYForce] = useState(0)
+  const [zoomTransform, setZoomTransform] = useState(d3.zoomIdentity)
 
   const filteredData = useMemo(() => {
     const filteredNodes = searchTerm
@@ -84,6 +85,7 @@ export default function WikipediaGraph() {
         .scaleExtent([0.01, 5])
         .on("zoom", (event) => {
           g.attr("transform", event.transform)
+          setZoomTransform(event.transform);
         })
   
       svg.call(zoom)
@@ -385,9 +387,12 @@ export default function WikipediaGraph() {
       .scaleExtent([0.01, 5])
       .on("zoom", (event) => {
         g.attr("transform", event.transform);
+        setZoomTransform(event.transform);
       });
 
     svg.call(zoom);
+
+    svg.call(zoom.transform, zoomTransform);
 
     const links = filteredData.links.map((d) => ({ ...d }));
     const nodes = filteredData.nodes.map((d) => ({ ...d }));
