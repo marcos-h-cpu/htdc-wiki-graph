@@ -26,9 +26,10 @@ export default function WikipediaGraph() {
   const [linkHashMap, setLinkHashMap] = useState(new Map())
   const [linkOpacity, setLinkOpacity] = useState(0.5)
   const [colorHue, setColorHue] = useState(0)
-  const [linkColor, setLinkColor] = useState("hsl(0, 100%, 50%)")
+  const [linkColor, setLinkColor] = useState("hsl(0 100% 50%)")
   const [repulsion, setRepulsion] = useState(500)
   const [linkDistance, setLinkDistance] = useState(20)
+  const [linkCurve, setLinkCurve] = useState(.9)
   const [xForce, setXForce] = useState(0)
   const [yForce, setYForce] = useState(0)
   const [zoomTransform, setZoomTransform] = useState(d3.zoomIdentity)
@@ -373,7 +374,7 @@ export default function WikipediaGraph() {
     if (graphData.nodes.length > 0 || graphData.links.length > 0) {
       rerenderGraph();
     }
-  }, [graphData]);
+  }, [graphData, linkCurve]);
 
   const rerenderGraph = () => {
     if (!svgRef.current || graphData.nodes.length === 0) return;
@@ -458,10 +459,11 @@ export default function WikipediaGraph() {
     });
 
     simulation.on("tick", () => {
+      
       link.attr("d", (d) => {
         const dx = d.target.x - d.source.x,
               dy = d.target.y - d.source.y,
-              dr = Math.sqrt(dx * dx + dy * dy) * 0.9;
+              dr = Math.sqrt(dx * dx + dy * dy) * linkCurve;
 
         return `M${d.source.x},${d.source.y} A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
       });
@@ -583,7 +585,6 @@ export default function WikipediaGraph() {
                           const newColor = `hsl(${hue}, 100%, 50%)`;
                           setColorHue(hue);
                           setLinkColor(newColor);
-                          console.log(newColor);
                         }}
                         className={styles.rainbowSlider}
                       />
@@ -597,6 +598,31 @@ export default function WikipediaGraph() {
                       <CheckIcon className={`h-2 w-2 text-white ${styles.blendIcon}`} />
                     </button>
                   </form>
+                </li>
+                <li>
+                  <label className="flex flex-row justify-start gap-1 items-center">
+                    <span className="mb-0">Link Curve:</span>
+                    <div className="flex gap-2">
+                      <button
+                        className="px-2 py-1 text-xs border rounded-full hover:bg-gray-100"
+                        onClick={() => setLinkCurve(100)}
+                      >
+                        Straight
+                      </button>
+                      <button
+                        className="px-2 py-1 text-xs border rounded-full hover:bg-gray-100"
+                        onClick={() => {setLinkCurve(0.9)}}
+                      >
+                        Curved
+                      </button>
+                      <button
+                        className="px-2 py-1 text-xs border rounded-full hover:bg-gray-100"
+                        onClick={() => setLinkCurve(0.1)}
+                      >
+                        Half Moon
+                      </button>
+                    </div>
+                  </label>
                 </li>
                 <li className="cursor-pointer hover:text-gray-900">
                 <label className="flex flex-row justify-start gap-1">
@@ -617,10 +643,10 @@ export default function WikipediaGraph() {
                     <span className="mb-0">Reach</span>
                     <input
                       type="range"
-                      min="10"
-                      max="500"
-                      step="10"
-                      defaultValue="20"
+                      min="0"
+                      max="750"
+                      step="50"
+                      defaultValue="25"
                       onChange={(e) => {updateForce("linkDistance", +e.target.value); setLinkDistance(+e.target.value)}}
                       className={styles.rangeInput}
                     />
