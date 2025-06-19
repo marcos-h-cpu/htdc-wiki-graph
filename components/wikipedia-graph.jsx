@@ -599,7 +599,7 @@ export default function WikipediaGraph() {
                     </button>
                   </form>
                 </li>
-                <li>
+                <li className="cursor-pointer hover:text-gray-900">
                   <label className="flex flex-row justify-start gap-1 items-center">
                     <span className="mb-0">Link Curve:</span>
                     <div className="flex gap-1">
@@ -666,7 +666,7 @@ export default function WikipediaGraph() {
                     />
                   </label>
                 </li>
-                <li>
+                <li className="cursor-pointer hover:text-gray-900">
                 <label className="flex flex-row justify-start gap-1">
                   <span className="mb-0">Y-Force</span>
                   <input
