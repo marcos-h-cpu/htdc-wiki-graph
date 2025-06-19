@@ -33,6 +33,7 @@ export default function WikipediaGraph() {
   const [xForce, setXForce] = useState(0)
   const [yForce, setYForce] = useState(0)
   const [zoomTransform, setZoomTransform] = useState(d3.zoomIdentity)
+  const [error, setError] = useState(null)
 
   const filteredData = useMemo(() => {
     const filteredNodes = searchTerm
@@ -351,20 +352,43 @@ export default function WikipediaGraph() {
     setSelectedNode(null)
   }
 
-  const handleLinkClick = async (link) => {
+  const isValidWikipediaUrl = (url) => {
+    return url.startsWith("https://en.wikipedia.org/wiki/") || url.startsWith("https://wikipedia.org/wiki/")
+  }
+
+  const fetchArticleData = async (articleUrl) => {
+    if (!isValidWikipediaUrl(articleUrl)) {
+      setError("Please enter a valid URL")
+      return
+    }
+    setError(null)
+
     try {
       const response = await fetch("/api/scrape", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url: link.url }),
+        body: JSON.stringify({ url: articleUrl }),
       })
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch article data")
+      }
+
       const data = await response.json()
 
-      updateGraph(data, link.url)
-      rerenderGraph();
+      // Update graph with new data
+      updateGraph(data, articleUrl)
+    } catch (err) {
+      setError("Error fetching article data. Please try again.")
+      console.error(err)
+    }
+}
 
+  const handleLinkClick = async (link) => {
+    try {
+      fetchArticleData(link.url)
     } catch (error) {
       console.error("Error fetching article data:", error);
     }
@@ -476,7 +500,6 @@ export default function WikipediaGraph() {
     
   };
 
-  // Drag functionality
   function drag(simulation) {
     function dragstarted(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -713,7 +736,7 @@ export default function WikipediaGraph() {
                   }
                 />
       )}
-      <Toolbar setGraphData={setGraphData} updateGraph={updateGraph}>
+      <Toolbar setGraphData={setGraphData} updateGraph={updateGraph} fetchArticleData={fetchArticleData} >
         <Carousel opts={{ slidesToScroll: 4, slidesToShow: 8 }}>
           <CarouselContent>
             {graphData.nodes.map((node) => (

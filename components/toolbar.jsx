@@ -1,57 +1,14 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Carousel } from "./ui/carousel";
 import { useState } from "react";
 import React from "react";
 
-export default function Toolbar(props) {
+export default function Toolbar({fetchArticleData, ...props}) {
     const [url, setUrl] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
-    const [isSettingsPopupOpen, setIsSettingsPopupOpen] = useState(false)
 
-    const {updateGraph, setGraphData, exportGraph} = props
-
-
-    const isValidWikipediaUrl = (url) => {
-        return url.startsWith("https://en.wikipedia.org/wiki/") || url.startsWith("https://wikipedia.org/wiki/")
-    }
-
-    const fetchArticleData = async (articleUrl) => {
-        if (!isValidWikipediaUrl(articleUrl)) {
-          setError("Please enter a valid URL")
-          return
-        }
-    
-        setIsLoading(true)
-        setError(null)
-    
-        try {
-          const response = await fetch("/api/scrape", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ url: articleUrl }),
-          })
-    
-          if (!response.ok) {
-            throw new Error("Failed to fetch article data")
-          }
-    
-          const data = await response.json()
-    
-          // Update graph with new data
-          updateGraph(data, articleUrl)
-        } catch (err) {
-          setError("Error fetching article data. Please try again.")
-          console.error(err)
-        } finally {
-          setIsLoading(false)
-        }
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -59,8 +16,6 @@ export default function Toolbar(props) {
           fetchArticleData(url)
         }
     }
-
-
 
     return (
         <>
