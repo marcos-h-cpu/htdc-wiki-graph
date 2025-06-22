@@ -28,8 +28,8 @@ export default function WikipediaGraph() {
   const [colorHue, setColorHue] = useState(0)
   const [linkColor, setLinkColor] = useState("hsl(0 100% 50%)")
   const [repulsion, setRepulsion] = useState(500)
-  const [linkDistance, setLinkDistance] = useState(20)
-  const [linkCurve, setLinkCurve] = useState(.9)
+  const [linkDistance, setLinkDistance] = useState(200)
+  const [linkCurve, setLinkCurve] = useState(100)
   const [xForce, setXForce] = useState(0)
   const [yForce, setYForce] = useState(0)
   const [zoomTransform, setZoomTransform] = useState(d3.zoomIdentity)
@@ -104,7 +104,7 @@ export default function WikipediaGraph() {
           d3
             .forceLink(links)
             .id((d) => d.id)
-            .distance(10),
+            .distance(200),
         )
         .force("charge", d3.forceManyBody().strength(-500))
         .force("center", d3.forceCenter(width / 2, height / 2))
@@ -128,7 +128,7 @@ export default function WikipediaGraph() {
         link.attr("d", (d) => {
           const dx = d.target.x - d.source.x,
                 dy = d.target.y - d.source.y,
-                dr = Math.sqrt(dx * dx + dy * dy) * .9;
+                dr = Math.sqrt(dx * dx + dy * dy) * 100;
       
           return `M${d.source.x},${d.source.y} A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
         });
