@@ -377,18 +377,24 @@ export default function WikipediaGraph() {
       }
 
       const data = await response.json()
+      return data
 
-      // Update graph with new data
-      updateGraph(data, articleUrl)
     } catch (err) {
       setError("Error fetching article data. Please try again.")
       console.error(err)
+      return null
     }
 }
 
   const handleLinkClick = async (link) => {
     try {
-      fetchArticleData(link.url)
+      const articleData = await fetchArticleData(link.url);
+      console.log("Article data fetched:", articleData);
+      if (articleData) {
+        updateGraph(articleData, articleData.url);
+      } else {
+        console.error("Invalid article data received.");
+      }
     } catch (error) {
       console.error("Error fetching article data:", error);
     }

@@ -4,17 +4,28 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import React from "react";
 
-export default function Toolbar({fetchArticleData, ...props}) {
+export default function Toolbar({fetchArticleData, updateGraph, ...props}) {
     const [url, setUrl] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        if (url) {
-          fetchArticleData(url)
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      if (url) {
+        try {
+          setIsLoading(true);
+          const articleData = await fetchArticleData(url);
+          console.log("Fetched article data:", articleData);
+          updateGraph(articleData, articleData.url);
+          setError(null);
+        } catch (err) {
+          console.error("Error fetching article data:", err);
+          setError("Failed to fetch article data. Please try again.");
+        } finally {
+          setIsLoading(false); // Reset loading state
         }
+      }
     }
 
     return (

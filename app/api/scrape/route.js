@@ -128,7 +128,6 @@ export async function POST(request) {
     const apiData = await apiResponse.json();
     const pages = apiData.query?.pages || {};
     const page = Object.values(pages)[0];
-    console.log("Fetched page data:", page);
 
     if (!page || page.missing) {
       return NextResponse.json({ error: "Wikipedia page not found" }, { status: 404 });
@@ -156,13 +155,12 @@ export async function POST(request) {
         url: `https://en.wikipedia.org/wiki/${encodeURIComponent(link.title.replace(/ /g, "_"))}`, // Replace spaces with underscores
       }));
 
-    console.log("Fetched links:", links);
-
     return NextResponse.json({
       title,
       summary,
       image,
       links,
+      url: page.fullurl || `https://en.wikipedia.org/wiki/${encodeURIComponent(pageTitle)}`
     });
   } catch (error) {
     console.error("Error fetching Wikipedia API:", error);
