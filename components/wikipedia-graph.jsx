@@ -503,7 +503,6 @@ export default function WikipediaGraph() {
         .attr("y", (d) => d.y - 50);
     });
 
-    
   };
 
   function drag(simulation) {
@@ -530,7 +529,7 @@ export default function WikipediaGraph() {
   return (
     <div>
       <div className="fixed top-4 left-4 z-10">
-        {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} graphData={graphData}/>}
+        {selectedNode && <SelectedNode node={selectedNode} handleLinkClick={handleLinkClick} deselectNode={deselectNode} fetchArticleData={fetchArticleData} updateGraph={updateGraph} setGraphData={setGraphData} graphData={graphData}/>}
       </div>
       <div className="fixed top-4 right-4 z-20 flex flex-col items-end">
           {isOptionsOpen && (

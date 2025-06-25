@@ -4,20 +4,174 @@ import { useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import styles from "./selected-node.module.css";
 
-export default function SelectedNode({ node, handleLinkClick, deselectNode, graphData }) {
+export default function SelectedNode({ node, handleLinkClick, deselectNode, graphData, setGraphData, fetchArticleData, updateGraph }) {
   const [showSummary, setShowSummary] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
   const [showImageDetails, setShowImageDetails] = useState(false);
   const [showEdges, setShowEdges] = useState(false);
+  const [showSearchPopup, setShowSearchPopup] = useState(false);
+
+  const SearchReplacePopup = ({ node, onReplaceNode, onClose }) => {
+    const [searchTerm, setSearchTerm] = useState(node.title || "");
+    const [searchResults, setSearchResults] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const handleSearch = async () => {
+      if (!searchTerm.trim()) {
+        setError("Please enter a search term.");
+        return;
+      }
+
+      setError(null);
+      setIsLoading(true);
+
+      try {
+        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(
+          searchTerm
+        )}&format=json&origin=*`;
+        const response = await fetch(searchUrl);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch search results.");
+        }
+
+        const data = await response.json();
+        setSearchResults(data.query?.search || []);
+      } catch (err) {
+        console.error("Error fetching search results:", err);
+        setError("Failed to fetch search results. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const handleReplace = async (selectedArticle) => {
+      try {
+        const articleData = await fetchArticleData(
+          `https://en.wikipedia.org/wiki/${encodeURIComponent(
+            selectedArticle.title.replace(/ /g, "_")
+          )}`
+        );
+
+        if (articleData) {
+          setGraphData((prevGraphData) => {
+            const updatedNodes = prevGraphData.nodes.filter((n) => n.id !== node.id);
+            const updatedEdges = prevGraphData.links.filter(
+              (link) => link.source !== node.id && link.target !== node.id
+            );
+
+            const replacementNode = {
+              id: articleData.url,
+              title: articleData.title,
+              summary: articleData.summary,
+              image: articleData.image,
+              links: articleData.links,
+            };
+            updatedNodes.push(replacementNode);
+
+            const secondMostRecentNode =
+              updatedNodes.length > 1 ? updatedNodes[updatedNodes.length - 2] : null;
+
+            if (secondMostRecentNode) {
+              updatedEdges.push({
+                source: secondMostRecentNode.id,
+                target: replacementNode.id,
+                connectionType: "Replacement Connection",
+              });
+            }
+
+            return { nodes: updatedNodes, links: updatedEdges };
+          });
+
+          onClose();
+        } else {
+          console.error("Failed to fetch article data for replacement.");
+        }
+      } catch (error) {
+        console.error("Error replacing node:", error);
+      }
+    };
+
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <div className="bg-white rounded-md shadow-lg p-4 w-[40vw] max-h-[80vh] overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold">Search and Replace Node</h2>
+            <Button
+              variant="ghost"
+              onClick={onClose}
+              className="h-[24px] w-[24px] flex items-center justify-center"
+              aria-label="Close"
+            >
+              <XMarkIcon className="h-4 w-4 text-gray-700" />
+            </Button>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search for articles..."
+              className="border rounded-md px-2 py-1 text-sm"
+            />
+            <Button onClick={handleSearch} className="bg-blue-500 text-white px-4 py-2 rounded-md">
+              {isLoading ? "Searching..." : "Search"}
+            </Button>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+          </div>
+
+          <div className="mt-4">
+            {searchResults.length > 0 ? (
+              <ul className="flex flex-col gap-2">
+                {searchResults.map((result) => (
+                  <li
+                    key={result.pageid}
+                    className="border rounded-md p-2 flex justify-between items-center"
+                  >
+                    <span className="text-sm">{result.title}</span>
+                    <Button
+                      onClick={() => handleReplace(result)}
+                      className="bg-green-500 text-white px-2 py-1 rounded-md"
+                    >
+                      Replace
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500 text-sm">No results found.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
+      {showSearchPopup && (
+        <SearchReplacePopup
+          node={node}
+          onReplaceNode={(newNode) => {
+            // Update the graphData with the new node
+            setGraphData((prevGraphData) => {
+              const updatedNodes = prevGraphData.nodes.map((n) =>
+                n.id === node.id ? newNode : n
+              );
+              return { ...prevGraphData, nodes: updatedNodes };
+            });
+          }}
+          onClose={() => setShowSearchPopup(false)}
+        />
+      )}
       <div className={`flex flex-col items-left z-20 fixed left-[1vw] top-[2vh] min-w-[30vw] max-h-[80vh] overflow-y-auto overflow-x-hidden !bg-gray-100 !rounded-md border backdrop-blur-md !bg-opacity-50 ${styles.scroll}`}>
         <div className="flex flex-row justify-between items-center px-2 py-1 border-b sticky top-0 bg-gray-100 bg-opacity-80 backdrop-blur-xl">
           <div className="flex flex-col gap-0 p-0">
             <div className="flex flex-row items-end gap-1 pr-4">
-                <a href={node.url} className="text-gray-700 text-xs font-bold">{node.title}</a>
-                <div onClick={() => setShowSummary(!showSummary)} className={`text-xs hover:text-blue-800 cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}>
+              <a href={node.url} className="text-gray-700 text-xs font-bold">{node.title}</a>
+              <div onClick={() => setShowSummary(!showSummary)} className={`text-xs hover:text-blue-800 cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}>
                   Summary
                 </div>
                 <div onClick={() => setShowDetails(!showDetails)} className={`text-xs hover:text-blue-800 cursor-pointer ${showDetails ? "text-blue-500" : "text-gray-700"}`}>
@@ -29,15 +183,21 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
                 <div onClick={() => setShowEdges(!showEdges)} className={`text-xs hover:text-blue-800 cursor-pointer ${showEdges ? "text-blue-500" : "text-gray-700"}`}>
                   Edges
                 </div>
-              </div>
+              <Button
+                onClick={() => setShowSearchPopup(true)}
+                className="bg-blue-500 text-white px-2 py-1 rounded-md"
+              >
+                Search and Replace
+              </Button>
+            </div>
           </div>
           <Button
-              variant="ghost"
-              onClick={deselectNode}
-              className="h-[16px] !w-[16px] flex items-center justify-center !p-0"
-              aria-label="Close"
-            >
-              <XMarkIcon className="h-4 w-4 text-black-700" />
+            variant="ghost"
+            onClick={deselectNode}
+            className="h-[16px] !w-[16px] flex items-center justify-center !p-0"
+            aria-label="Close"
+          >
+            <XMarkIcon className="h-4 w-4 text-black-700" />
           </Button>
         </div>
 
