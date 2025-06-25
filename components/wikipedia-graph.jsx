@@ -734,7 +734,7 @@ export default function WikipediaGraph() {
                 <Input
                   type="text"
                   placeholder="Search"
-                  className="px-5 w-[200px] rounded-full !text-xs h-[24px] text-left"
+                  className="px-3 w-[200px] rounded-full !text-xs h-[24px] text-left"
                   value={searchTerm}
                   onChange={(e) => 
                     setSearchTerm(e.target.value)
