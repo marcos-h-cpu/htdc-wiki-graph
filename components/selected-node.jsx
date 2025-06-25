@@ -94,57 +94,73 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
     };
 
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-        <div className="bg-white rounded-md shadow-lg p-4 w-[40vw] max-h-[80vh] overflow-y-auto">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold">Search and Replace Node</h2>
-            <Button
-              variant="ghost"
-              onClick={onClose}
-              className="h-[24px] w-[24px] flex items-center justify-center"
-              aria-label="Close"
-            >
-              <XMarkIcon className="h-4 w-4 text-gray-700" />
-            </Button>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search for articles..."
-              className="border rounded-md px-2 py-1 text-sm"
-            />
-            <Button onClick={handleSearch} className="bg-blue-500 text-white px-4 py-2 rounded-md">
-              {isLoading ? "Searching..." : "Search"}
-            </Button>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-          </div>
-
-          <div className="mt-4">
-            {searchResults.length > 0 ? (
-              <ul className="flex flex-col gap-2">
-                {searchResults.map((result) => (
-                  <li
-                    key={result.pageid}
-                    className="border rounded-md p-2 flex justify-between items-center"
-                  >
-                    <span className="text-sm">{result.title}</span>
-                    <Button
-                      onClick={() => handleReplace(result)}
-                      className="bg-green-500 text-white px-2 py-1 rounded-md"
-                    >
-                      Replace
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-500 text-sm">No results found.</p>
-            )}
-          </div>
+      <div className="fixed top-20 left-10 flex items-center justify-center z-50">
+        <div className={`flex flex-col items-left z-20 min-w-[40vw] max-h-[35vh] overflow-y-auto overflow-x-hidden !bg-gray-100 !rounded-md border backdrop-blur-md !bg-opacity-70 ${styles.scroll}`}>
+        <div className="flex flex-row justify-between items-center px-2 py-1 border-b sticky top-0 bg-gray-100 bg-opacity-50 backdrop-blur-xl">
+        <h2 className="text-xs font-bold">Search and Replace Node</h2>
+        <Button 
+          variant="ghost"
+          onClick={onClose}
+          className="h-[16px] !w-[16px] flex items-center justify-center !p-0"
+          aria-label="Close"
+        >
+          <XMarkIcon className="h-4 w-4 text-gray-700" />
+        </Button>
         </div>
+
+        <div className="flex flex-row gap-2 p-2">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search for articles..."
+          className="border rounded h-[24px] w-full rounded-full px-3 !text-xsd-md px-2 py-1 text-sm"
+        />
+        <Button onClick={handleSearch} className="h-[24px] w-[80px] rounded-full px-2 py-1 text-xs">
+          {isLoading ? "Searching..." : "Search"}
+        </Button>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        </div>
+
+        <div className="p-0">
+        {searchResults.length > 0 ? (
+          <ul className="flex flex-col">
+          {searchResults.map((result) => (
+            <li
+            key={result.pageid}
+            className="p-0 flex justify-between items-center border-t hover:bg-purple-100 hover:bg-opacity-25"
+            >
+            <div className="px-2 py-1">
+              <span className="text-xs">{result.title}</span>
+              <span className="text-xs text-gray-500 ml-2">
+              <a
+                href={`https://en.wikipedia.org/?curid=${result.pageid}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-purple-700 hover:underline"
+                onClick={(e) => {
+                  e.preventDefault(); // Prevent default behavior
+                  window.open(`https://en.wikipedia.org/?curid=${result.pageid}`, "_blank");
+                }}
+              >
+                Open in new tab
+              </a>
+              </span>
+            </div>
+            <span
+              onClick={() => handleReplace(result)}
+              className="h-[24px] w-[60px] rounded-full text-blue-500 hover:text-blue-800 cursor-pointer text-xs align-center flex items-center justify-center"
+              >
+              Replace
+              </span>
+            </li>
+          ))}
+          </ul>
+        ) : (
+          <p className="text-gray-500 text-sm p-2">No results found.</p>
+        )}
+        </div>
+      </div>
       </div>
     );
   };
@@ -155,7 +171,6 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
         <SearchReplacePopup
           node={node}
           onReplaceNode={(newNode) => {
-            // Update the graphData with the new node
             setGraphData((prevGraphData) => {
               const updatedNodes = prevGraphData.nodes.map((n) =>
                 n.id === node.id ? newNode : n
@@ -183,12 +198,6 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
                 <div onClick={() => setShowEdges(!showEdges)} className={`text-xs hover:text-blue-800 cursor-pointer ${showEdges ? "text-blue-500" : "text-gray-700"}`}>
                   Edges
                 </div>
-              <Button
-                onClick={() => setShowSearchPopup(true)}
-                className="bg-blue-500 text-white px-2 py-1 rounded-md"
-              >
-                Search and Replace
-              </Button>
             </div>
           </div>
           <Button
@@ -204,13 +213,20 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
         <div className="flex flex-col gap-4">
           {showSummary && (
             <div className="flex flex-col items-left border-t px-3 mb-2 max-w-[30vw]">
-              <h3 className="text-xs mt-2">Summary</h3>
-              <div>
-                {node.summary.split("\n\n").map((paragraph, index) => (
-                  <p key={index} className="text-xs p-0">
-                    {paragraph}
-                  </p>
-                ))}
+              <div className="mt-2">
+                {node.summary && node.summary.trim() !== "" ? (
+                  node.summary.split("\n").map((paragraph, index) => (
+                    <p key={index} className="text-xs p-0">
+                      {paragraph}
+                    </p>
+                  ))
+                ) : (
+                  <>
+                    <p className="text-gray-500 text-xs">This node is incomplete/broken due to an improper url being passed to the Wikimedia API. You can repair this node via
+                    <span className="cursor-pointer underline text-purple-400 ml-1" onClick={() => setShowSearchPopup(true)}>Search and Replace...</span></p>
+
+                </>
+                )}
               </div>
             </div>
           )}

@@ -39,10 +39,10 @@ export default function Toolbar({fetchArticleData, updateGraph, ...props}) {
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="Enter Wikipedia URL"
-                  className={`h-[24px] w-[200px] rounded-full px-5 !text-xs ${error ? "border-red-500" : "border"}`}
+                  className={`h-[24px] w-[400px] rounded-full px-3 !text-xs ${error ? "border-red-500" : "border"}`}
                 />
-              <Button type="submit" disabled={isLoading} className="h-[24px] rounded-full px-2 py-1 text-xs">
-                Scrape
+              <Button type="submit" disabled={isLoading} className="h-[24px] w-[80px] rounded-full px-2 py-1 text-xs">
+                Submit
               </Button>
             </form>
           </CardContent>
