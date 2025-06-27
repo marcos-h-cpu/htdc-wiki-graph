@@ -10,7 +10,7 @@ const fetchAllLinks = async (pageTitle) => {
   let continueParam = null;
 
   do {
-    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=links&titles=${encodeURIComponent(
+    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=links&titles=${encodeURI(
       pageTitle
     )}&format=json&pllimit=max${continueParam ? `&plcontinue=${continueParam}` : ""}`;
 
@@ -38,7 +38,7 @@ const fetchAllLinks = async (pageTitle) => {
 const fetchInfoboxImage = async (pageTitle) => {
   try {
     // Fetch the parsed content of the page
-    const parseUrl = `https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(
+    const parseUrl = `https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURI(
       pageTitle
     )}&prop=wikitext&format=json`;
     const parseResponse = await fetch(parseUrl);
@@ -64,7 +64,7 @@ const fetchInfoboxImage = async (pageTitle) => {
     }
 
     // Fetch the image URL using the imageinfo property
-    const imageInfoUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=File:${encodeURIComponent(
+    const imageInfoUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=File:${encodeURI(
       imageFile
     )}&prop=imageinfo&iiprop=url&format=json`;
     const imageInfoResponse = await fetch(imageInfoUrl);
@@ -116,7 +116,7 @@ export async function POST(request) {
     const pageTitle = url.split("/wiki/")[1];
 
     // Fetch data from the Wikipedia API
-    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|info|pageimages&exintro&explaintext&titles=${encodeURIComponent(
+    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|info|pageimages&exintro&explaintext&titles=${encodeURI(
       pageTitle
     )}&format=json&inprop=url&pithumbsize=500`;
     const apiResponse = await fetch(apiUrl);
@@ -152,7 +152,7 @@ export async function POST(request) {
       .slice(0, maxLinks)
       .map((link) => ({
         title: link.title,
-        url: `https://en.wikipedia.org/wiki/${encodeURIComponent(link.title.replace(/ /g, "_"))}`, // Replace spaces with underscores
+        url: `https://en.wikipedia.org/wiki/${encodeURI(link.title.replace(/ /g, "_"))}`, // Replace spaces with underscores
       }));
 
     return NextResponse.json({
@@ -160,7 +160,7 @@ export async function POST(request) {
       summary,
       image,
       links,
-      url: page.fullurl || `https://en.wikipedia.org/wiki/${encodeURIComponent(pageTitle)}`
+      url: page.fullurl || `https://en.wikipedia.org/wiki/${encodeURI(pageTitle)}`
     });
   } catch (error) {
     console.error("Error fetching Wikipedia API:", error);

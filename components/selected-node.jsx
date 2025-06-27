@@ -27,7 +27,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
       setIsLoading(true);
 
       try {
-        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(
+        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURI(
           searchTerm
         )}&format=json&origin=*`;
         const response = await fetch(searchUrl);
@@ -49,7 +49,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
     const handleReplace = async (selectedArticle) => {
       try {
         const articleData = await fetchArticleData(
-          `https://en.wikipedia.org/wiki/${encodeURIComponent(
+          `https://en.wikipedia.org/wiki/${encodeURI(
             selectedArticle.title.replace(/ /g, "_")
           )}`
         );

@@ -290,7 +290,7 @@ export default function WikipediaGraph() {
     };
 
     const dataStr = JSON.stringify(dataToExport, null, 2);
-    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+    const dataUri = "data:application/json;charset=utf-8," + encodeURI(dataStr);
 
     const exportFileDefaultName = fileName.endsWith(".json") ? fileName : `${fileName}.json`;
 
