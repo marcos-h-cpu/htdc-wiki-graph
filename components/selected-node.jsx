@@ -27,9 +27,9 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
       setIsLoading(true);
 
       try {
-        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURI(
+        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${
           searchTerm
-        )}&format=json&origin=*`;
+        }&format=json&origin=*`;
         const response = await fetch(searchUrl);
 
         if (!response.ok) {
@@ -48,11 +48,11 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
 
     const handleReplace = async (selectedArticle) => {
       try {
-        const articleData = await fetchArticleData(
-          `https://en.wikipedia.org/wiki/${encodeURI(
-            selectedArticle.title.replace(/ /g, "_")
-          )}`
-        );
+        // Construct the URL without encoding
+        const articleUrl = `https://en.wikipedia.org/wiki/${selectedArticle.title.replace(/ /g, "_")}`;
+        console.log(articleUrl);
+
+        const articleData = await fetchArticleData(articleUrl);
 
         if (articleData) {
           setGraphData((prevGraphData) => {
@@ -213,7 +213,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
 
         <div className="flex flex-col gap-2">
           {showSummary && (
-            <div className="flex flex-col items-left border-t px-3 max-w-[30vw]">
+            <div className="flex flex-col items-left border-t px-3 max-w-[30vw] mb-2">
               <div className="mt-2">
                 {node.summary && node.summary.trim() !== "" ? (
                   node.summary.split("\n").map((paragraph, index) => (

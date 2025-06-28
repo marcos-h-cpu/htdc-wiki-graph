@@ -10,9 +10,9 @@ const fetchAllLinks = async (pageTitle) => {
   let continueParam = null;
 
   do {
-    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=links&titles=${encodeURI(
+    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=links&titles=${
       pageTitle
-    )}&format=json&pllimit=max${continueParam ? `&plcontinue=${continueParam}` : ""}`;
+    }&format=json&pllimit=max${continueParam ? `&plcontinue=${continueParam}` : ""}`;
 
     const apiResponse = await fetch(apiUrl);
 
@@ -114,12 +114,14 @@ export async function POST(request) {
 
     // Extract the page title from the URL
     const pageTitle = url.split("/wiki/")[1];
+    console.log("Fetching data for page:", pageTitle);
 
     // Fetch data from the Wikipedia API
-    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|info|pageimages&exintro&explaintext&titles=${encodeURI(
+    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|info|pageimages&exintro&explaintext&titles=${
       pageTitle
-    )}&format=json&inprop=url&pithumbsize=500`;
+    }&format=json&inprop=url&pithumbsize=500`;
     const apiResponse = await fetch(apiUrl);
+    console.log("API URL:", apiUrl);
 
     if (!apiResponse.ok) {
       return NextResponse.json({ error: "Failed to fetch Wikipedia API" }, { status: 500 });
@@ -152,7 +154,7 @@ export async function POST(request) {
       .slice(0, maxLinks)
       .map((link) => ({
         title: link.title,
-        url: `https://en.wikipedia.org/wiki/${encodeURI(link.title.replace(/ /g, "_"))}`, // Replace spaces with underscores
+        url: `https://en.wikipedia.org/wiki/${link.title.replace(/ /g, "_")}`,
       }));
 
     return NextResponse.json({
@@ -160,7 +162,7 @@ export async function POST(request) {
       summary,
       image,
       links,
-      url: page.fullurl || `https://en.wikipedia.org/wiki/${encodeURI(pageTitle)}`
+      url: `https://en.wikipedia.org/wiki/${pageTitle}` || page.fullurl
     });
   } catch (error) {
     console.error("Error fetching Wikipedia API:", error);

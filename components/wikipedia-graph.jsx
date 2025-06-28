@@ -267,7 +267,6 @@ export default function WikipediaGraph() {
                 target: sourceId,
                 connectionType: link.url
               })
-              console.log("Link added:", existingLink, sourceId, link.url)
             }
           }
         }
@@ -389,7 +388,6 @@ export default function WikipediaGraph() {
   const handleLinkClick = async (link) => {
     try {
       const articleData = await fetchArticleData(link.url);
-      console.log("Article data fetched:", articleData);
       if (articleData) {
         updateGraph(articleData, articleData.url);
       } else {
