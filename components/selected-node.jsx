@@ -50,7 +50,6 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
       try {
         // Construct the URL without encoding
         const articleUrl = `https://en.wikipedia.org/wiki/${selectedArticle.title.replace(/ /g, "_")}`;
-        console.log(articleUrl);
 
         const articleData = await fetchArticleData(articleUrl);
 

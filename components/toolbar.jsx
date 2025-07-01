@@ -16,7 +16,6 @@ export default function Toolbar({fetchArticleData, updateGraph, ...props}) {
         try {
           setIsLoading(true);
           const articleData = await fetchArticleData(url);
-          console.log("Fetched article data:", articleData);
           updateGraph(articleData, articleData.url);
           setError(null);
         } catch (err) {
