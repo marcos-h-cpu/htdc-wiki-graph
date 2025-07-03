@@ -5,14 +5,21 @@ const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const MAX_REQUESTS_PER_WINDOW = 10;
 const requestLog = {};
 
-const fetchAllLinks = async (pageTitle) => {
+const fetchAllLinks = async (identifier, isPageId = true) => {
   let allLinks = [];
   let continueParam = null;
 
   do {
-    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=links&titles=${
-      pageTitle
-    }&format=json&pllimit=max${continueParam ? `&plcontinue=${continueParam}` : ""}`;
+    // Construct the API URL based on whether the identifier is a pageId or pageTitle
+    const apiUrl = isPageId
+      ? `https://en.wikipedia.org/w/api.php?action=query&prop=links&pageids=${identifier}&format=json&pllimit=max${
+          continueParam ? `&plcontinue=${continueParam}` : ""
+        }`
+      : `https://en.wikipedia.org/w/api.php?action=query&prop=links&titles=${encodeURIComponent(
+          identifier
+        )}&format=json&pllimit=max${
+          continueParam ? `&plcontinue=${continueParam}` : ""
+        }`;
 
     const apiResponse = await fetch(apiUrl);
 
@@ -25,7 +32,12 @@ const fetchAllLinks = async (pageTitle) => {
     const page = Object.values(pages)[0];
 
     if (page.links) {
-      allLinks = allLinks.concat(page.links);
+      // Construct URLs using the title.replace method
+      const linksWithUrls = page.links.map((link) => ({
+        ...link,
+        url: `https://en.wikipedia.org/wiki/${link.title.replace(/ /g, "_")}`, // Always use /wiki/ format
+      }));
+      allLinks = allLinks.concat(linksWithUrls);
     }
 
     // Update the continue parameter for the next request
@@ -86,42 +98,35 @@ const fetchInfoboxImage = async (pageTitle) => {
 };
 
 export async function POST(request) {
-  // Rate limiting
-  const ip = request.headers.get("x-forwarded-for") || "unknown";
-  const now = Date.now();
-
-  if (!requestLog[ip]) {
-    requestLog[ip] = [];
-  }
-
-  // Clean up old requests
-  requestLog[ip] = requestLog[ip].filter((timestamp) => now - timestamp < RATE_LIMIT_WINDOW);
-
-  // Check if rate limit exceeded
-  if (requestLog[ip].length >= MAX_REQUESTS_PER_WINDOW) {
-    return NextResponse.json({ error: "Rate limit exceeded. Please try again later." }, { status: 429 });
-  }
-
-  // Add current request to log
-  requestLog[ip].push(now);
-
   try {
     const { url } = await request.json();
 
-    if (!url || !url.includes("wikipedia.org/wiki/")) {
-      return NextResponse.json({ error: "Invalid Wikipedia URL" }, { status: 400 });
+    // Validate the URL structure
+    if (!url || (!url.includes("wikipedia.org/?curid=") && !url.includes("wikipedia.org/wiki/"))) {
+      return NextResponse.json({ error: "Invalid Wikipedia URL. Only URLs with ?curid= or /wiki/ are supported." }, { status: 400 });
     }
 
-    // Extract the page title from the URL
-    const pageTitle = url.split("/wiki/")[1];
-    console.log("Fetching data for page:", pageTitle);
+    let pageId = null;
+    let pageTitle = null;
+
+    // Determine the type of URL and extract the relevant data
+    if (url.includes("?curid=")) {
+      pageId = url.split("?curid=")[1];
+    } else if (url.includes("/wiki/")) {
+      pageTitle = url.split("/wiki/")[1].replace(/_/g, " "); // Replace underscores with spaces
+    }
+
+    console.log("Page ID:", pageId);
+    console.log("Page Title:", pageTitle);
 
     // Fetch data from the Wikipedia API
-    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|info|pageimages&exintro&explaintext&titles=${
-      pageTitle
-    }&format=json&inprop=url&pithumbsize=500`;
-    const apiResponse = await fetch(apiUrl);
+    const apiUrl = pageId
+      ? `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|info|pageimages&exintro&explaintext&pageids=${pageId}&format=json&inprop=url&pithumbsize=500`
+      : `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|info|pageimages&exintro&explaintext&titles=${encodeURIComponent(pageTitle)}&format=json&inprop=url&pithumbsize=500`;
+
     console.log("API URL:", apiUrl);
+
+    const apiResponse = await fetch(apiUrl);
 
     if (!apiResponse.ok) {
       return NextResponse.json({ error: "Failed to fetch Wikipedia API" }, { status: 500 });
@@ -141,28 +146,26 @@ export async function POST(request) {
     let image = page.thumbnail?.source || null;
 
     // Fallback to infobox image if no thumbnail is available
-    if (!image) {
+    if (!image && pageTitle) {
       image = await fetchInfoboxImage(pageTitle);
     }
 
-    // Fetch all links using pagination
-    const allLinks = await fetchAllLinks(pageTitle);
+    // Fetch all links using pageId or pageTitle
+    const allLinks = pageId
+      ? await fetchAllLinks(pageId, true) // Pass pageId and specify it's a pageId
+      : await fetchAllLinks(pageTitle, false); // Pass pageTitle and specify it's a pageTitle
 
     const maxLinks = 20; // Limit number of links
     const links = allLinks
       .filter((link) => link.ns === 0) // Only include links to articles (namespace 0)
-      .slice(0, maxLinks)
-      .map((link) => ({
-        title: link.title,
-        url: `https://en.wikipedia.org/wiki/${link.title.replace(/ /g, "_")}`,
-      }));
+      .slice(0, maxLinks);
 
     return NextResponse.json({
       title,
       summary,
       image,
       links,
-      url: `https://en.wikipedia.org/wiki/${pageTitle}` || page.fullurl
+      url: page.fullurl || (pageId ? `https://en.wikipedia.org/?curid=${pageId}` : `https://en.wikipedia.org/wiki/${pageTitle.replace(/ /g, "_")}`),
     });
   } catch (error) {
     console.error("Error fetching Wikipedia API:", error);

@@ -62,8 +62,9 @@ export default function WikipediaGraph() {
   const svgRef = useRef(null)
   const simulationRef = useRef(null); // Store the simulation instance
 
-  const handleNodeClick = async (nodeId) => {
+  const handleNodeClick = async (nodeId) => { 
     const node = graphData.nodes.find((n) => n.id === nodeId)
+    console.log("Clicked node:", node)
     if (!node) return
     setSelectedNode(node)
   }
@@ -351,16 +352,7 @@ export default function WikipediaGraph() {
     setSelectedNode(null)
   }
 
-  const isValidWikipediaUrl = (url) => {
-    return url.startsWith("https://en.wikipedia.org/wiki/") || url.startsWith("https://wikipedia.org/wiki/")
-  }
-
   const fetchArticleData = async (articleUrl) => {
-    if (!isValidWikipediaUrl(articleUrl)) {
-      setError("Please enter a valid URL")
-      return
-    }
-    setError(null)
 
     try {
       const response = await fetch("/api/scrape", {
