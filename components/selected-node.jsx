@@ -49,8 +49,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
     const handleReplace = async (selectedArticle) => {
       try {
         // Construct the URL without encoding
-        const articleUrl = `https://en.wikipedia.org/wiki/${selectedArticle.title.replace(/ /g, "_")}`;
-
+        const articleUrl = `https://en.wikipedia.org/?curid=${selectedArticle.pageid}`;
         const articleData = await fetchArticleData(articleUrl);
 
         if (articleData) {
@@ -181,25 +180,9 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           onClose={() => setShowSearchPopup(false)}
         />
       )}
-      <div className={`flex flex-col items-left z-20 fixed left-[1vw] top-[2vh] min-w-[30vw] max-h-[80vh] overflow-y-auto overflow-x-hidden !bg-gray-100 !rounded-md border backdrop-blur-md !bg-opacity-50 ${styles.scroll}`}>
+      <div className={`flex flex-col items-left z-20 fixed left-[1vw] top-[2vh] min-w-[35vw] max-h-[80vh] overflow-y-auto overflow-x-hidden !bg-gray-100 !rounded-md border backdrop-blur-md !bg-opacity-50 ${styles.scroll}`}>
         <div className="flex flex-row justify-between items-center px-2 py-1 border-b sticky top-0 bg-gray-100 bg-opacity-80 backdrop-blur-xl">
-          <div className="flex flex-col gap-0 p-0">
-            <div className="flex flex-row items-end gap-1 pr-4">
-              <a href={node.url} className="text-gray-700 text-xs font-bold">{node.title}</a>
-              <div onClick={() => setShowSummary(!showSummary)} className={`text-xs hover:text-blue-800 cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}>
-                  Summary
-                </div>
-                <div onClick={() => setShowDetails(!showDetails)} className={`text-xs hover:text-blue-800 cursor-pointer ${showDetails ? "text-blue-500" : "text-gray-700"}`}>
-                  Links
-                </div>
-                <div onClick={() => setShowImageDetails(!showImageDetails)} className={`text-xs hover:text-blue-800 cursor-pointer ${showImageDetails ? "text-blue-500" : "text-gray-700"}`}>
-                  Image
-                </div>
-                <div onClick={() => setShowEdges(!showEdges)} className={`text-xs hover:text-blue-800 cursor-pointer ${showEdges ? "text-blue-500" : "text-gray-700"}`}>
-                  Edges
-                </div>
-            </div>
-          </div>
+          <span className="text-gray-700 text-xs font-bold">{node.title}</span>
           <Button
             variant="ghost"
             onClick={deselectNode}
@@ -210,9 +193,24 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           </Button>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
+        <div className="flex flex-row items-end gap-1 px-3 pt-1 text-xs">
+              <div onClick={() => setShowSummary(!showSummary)} className={`hover:text-blue-800 cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}>
+                Summary
+              </div>
+              <div onClick={() => setShowDetails(!showDetails)} className={`hover:text-blue-800 cursor-pointer ${showDetails ? "text-blue-500" : "text-gray-700"}`}>
+                Links
+              </div>
+              <div onClick={() => setShowImageDetails(!showImageDetails)} className={`hover:text-blue-800 cursor-pointer ${showImageDetails ? "text-blue-500" : "text-gray-700"}`}>
+                Image
+              </div>
+              <div onClick={() => setShowEdges(!showEdges)} className={`hover:text-blue-800 cursor-pointer ${showEdges ? "text-blue-500" : "text-gray-700"}`}>
+                Edges
+              </div>
+              <span className="cursor-pointer underline text-purple-400 ml-1" onClick={() => setShowSearchPopup(true)}>Search and Replace Node...</span>
+            </div>
           {showSummary && (
-            <div className="flex flex-col items-left border-t px-3 max-w-[30vw] mb-2">
+            <div className="flex flex-col items-left border-t px-3 max-w-[35vw] mb-2">
               <div className="mt-2">
                 {node.summary && node.summary.trim() !== "" ? (
                   node.summary.split("\n").map((paragraph, index) => (
@@ -223,7 +221,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
                 ) : (
                   <div className="mb-2">
                     <p className="text-gray-500 text-xs">This node is incomplete/broken due to an improper url being passed to the Wikimedia API. You can repair this node via
-                    <span className="cursor-pointer underline text-purple-400 ml-1" onClick={() => setShowSearchPopup(true)}>Search and Replace...</span></p>
+                    <span className="cursor-pointer underline text-purple-400 ml-1" onClick={() => setShowSearchPopup(true)}>Search and Replace Node...</span></p>
 
                 </div>
                 )}
@@ -232,7 +230,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showDetails && (
-            <div className="border-t px-3 mb-2 max-w-[30vw]">
+            <div className="border-t px-3 mb-2 max-w-[35vw]">
                 <div className="flex flex-wrap gap-1 mt-2 ">
                   {node.links &&
                     [...node.links]
@@ -262,7 +260,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showImageDetails && (
-            <div className="border-t px-3 mb-2 max-w-[30vw]">
+            <div className="border-t px-3 mb-2 max-w-[35vw]">
               <div className="flex flex-col items-center mt-2">
                 {node.image ? (
                   <Image
@@ -280,7 +278,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showEdges && (
-            <div className="border-t mb-2 px-2  max-w-[30vw]">
+            <div className="border-t mb-2 px-2  max-w-[35vw]">
               <table
                 className="table-auto border-collapse border border-gray-300 text-xs w-full mt-2"
                 style={{ tableLayout: "fixed" }}
