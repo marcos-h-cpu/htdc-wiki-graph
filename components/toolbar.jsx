@@ -85,20 +85,17 @@ export default function Toolbar({ fetchArticleData, updateGraph, ...props }) {
           )}
           {searchResults.length > 0 && (
             <div className="flex flex-row gap-1 items-center">
-            <div className={`border bg-white h-[24px] rounded-full flex flex-row justify-between`}>
-              <ul className={`overflow-y-auto ${styles.scroll}`}>
+              <ul className={`!rounded-full !bg-white border !h-[24px] flex flex-col overflow-y-auto ${styles.scroll}`}>
                 {searchResults.map((result) => (
                   <li
                     key={result.pageid}
-                    className="cursor-pointer hover:bg-green-100 text-xs w-[200px] h-[24px] rounded-full flex px-3 py-1"
+                    className="cursor-pointer hover:bg-green-100 text-xs w-[250px] h-[24px] rounded-full flex px-3 py-1"
                     onClick={() => handleSelectResult(result)}
                   >
                     {result.title}
                   </li>
                 ))}
               </ul>
-              <span className="px-2 pt-2 text-gray-500 text-[8px] h-[24px] w-[50px] text-right">{searchResults.length} results</span>
-            </div>
             <Button onClick={() => setSearchResults([])} className="h-[24px] w-[24px] rounded-full px-2 py-1">
               <img
                 src="/refresh-svgrepo-com.svg"
