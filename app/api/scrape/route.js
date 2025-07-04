@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
 // Simple in-memory rate limiting
-const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
-const MAX_REQUESTS_PER_WINDOW = 10;
-const requestLog = {};
+// const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+// const MAX_REQUESTS_PER_WINDOW = 10;
+// const requestLog = {};
 
 const fetchAllLinks = async (identifier, isPageId = true) => {
   let allLinks = [];

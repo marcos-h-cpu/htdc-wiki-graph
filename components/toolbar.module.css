@@ -1,0 +1,16 @@
+.scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    background-color: var(--color-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow-y: auto; /* Enable scrolling */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar in Internet Explorer */
+}
+
+.scroll::-webkit-scrollbar {
+    display: none; /* Hide scrollbar in WebKit browsers (Chrome, Safari, etc.) */
+}
