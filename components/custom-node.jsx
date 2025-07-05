@@ -12,7 +12,7 @@ export default function CustomNode({ node, onClick, isCarouselNode, setHighlight
             >
                 <Image
                     className={styles.thumbnail_carousel}
-                    src={node.image || "/placeholder.png"}
+                    src={node.image || "/blob.png"}
                     alt={node.title}
                     width={20}
                     height={30}
