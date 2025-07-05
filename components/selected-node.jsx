@@ -48,37 +48,28 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
 
     const handleReplace = async (selectedArticle) => {
       try {
-        // Construct the URL without encoding
         const articleUrl = `https://en.wikipedia.org/?curid=${selectedArticle.pageid}`;
         const articleData = await fetchArticleData(articleUrl);
 
         if (articleData) {
+          const replacementNode = {
+            id: articleData.title.replace(/ /g, "_"),
+            url: articleData.url,
+            title: articleData.title,
+            summary: articleData.summary,
+            image: articleData.image,
+            links: articleData.links,
+          };
+
+          // Update the graph with the replacement node
+          updateGraph(replacementNode, replacementNode.url);
+
+          // Remove the node being replaced
           setGraphData((prevGraphData) => {
             const updatedNodes = prevGraphData.nodes.filter((n) => n.id !== node.id);
             const updatedEdges = prevGraphData.links.filter(
               (link) => link.source !== node.id && link.target !== node.id
             );
-
-            const replacementNode = {
-              id: articleData.title.replace(/ /g, "_"),
-              url: articleData.url,
-              title: articleData.title,
-              summary: articleData.summary,
-              image: articleData.image,
-              links: articleData.links,
-            };
-            updatedNodes.push(replacementNode);
-
-            const secondMostRecentNode =
-              updatedNodes.length > 1 ? updatedNodes[updatedNodes.length - 2] : null;
-
-            if (secondMostRecentNode) {
-              updatedEdges.push({
-                source: secondMostRecentNode.id,
-                target: replacementNode.id,
-                connectionType: "Replacement Connection",
-              });
-            }
 
             return { nodes: updatedNodes, links: updatedEdges };
           });

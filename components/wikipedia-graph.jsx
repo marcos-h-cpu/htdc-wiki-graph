@@ -272,7 +272,7 @@ export default function WikipediaGraph() {
           }
         }
       }
-}
+    }
   
     setGraphData({
       nodes: newNodes,
