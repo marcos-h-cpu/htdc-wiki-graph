@@ -145,8 +145,8 @@ export default function WikipediaGraph() {
         .data(nodes)
         .join("foreignObject")
         .attr("class", "node")
-        .attr("width", 80) // Adjust width for CustomNode
-        .attr("height", 80) // Adjust height for CustomNode
+        .attr("width", 100) // Adjust width for CustomNode
+        .attr("height", 100) // Adjust height for CustomNode
         .attr("x", (d) => d.x - 20) // Center the node horizontally
         .attr("y", (d) => d.y - 20) // Center the node vertically
         .html((d) => {
@@ -457,8 +457,8 @@ export default function WikipediaGraph() {
       .data(nodes)
       .join("foreignObject")
       .attr("class", "node")
-      .attr("width", 80)
-      .attr("height", 80)
+      .attr("width", 100)
+      .attr("height", 100)
       .attr("x", (d) => d.x - 20)
       .attr("y", (d) => d.y - 20)
       .html((d) => {
