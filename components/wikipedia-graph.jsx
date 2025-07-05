@@ -30,8 +30,8 @@ export default function WikipediaGraph() {
   const [repulsion, setRepulsion] = useState(500)
   const [linkDistance, setLinkDistance] = useState(200)
   const [linkCurve, setLinkCurve] = useState(100)
-  const [xForce, setXForce] = useState(0)
-  const [yForce, setYForce] = useState(0)
+  const [xForce, setXForce] = useState(0.1)
+  const [yForce, setYForce] = useState(0.1)
   const [zoomTransform, setZoomTransform] = useState(d3.zoomIdentity)
   const [error, setError] = useState(null)
 
@@ -109,8 +109,8 @@ export default function WikipediaGraph() {
         )
         .force("charge", d3.forceManyBody().strength(-500))
         .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("x", d3.forceX(width / 2).strength(0))
-        .force("y", d3.forceY(height / 2).strength(0))
+        .force("x", d3.forceX(width / 2).strength(0.1))
+        .force("y", d3.forceY(height / 2).strength(0.1))
   
       simulationRef.current = simulation; // Store the simulation in the ref
   
@@ -677,8 +677,8 @@ export default function WikipediaGraph() {
                       type="range"
                       min="0"
                       max="1"
-                      step=".2"
-                      defaultValue="0"
+                      step=".1"
+                      defaultValue="0.1"
                       onChange={(e) => {updateForce("x", +e.target.value); setXForce(+e.target.value)}}
                       className={styles.rangeInput}
                     />
@@ -691,8 +691,8 @@ export default function WikipediaGraph() {
                     type="range"
                     min="0"
                     max="1"
-                    step=".2"
-                    defaultValue="0"
+                    step=".1"
+                    defaultValue="0.1"
                     onChange={(e) => {updateForce("y", +e.target.value); setYForce(+e.target.value)}}
                     className={styles.rangeInput}
                   />
