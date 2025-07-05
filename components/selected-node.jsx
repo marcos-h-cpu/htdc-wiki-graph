@@ -184,8 +184,8 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           </Button>
         </div>
 
-        <div className="flex flex-col gap-1">
-        <div className="flex flex-row items-end gap-1 px-3 pt-1 text-xs">
+        <div className="flex flex-col gap-0">
+        <div className="flex flex-row items-end gap-1 px-3 py-1 text-xs">
               <div onClick={() => setShowSummary(!showSummary)} className={`hover:text-blue-800 cursor-pointer ${showSummary ? "text-blue-500" : "text-gray-700"}`}>
                 Summary
               </div>
