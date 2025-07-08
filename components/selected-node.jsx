@@ -199,21 +199,30 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
                 Edges
               </div>
               <span className="cursor-pointer underline text-purple-400 ml-1" onClick={() => setShowSearchPopup(true)}>Search and Replace Node...</span>
-            </div>
+        </div>
           {showSummary && (
             <div className="flex flex-col items-left border-t px-3 max-w-[35vw] mb-2">
               <div className="mt-2">
-                {node.summary && node.summary.trim() !== "" ? (
-                  node.summary.split("\n").map((paragraph, index) => (
+              {node.summary && node.summary.trim() !== "" ? (
+                <>
+                  {node.summary.split("\n").map((paragraph, index) => (
                     <p key={index} className="text-xs p-0">
                       {paragraph}
                     </p>
-                  ))
+                  ))}
+                  <a
+                    href={node.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline text-xs mt-2"
+                  >
+                    Read more on Wikipedia...
+                  </a>
+                </>
                 ) : (
                   <div className="mb-2">
                     <p className="text-gray-500 text-xs">This node is incomplete/broken due to an improper url being passed to the Wikimedia API. You can repair this node via
                     <span className="cursor-pointer underline text-purple-400 ml-1" onClick={() => setShowSearchPopup(true)}>Search and Replace Node...</span></p>
-
                 </div>
                 )}
               </div>
