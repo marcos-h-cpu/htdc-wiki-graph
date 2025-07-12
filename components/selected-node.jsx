@@ -220,9 +220,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
                   </a>
                 </>
                 ) : (
-                  <div className="mb-2">
-                    <p className="text-gray-500 text-xs">This node is incomplete/broken due to an improper url being passed to the Wikimedia API. You can repair this node via
-                    <span className="cursor-pointer underline text-purple-400 ml-1" onClick={() => setShowSearchPopup(true)}>Search and Replace Node...</span></p>
+                <div className="mb-2">
                 </div>
                 )}
               </div>
