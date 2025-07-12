@@ -89,10 +89,11 @@ export default function Toolbar({ fetchArticleData, updateGraph, ...props }) {
                 {searchResults.map((result) => (
                   <li
                     key={result.pageid}
-                    className="cursor-pointer hover:bg-green-100 text-xs w-[250px] h-[24px] rounded-full flex px-3 py-1"
+                    className="cursor-pointer text-xs w-[250px] h-[24px] rounded-full flex px-3 py-1"
                     onClick={() => handleSelectResult(result)}
                   >
-                    {result.title}
+                   <span className={styles.searchResult}
+                   >{result.title}</span>
                   </li>
                 ))}
               </ul>
