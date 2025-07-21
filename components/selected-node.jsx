@@ -258,8 +258,8 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           )}
 
           {showImageDetails && (
-            <div className="border-t px-3 mb-2 max-w-[35vw]">
-              <div className="flex flex-col items-center mt-2">
+            <div className="flex justify-center border-t px-3 mb-2 max-w-[35vw]">
+              <div className="flex mt-2 max-w-[200px]">
                 {node.image ? (
                   <Image
                     src={node.image}
