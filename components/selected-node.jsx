@@ -171,7 +171,7 @@ export default function SelectedNode({ node, handleLinkClick, deselectNode, grap
           onClose={() => setShowSearchPopup(false)}
         />
       )}
-      <div className={`flex flex-col items-left z-20 fixed left-[1vw] top-[2vh] min-w-[35vw] max-h-[80vh] overflow-y-auto overflow-x-hidden !bg-gray-100 !rounded-md border backdrop-blur-md !bg-opacity-50 ${styles.scroll}`}>
+      <div className={`flex flex-col z-20 fixed left-[1vw] top-[2vh] min-w-[35vw] max-h-[80vh] overflow-y-auto overflow-x-hidden !bg-gray-100 !rounded-md border backdrop-blur-md !bg-opacity-50 ${styles.scroll}`}>
         <div className="flex flex-row justify-between items-center px-2 py-1 border-b sticky top-0 bg-gray-100 bg-opacity-80 backdrop-blur-xl">
           <span className="text-gray-700 text-xs font-bold">{node.title}</span>
           <Button

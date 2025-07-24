@@ -523,8 +523,8 @@ export default function WikipediaGraph() {
       </div>
       <div className="fixed top-4 right-4 z-20 flex flex-col items-end">
           {isOptionsOpen && (
-            <div className="bg-gray-100 bg-opacity-50 backdrop-blur-md rounded-md border w-[20vw]">
-              <div className="flex flex-row justify-between items-center py-1 px-2">
+            <div className="!bg-gray-100 !rounded-md border backdrop-blur-md !bg-opacity-50 w-[20vw]">
+              <div className="flex flex-row justify-between items-center px-2 py-1 border-b sticky top-0 bg-gray-100 bg-opacity-80 backdrop-blur-xl">
                 <span className="text-xs text-gray-900">Options</span>
                 <Button
                     variant="ghost"
@@ -535,7 +535,7 @@ export default function WikipediaGraph() {
                     <XMarkIcon className="h-4 w-4 text-black-700" />
                 </Button>
               </div>
-              <ul className="flex flex-col gap-1 p-2 border-t text-gray-600">
+              <ul className="flex flex-col gap-1 p-2 text-gray-600">
                 <li
                   className="cursor-pointer text-xs hover:text-gray-900"
                   onClick={handleFileImport}
