@@ -171,7 +171,7 @@ function CollapsibleNode({ node, graphData, setTempData }) {
                 className="text-blue-300 hover:text-blue-800 cursor-pointer"
                 onClick={(event) => handleLinkClick(link, event)} // Pass the event object
               >
-                {link.title} ({link.url})
+                {link.title}
                 {i < node.links.length - 1 ? ", " : ""}
               </span>
                 ))
