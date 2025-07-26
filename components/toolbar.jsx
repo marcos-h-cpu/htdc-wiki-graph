@@ -58,7 +58,7 @@ export default function Toolbar({ fetchArticleData, updateGraph, ...props }) {
   return (
     <>
 
-      <div className="flex flex-row justify-between items-center bg-gray-100 rounded-full border py-[5px] px-[32px] backdrop-blur-md bg-opacity-50 w-full">
+      <div className="flex flex-row justify-between items-center py-[5px] px-[16px] w-full">
         <CardContent className="flex flex-col gap-2 p-0 w-1/4">
           {searchResults.length === 0 && (
             <form onSubmit={handleSearch} className="flex flex-row gap-1 items-center">
